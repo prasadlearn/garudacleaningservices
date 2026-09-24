@@ -1,21 +1,12 @@
 import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Sparkles, ChevronLeft, ChevronRight } from 'lucide-react';
-
-const CIRCLES = [
-  { title: 'Full Home Deep Clean', image: '/images/hero-interior.jpg', slug: 'home-deep-cleaning' },
-  { title: 'Kitchen Cleaning', image: '/images/kitchen-clean.jpg', slug: 'kitchen-cleaning' },
-  { title: 'Bathroom Cleaning', image: '/images/bathroom-clean.jpg', slug: 'bathroom-cleaning' },
-  { title: 'Sofa Cleaning', image: '/images/sofa-clean.jpg', slug: 'sofa-cleaning' },
-  { title: 'Carpet Cleaning', image: '/images/cleaning-team.jpg', slug: 'carpet-cleaning' },
-  { title: 'Floor Scrubbing', image: '/images/floor-clean.jpg', slug: 'floor-scrubbing-polishing' },
-  { title: 'Office Cleaning', image: '/images/office-clean.jpg', slug: 'office-commercial-cleaning' },
-  { title: 'Villa Cleaning', image: '/images/hero-cleaner.png', slug: 'villa-cleaning' },
-  { title: 'Pest Control', image: '/images/cleaning-crew.png', slug: 'pest-control' },
-];
+import { getEnabledServices } from '../data/servicesData';
+import { SafeImage } from './SafeImage';
 
 export const ServiceCircles: React.FC = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const enabledServices = getEnabledServices();
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -25,7 +16,7 @@ export const ServiceCircles: React.FC = () => {
   };
 
   // Double the list for infinite seamless marquee loop
-  const duplicatedCircles = [...CIRCLES, ...CIRCLES];
+  const duplicatedCircles = [...enabledServices, ...enabledServices];
 
   return (
     <section className="py-16 sm:py-20 px-4 sm:px-8 bg-white overflow-hidden border-b border-slate-100 relative">
@@ -33,13 +24,13 @@ export const ServiceCircles: React.FC = () => {
         <div className="text-center mb-10">
           <span className="homecare-pill mb-2">
             <Sparkles className="w-3.5 h-3.5" />
-            Specialized Categories
+            Our Services
           </span>
           <h2 className="text-2xl sm:text-4xl font-black text-[#041B3B] mt-1 tracking-tight">
             Cleaning Services in Tirupati
           </h2>
-          <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Tap any service category to view specialized machinery, transparent prices & instant booking.
+          <p className="text-xs sm:text-sm text-slate-600 mt-1">
+            Tap any service to view what is included and check prices.
           </p>
         </div>
 
@@ -48,7 +39,7 @@ export const ServiceCircles: React.FC = () => {
           {/* Manual control arrows for user convenience */}
           <button
             onClick={() => scroll('left')}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/95 text-[#041B3B] shadow-xl border border-slate-200 flex items-center justify-center hover:bg-[#22AC33] hover:text-white transition-all cursor-pointer opacity-0 group-hover/carousel:opacity-100 -ml-2 sm:-ml-5"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-[var(--z-content)] w-10 h-10 rounded-full bg-white/95 text-[#041B3B] shadow-xl border border-slate-200 flex items-center justify-center hover:bg-[#22AC33] hover:text-white transition-all cursor-pointer opacity-0 group-hover/carousel:opacity-100 -ml-2 sm:-ml-5"
             aria-label="Previous"
           >
             <ChevronLeft className="w-5 h-5" />
@@ -56,7 +47,7 @@ export const ServiceCircles: React.FC = () => {
 
           <button
             onClick={() => scroll('right')}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-white/95 text-[#041B3B] shadow-xl border border-slate-200 flex items-center justify-center hover:bg-[#22AC33] hover:text-white transition-all cursor-pointer opacity-0 group-hover/carousel:opacity-100 -mr-2 sm:-mr-5"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-[var(--z-content)] w-10 h-10 rounded-full bg-white/95 text-[#041B3B] shadow-xl border border-slate-200 flex items-center justify-center hover:bg-[#22AC33] hover:text-white transition-all cursor-pointer opacity-0 group-hover/carousel:opacity-100 -mr-2 sm:-mr-5"
             aria-label="Next"
           >
             <ChevronRight className="w-5 h-5" />
@@ -68,21 +59,23 @@ export const ServiceCircles: React.FC = () => {
             className="overflow-hidden w-full py-4 mask-gradient"
           >
             <div className="flex gap-8 sm:gap-12 animate-circle-marquee hover:[animation-play-state:paused] w-max cursor-grab active:cursor-grabbing">
-              {duplicatedCircles.map((c, i) => (
+              {duplicatedCircles.map((service, i) => (
                 <Link
-                  key={i}
-                  to={`/services/${c.slug}`}
+                  key={`${service.id}-${i}`}
+                  to={`/services/${service.slug}`}
                   className="flex flex-col items-center gap-3 shrink-0 group/circle transition-transform duration-300 hover:scale-105"
                 >
                   <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-slate-200 group-hover/circle:border-[#22AC33] transition-all duration-300 shadow-md group-hover/circle:shadow-xl relative bg-slate-900">
-                    <img
-                      src={c.image}
-                      alt={c.title}
+                    <SafeImage
+                      src={service.image}
+                      alt={service.title}
+                      loading="eager"
+                      fallbackLabel={service.title}
                       className="w-full h-full object-cover group-hover/circle:scale-110 transition-transform duration-500"
                     />
                   </div>
                   <span className="text-xs sm:text-sm font-extrabold text-[#041B3B] group-hover/circle:text-[#22AC33] transition-colors text-center max-w-[110px] leading-tight">
-                    {c.title}
+                    {service.title}
                   </span>
                 </Link>
               ))}

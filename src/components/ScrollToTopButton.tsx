@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ArrowUp } from 'lucide-react';
 
 export const ScrollToTopButton: React.FC = () => {
@@ -20,9 +20,13 @@ export const ScrollToTopButton: React.FC = () => {
 
   return (
     <button
+      type="button"
       onClick={scrollToTop}
       aria-label="Scroll to top"
-      className="hidden sm:flex fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full bg-[#0E6B7A] hover:bg-[#0B192C] text-white items-center justify-center shadow-lg transition-all cursor-pointer"
+      className="fixed right-4 sm:right-6 z-[var(--z-back-to-top)] w-11 h-11 rounded-full bg-[#041B3B] hover:bg-[#22AC33] text-white flex items-center justify-center shadow-xl border-2 border-white/40 transition-all cursor-pointer"
+      style={{
+        bottom: 'calc(var(--bar-h, 60px) + env(safe-area-inset-bottom, 0px) + 12px)'
+      }}
     >
       <ArrowUp className="w-5 h-5" />
     </button>

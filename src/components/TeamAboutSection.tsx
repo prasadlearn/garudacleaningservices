@@ -1,31 +1,45 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { MessageCircle, CheckCircle2 } from 'lucide-react';
+import { MessageCircle, CheckCircle2, MapPin, ArrowRight } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
+import { TRUST_CONFIG, hasVerifiedRating } from '../config/trustConfig';
+import { SafeImage } from './SafeImage';
 
 export const TeamAboutSection: React.FC = () => {
+  const showRating = hasVerifiedRating();
+
   return (
     <section className="py-16 sm:py-20 px-4 sm:px-8 bg-white border-b border-slate-100 overflow-hidden">
       <div className="max-w-7xl mx-auto">
-        <div className="rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-sm bg-[#FAFAFA]">
+        <div className="rounded-3xl border border-slate-200 p-6 sm:p-10 shadow-xs bg-[#FAFAFA]">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            {/* Left Column: Team with Machines + 4.8★ Box */}
+            {/* Left Column: Team with Machines */}
             <div className="lg:col-span-6 relative">
-              <div className="rounded-2xl overflow-hidden aspect-[4/3] bg-slate-900 shadow-xl border-4 border-white">
-                <img
-                  src="/images/office-clean.jpg"
-                  alt="Garuda Cleaning Services Uniformed Team"
+              <div className="rounded-2xl overflow-hidden aspect-4/3 bg-slate-900 shadow-xl border-4 border-white">
+                <SafeImage
+                  src="/images/office-clean.webp"
+                  alt="Garuda Cleaning Services Team"
+                  fallbackLabel="Garuda Cleaning Services Team"
                   className="w-full h-full object-cover"
                 />
               </div>
 
-              {/* 4.8★ Yellow Box Badge */}
-              <div className="absolute -bottom-4 -left-2 sm:-left-3 bg-[#FFD700] text-[#041B3B] p-3 sm:p-4 rounded-2xl shadow-xl flex items-center gap-2 border-2 border-white">
-                <span className="text-2xl sm:text-3xl font-black">4.8★</span>
-                <div className="text-[10px] sm:text-xs font-black leading-tight uppercase">
-                  Google<br />Verified
+              {/* Verified Badge or Local Badge */}
+              {showRating ? (
+                <div className="absolute -bottom-4 -left-2 sm:-left-3 bg-[#FFD700] text-[#041B3B] p-3 sm:p-4 rounded-2xl shadow-xl flex items-center gap-2 border-2 border-white">
+                  <span className="text-2xl sm:text-3xl font-black">{TRUST_CONFIG.googleRating}★</span>
+                  <div className="text-[10px] sm:text-xs font-black leading-tight uppercase">
+                    Google<br />Verified
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="absolute -bottom-4 -left-2 sm:-left-3 bg-[#041B3B] text-white p-3 sm:p-4 rounded-2xl shadow-xl flex items-center gap-2 border-2 border-white">
+                  <MapPin className="w-5 h-5 text-[#22AC33]" />
+                  <div className="text-[11px] sm:text-xs font-black leading-tight">
+                    Tirupati<br /><span className="text-[#4ADE80]">Local Service</span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Right Column: About Us */}
@@ -36,16 +50,26 @@ export const TeamAboutSection: React.FC = () => {
               </h2>
 
               <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                With over a decade of experience, Garuda Cleaning Services delivers reliable cleaning services in Tirupati focused on quality and customer satisfaction. Our trained professionals handle residential and commercial cleaning across areas like Balaji Colony, AIR Bypass Road, MR Palli, and Renigunta Road, ensuring consistent results, attention to detail, and a hassle-free service experience every time.
+                We provide thorough cleaning for homes, apartments, villas, and commercial spaces across Tirupati. Our focus is on clear upfront pricing, reliable scheduling, and careful cleaning using modern equipment and surface-safe products.
               </p>
 
-              {/* 4 Checklist Items */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+              <div>
+                <Link
+                  to="/service-areas"
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#22AC33] hover:underline"
+                >
+                  <span>See all areas we cover across Tirupati</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+
+              {/* 4 Checklist Items backed by business reality */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 {[
-                  'Trusted & Vetted Cleaners',
-                  'Customizable Cleaning Plans',
-                  'Home & Office Cleaning',
-                  'Assured Quality Service',
+                  'Service at your doorstep',
+                  'Clear upfront prices',
+                  'Homes, villas, and offices',
+                  'We check the work together with you' // TODO_OWNER: confirm room-by-room check process
                 ].map((item, idx) => (
                   <div key={idx} className="flex items-center gap-2 text-xs sm:text-sm font-bold text-[#041B3B]">
                     <CheckCircle2 className="w-4 h-4 text-[#22AC33] shrink-0" />
@@ -54,20 +78,20 @@ export const TeamAboutSection: React.FC = () => {
                 ))}
               </div>
 
-              {/* Buttons: Know More + WhatsApp Now */}
+              {/* Buttons: Learn More + WhatsApp Now */}
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-3">
                 <Link to="/about" className="btn-homecare-navy text-xs py-3 px-6 text-center justify-center font-bold">
-                  Know more
+                  Learn More
                 </Link>
 
                 <a
                   href={BUSINESS_CONFIG.buildWhatsAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn-homecare-green text-xs py-3 px-6 text-center justify-center font-bold shadow-md"
+                  className="btn-homecare-green text-xs py-3 px-6 text-center justify-center font-bold flex items-center gap-2"
                 >
                   <MessageCircle className="w-4 h-4" />
-                  WhatsApp: +91 77995 52084
+                  WhatsApp Us
                 </a>
               </div>
             </div>

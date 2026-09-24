@@ -1,16 +1,35 @@
 @import "tailwindcss";
+@source not "../scripts/**";
+@source not "../node_modules/**";
 
 :root {
   --navy: #041B3B;
   --navy-dark: #021227;
   --navy-card: #07254D;
-  --green: #22AC33;
-  --green-dark: #1A8C28;
+  --green: #1E9E2E;
+  --green-dark: #167A23;
   --green-light: #E8F8EC;
   --yellow: #FFD700;
   --yellow-hover: #E6C200;
   --bg-soft: #F8FAFC;
   --border: #E2E8F0;
+
+  /* Standard CSS Z-Index Scale */
+  --z-behind: -1;
+  --z-content: 1;
+  --z-subnav: 30;
+  --z-header: 40;
+  --z-sticky-bar: 45;
+  --z-floating: 48;
+  --z-back-to-top: 49;
+  --z-drawer-backdrop: 50;
+  --z-drawer: 55;
+  --z-modal: 60;
+  --z-toast: 70;
+
+  /* Sizing tokens */
+  --header-h: 64px;
+  --bar-h: 60px;
 }
 
 @layer base {
@@ -20,25 +39,37 @@
   html {
     scroll-behavior: smooth;
     color-scheme: light;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-wrap: break-word;
   }
   body {
     font-family: 'Poppins', 'Inter', system-ui, sans-serif;
-    color: #1E293B;
+    color: #0F172A;
     background-color: #FFFFFF;
-    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* Root-cause fixes applied; do NOT add overflow-x clipping here */
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Poppins', system-ui, sans-serif;
     font-weight: 700;
-    color: #041B3B;
+  }
+  input, select, textarea {
+    font-size: 16px;
+  }
+  input[type="date"] {
+    -webkit-appearance: none;
+    appearance: none;
+    min-height: 48px;
   }
 }
 
 /* =======================================================
-   HOMECARE SOLUTIONS EXACT ANIMATIONS & KEYFRAMES
+   ANIMATIONS & KEYFRAMES
    ======================================================= */
 
-/* 1. Pulse Scale for Badges & Combo Offers */
+/* 1. Pulse Scale */
 @keyframes pulseScale {
   0%, 100% {
     transform: scale(1);
@@ -52,7 +83,7 @@
   animation: pulseScale 2s ease-in-out infinite;
 }
 
-/* 2. Light Glare / Shine Effect Across Buttons & Card Heads */
+/* 2. Shine Effect */
 @keyframes shine {
   0% {
     left: -100%;
@@ -84,7 +115,7 @@
   pointer-events: none;
 }
 
-/* 3. Hero Background Ken Burns Subtle Zoom */
+/* 3. Hero Ken Burns */
 @keyframes bannerZoomOnly {
   0% {
     transform: scale(1);
@@ -120,7 +151,7 @@
   animation-play-state: paused;
 }
 
-/* Service Circles Infinite Continuous Scrolling */
+/* Service Circles Scrolling */
 @keyframes circleMarquee {
   0% {
     transform: translateX(0%);
@@ -144,54 +175,7 @@
   -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
 }
 
-/* 5. Homecare Pulsing Box Shadow for Worth Pill */
-@keyframes hcs-worth-pulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0px 0px rgba(5, 37, 80, 0.35);
-  }
-  50% {
-    transform: scale(1.06);
-    box-shadow: 0 0 0px 9px rgba(5, 37, 80, 0);
-  }
-}
-
-.worth-pill-pulse {
-  animation: hcs-worth-pulse 2.5s ease-in-out infinite;
-}
-
-/* 6. Gift / Offer Icon Shake Animation */
-@keyframes hcs-gift-shake {
-  0%, 100% { transform: rotate(0deg); }
-  10% { transform: rotate(-12deg); }
-  20% { transform: rotate(12deg); }
-  30% { transform: rotate(-10deg); }
-  40% { transform: rotate(10deg); }
-  50% { transform: rotate(-6deg); }
-  60% { transform: rotate(6deg); }
-  70% { transform: rotate(0deg); }
-}
-
-.gift-shake {
-  animation: hcs-gift-shake 3s ease-in-out infinite;
-  transform-origin: top center;
-}
-
-/* 7. Float Animation for Floating Badges */
-@keyframes floatBadge {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-8px);
-  }
-}
-
-.float-badge {
-  animation: floatBadge 3.5s ease-in-out infinite;
-}
-
-/* 8. Ripple Ring Pulse for WhatsApp & Call Floating Buttons */
+/* 5. Ripple Ring */
 @keyframes ripplePulse {
   0% {
     box-shadow: 0 0 0 0 rgba(34, 172, 51, 0.6);
@@ -208,12 +192,7 @@
   animation: ripplePulse 2s infinite;
 }
 
-/* 9. Ribbon Clip Path for Price Highlights */
-.price-btn-23 {
-  clip-path: polygon(96% 50%, 100% 100%, 0% 100%, 4% 50%, 0% 0%, 100% 0%);
-}
-
-/* 10. Smooth Card Image Zoom & Elevate */
+/* 6. Card Hover */
 .price-card {
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
 }
@@ -237,10 +216,11 @@
    BUTTONS & BADGES UTILITIES
    ======================================================= */
 .btn-homecare-green {
-  background-color: #22AC33;
+  background-color: #1A8C28;
   color: #FFFFFF;
   font-weight: 700;
-  padding: 12px 24px;
+  min-height: 44px;
+  padding: 10px 22px;
   border-radius: 9999px;
   display: inline-flex;
   align-items: center;
@@ -248,22 +228,23 @@
   gap: 8px;
   font-size: 13.5px;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 14px rgba(34, 172, 51, 0.35);
+  box-shadow: 0 4px 14px rgba(26, 140, 40, 0.35);
   border: none;
   cursor: pointer;
   text-decoration: none;
 }
 .btn-homecare-green:hover {
-  background-color: #1A8C28;
+  background-color: #156E20;
   transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(34, 172, 51, 0.45);
+  box-shadow: 0 8px 22px rgba(26, 140, 40, 0.45);
 }
 
 .btn-homecare-navy {
   background-color: #041B3B;
   color: #FFFFFF;
   font-weight: 700;
-  padding: 12px 24px;
+  min-height: 44px;
+  padding: 10px 22px;
   border-radius: 9999px;
   display: inline-flex;
   align-items: center;
@@ -283,29 +264,28 @@
 }
 
 .btn-homecare-outline {
-  border: 1.5px solid #041B3B;
-  color: #041B3B;
+  border: 1.5px solid currentColor;
   font-weight: 700;
+  min-height: 44px;
   padding: 9px 20px;
   border-radius: 9999px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  font-size: 12.5px;
+  font-size: 13px;
   transition: all 0.25s ease;
   cursor: pointer;
   text-decoration: none;
 }
 .btn-homecare-outline:hover {
-  background-color: #041B3B;
-  color: #FFFFFF;
-  transform: translateY(-1px);
+  background-color: currentColor;
+  opacity: 0.9;
 }
 
 .homecare-pill {
   background-color: #E8F8EC;
-  color: #22AC33;
+  color: #167A23;
   font-weight: 700;
   font-size: 11.5px;
   padding: 4px 14px;
@@ -330,10 +310,25 @@
   gap: 8px;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   cursor: pointer;
+  min-height: 44px;
 }
 .area-pill:hover {
-  background-color: #22AC33;
+  background-color: #1A8C28;
   transform: translateY(-3px);
-  box-shadow: 0 8px 18px rgba(34, 172, 51, 0.35);
-  border-color: #22AC33;
+  box-shadow: 0 8px 18px rgba(26, 140, 40, 0.35);
+  border-color: #1A8C28;
+}
+
+.overflow-wrap-anywhere {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

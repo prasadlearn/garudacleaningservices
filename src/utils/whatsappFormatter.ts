@@ -13,23 +13,9 @@ export interface ServiceRequestData {
 }
 
 /**
- * Generates the exact WhatsApp format requested by the client:
- * 
- * *New Service Request*
- * Appointment Date: 06/09/2026
- * Customer Name: Dhana
- * Phone Number: 7799552084
- * Address: Tata nagar
- * Landmark: Tata nagar
- * GPS Location: -
- * Service Required: House Deep Cleaning (2BHK) (₹2999)
- * Total Amount: To be confirmed
- * Subscription Client: No
- * Priority Time: 10 am
- * Remarks: -
+ * Builds standard WhatsApp booking message url
  */
 export function buildGarudaServiceRequestWhatsAppUrl(data: ServiceRequestData): string {
-  // Format appointment date e.g. 20/09/2026
   let dateStr = data.appointmentDate?.trim();
   if (!dateStr) {
     const today = new Date();
@@ -62,6 +48,22 @@ Remarks: ${remarks}`;
   return `https://wa.me/917799552084?text=${encodeURIComponent(text)}`;
 }
 
+/**
+ * Fast direct booking WhatsApp message format requested in catalogue:
+ * "Hi Garuda Cleaning, I want to book {service} ({tier or quantity}). Estimated: {price}. Locality: __ . Page: {url}"
+ */
+export function buildQuickBookingWhatsAppUrl(params: {
+  service: string;
+  tierOrQuantity?: string;
+  price: string;
+  url?: string;
+}): string {
+  const detail = params.tierOrQuantity ? ` (${params.tierOrQuantity})` : '';
+  const currentUrl = params.url || (typeof window !== 'undefined' ? window.location.href : 'https://garudacleaningservices.com/services');
+  const text = `Hi Garuda Cleaning, I want to book ${params.service}${detail}. Estimated: ${params.price}. Locality: __ . Page: ${currentUrl}`;
+  return `https://wa.me/917799552084?text=${encodeURIComponent(text)}`;
+}
+
 // Backward-compatible alias
 export function buildGarudaInquiryWhatsAppUrl(data: any): string {
   return buildGarudaServiceRequestWhatsAppUrl({
@@ -71,7 +73,7 @@ export function buildGarudaInquiryWhatsAppUrl(data: any): string {
     address: data.address || data.location || data.locality || 'Tirupati',
     landmark: data.landmark,
     gpsLocation: data.gpsLocation || data.mapsPin,
-    serviceRequired: data.serviceRequired || data.service || 'House Deep Cleaning (2BHK) (₹2999)',
+    serviceRequired: data.serviceRequired || data.service || 'Deep Cleaning',
     totalAmount: data.totalAmount,
     subscriptionClient: data.subscriptionClient,
     priorityTime: data.priorityTime,

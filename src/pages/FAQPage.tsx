@@ -19,7 +19,7 @@ const FAQ_DATA: FAQCategory[] = [
       },
       {
         q: 'Can I reschedule or cancel my booking?',
-        a: 'Yes, rescheduling is 100% free of charge up to 4 hours before the scheduled crew arrival time. Just call us or message our WhatsApp helpline.'
+        a: 'Yes, rescheduling is free of charge up to 4 hours before the scheduled crew arrival time. Just call us or message our WhatsApp helpline.'
       },
       {
         q: 'Do you work on Sundays and public holidays?',
@@ -69,8 +69,8 @@ const FAQ_DATA: FAQCategory[] = [
         a: 'No hidden costs whatsoever. All quotes include labor, equipment, detergents, and transport throughout Tirupati city and neighboring mandals.'
       },
       {
-        q: 'What if I am not satisfied with a specific area after cleaning?',
-        a: 'We provide a 100% On-the-Spot Satisfaction Guarantee. Before making payment, you and our supervisor walk through every room. Any spot or corner that doesn’t meet your expectations will be re-cleaned immediately for free.'
+        q: 'What if I want to check a specific area after cleaning?',
+        a: 'Before making payment, you and our supervisor walk through every room together so you can verify the cleaning quality and point out any specific focus areas.'
       },
       {
         q: 'What payment options do you accept?',
@@ -104,11 +104,35 @@ export const FAQPage: React.FC = () => {
     )
   })).filter(cat => cat.items.length > 0);
 
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: FAQ_DATA.flatMap((cat) =>
+      cat.items.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.a
+        }
+      }))
+    )
+  };
+
   return (
-    <div className="pt-24 pb-20 bg-[#F8FAFC]">
+    <div className="pb-20 bg-[#F8FAFC]">
+      {/* React 19 Head Hoisting */}
+      <title>FAQ | Garuda Cleaning Services Tirupati</title>
+      <meta name="description" content="Answers to common questions about deep cleaning workflows, chemical safety, equipment, and transparent pricing in Tirupati." />
+      <link rel="canonical" href="https://garudacleaningservices.in/faq" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
       {/* Header Banner */}
       <section className="bg-gradient-to-b from-[#041B3B] to-[#07254D] text-white py-16 px-4 sm:px-8 text-center relative overflow-hidden">
-        <div className="max-w-4xl mx-auto space-y-4 relative z-10">
+        <div className="max-w-4xl mx-auto space-y-4 relative z-[var(--z-content)]">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-emerald-400 text-xs font-bold border border-white/20">
             <HelpCircle className="w-4 h-4 text-[#22AC33]" />
             Garuda Knowledge Base & FAQs

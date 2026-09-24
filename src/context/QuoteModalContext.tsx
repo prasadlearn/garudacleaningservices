@@ -1,10 +1,16 @@
-﻿import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback } from 'react';
 import type { ReactNode } from 'react';
+
+export interface QuoteModalOptions {
+  serviceTitle?: string;
+  tier?: string;
+  sourcePage?: string;
+}
 
 interface QuoteModalContextType {
   isOpen: boolean;
   initialService: string;
-  openModal: (serviceTitle?: string) => void;
+  openModal: (options?: string | QuoteModalOptions) => void;
   closeModal: () => void;
 }
 
@@ -14,8 +20,18 @@ export const QuoteModalProvider: React.FC<{ children: ReactNode }> = ({ children
   const [isOpen, setIsOpen] = useState(false);
   const [initialService, setInitialService] = useState('');
 
-  const openModal = useCallback((serviceTitle = '') => {
-    setInitialService(serviceTitle);
+  const openModal = useCallback((options?: string | QuoteModalOptions) => {
+    if (typeof options === 'string') {
+      setInitialService(options);
+    } else if (options && typeof options === 'object') {
+      let title = options.serviceTitle || '';
+      if (options.tier) {
+        title = `${title} (${options.tier})`;
+      }
+      setInitialService(title);
+    } else {
+      setInitialService('');
+    }
     setIsOpen(true);
   }, []);
 

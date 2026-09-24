@@ -1,13 +1,37 @@
-﻿import React from 'react';
+import React from 'react';
 import { Clock, ShieldCheck, Sparkles, HeartPulse, Calendar, ThumbsUp } from 'lucide-react';
 
 const BENEFITS = [
-  { icon: Clock, title: 'Saves Time & Effort', desc: 'Free up your weekends while our trained specialists handle all laborious deep scrubbing.' },
-  { icon: ShieldCheck, title: 'Advanced Rotary Scrubbers', desc: 'Single-disc floor scrubbers and extraction vacuums achieve results household mops cannot.' },
-  { icon: HeartPulse, title: 'Eliminates Bacteria & Mites', desc: 'Hospital-grade sanitization that targets hidden mold, germs, and dust mite colonies.' },
-  { icon: Sparkles, title: 'Extends Furniture Lifespan', desc: 'Proper surface-safe descalers and pH-neutral solutions preserve your expensive tiles and fabrics.' },
-  { icon: Calendar, title: 'Customizable Scheduling', desc: 'Same-day, weekend, and evening cleaning slots available across Tirupati without extra surcharges.' },
-  { icon: ThumbsUp, title: '100% Satisfaction Guarantee', desc: 'We conduct a room-by-room joint inspection with you before departing.' },
+  {
+    icon: Clock,
+    title: 'Saves You Time',
+    desc: 'Enjoy your weekend while our trained team takes care of all the deep scrubbing and dusting.'
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Deep Floor Scrubbing',
+    desc: 'We use rotary floor scrubbers to clean tiles, marble, and grout lines deeper than regular mopping.'
+  },
+  {
+    icon: HeartPulse,
+    title: 'Removes Dust and Allergens',
+    desc: 'High-suction vacuum machines help extract deep dust, dirt, and allergens from mattresses and sofas.'
+  },
+  {
+    icon: Sparkles,
+    title: 'Safe for Surfaces',
+    desc: 'We use acid-free cleaning liquids that clean thoroughly without damaging your tiles or metal fittings.'
+  },
+  {
+    icon: Calendar,
+    title: 'Flexible Scheduling',
+    desc: 'Choose a morning or afternoon slot any day of the week, Monday through Sunday.'
+  },
+  {
+    icon: ThumbsUp,
+    title: 'Careful Final Check',
+    desc: 'We check every room together with you before we leave so you are happy with the work.' // TODO_OWNER: confirm room-by-room check process
+  },
 ];
 
 export const BenefitsSection: React.FC = () => {
@@ -15,12 +39,12 @@ export const BenefitsSection: React.FC = () => {
     <section className="py-20 px-4 sm:px-8 bg-[#F4F8FC] border-b border-slate-200">
       <div className="max-w-7xl mx-auto">
         <div className="text-center max-w-3xl mx-auto mb-14">
-          <span className="homecare-pill mb-2">Key Advantages</span>
+          <span className="homecare-pill mb-2">Why Choose Us</span>
           <h2 className="text-2xl sm:text-4xl font-extrabold text-[#041B3B] mt-1">
-            Benefits of Professional Cleaning Services in Tirupati
+            Why Choose Our Cleaning Service
           </h2>
           <p className="text-slate-600 mt-2 text-sm sm:text-base">
-            Why hundreds of Tirupati homes and businesses trust our mechanized cleaning service.
+            We make it simple and stress-free to keep your home or workplace clean in Tirupati.
           </p>
         </div>
 

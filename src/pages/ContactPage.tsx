@@ -1,25 +1,49 @@
-import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Clock, MessageCircle, Send, CheckCircle2, Sparkles, Navigation, Loader2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import {
+  Phone,
+  MessageCircle,
+  Mail,
+  MapPin,
+  Clock,
+  Send,
+  CheckCircle2,
+  ExternalLink,
+  AlertCircle,
+  Loader2,
+  Navigation
+} from 'lucide-react';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
-import { AreasList } from '../components/AreasList';
-import { FAQAccordionSection } from '../components/FAQAccordionSection';
-import { buildGarudaInquiryWhatsAppUrl } from '../utils/whatsappFormatter';
+import { TRUST_CONFIG } from '../config/trustConfig';
+import { SERVICES_DATA, getServiceBySlug, formatPrice } from '../data/servicesData';
+import { buildGarudaServiceRequestWhatsAppUrl } from '../utils/whatsappFormatter';
+import { trackEvent } from '../utils/analytics';
 
 export const ContactPage: React.FC = () => {
-  const [submitted, setSubmitted] = useState(false);
+  const [searchParams] = useSearchParams();
+  const preselectedSlug = searchParams.get('service') || '';
+
+  // Form states
+  const [name, setName] = useState('');
+  const [phone, setPhone] = useState('');
+  const [selectedServiceSlug, setSelectedServiceSlug] = useState('bhk-deep-cleaning');
+  const [bhkTier, setBhkTier] = useState('2 BHK');
+  const [unitQuantity, setUnitQuantity] = useState<number>(500);
+  const [locality, setLocality] = useState('');
+  const [gpsLocation, setGpsLocation] = useState('');
   const [locating, setLocating] = useState(false);
-  const [mapsPin, setMapsPin] = useState<string>('');
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    service: 'Complete Home Deep Cleaning',
-    locality: 'Balaji Colony',
-    message: 'Please contact me for free inspection',
-  });
+  const [mapLoaded, setMapLoaded] = useState(false);
+  const [preferredDate, setPreferredDate] = useState('');
+  const [preferredTime, setPreferredTime] = useState('Morning (8 AM - 12 PM)');
+  const [notes, setNotes] = useState('');
+  const [honeypot, setHoneypot] = useState('');
+
+  const [phoneError, setPhoneError] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   const handleDetectLocation = () => {
     if (!navigator.geolocation) {
-      alert('Geolocation is not supported by your browser. Please type your locality.');
+      alert('Geolocation is not supported by your browser.');
       return;
     }
 
@@ -29,308 +53,629 @@ export const ContactPage: React.FC = () => {
         const lat = position.coords.latitude;
         const lng = position.coords.longitude;
         const pinUrl = `https://maps.google.com/?q=${lat},${lng}`;
-        setMapsPin(pinUrl);
+        setGpsLocation(pinUrl);
         setLocating(false);
       },
       (error) => {
         console.warn('Geolocation error:', error);
         setLocating(false);
-        setMapsPin(`https://maps.google.com/?q=${encodeURIComponent(formData.locality + ', Tirupati')}`);
+        setGpsLocation('-');
       },
       { enableHighAccuracy: true, timeout: 10000 }
     );
   };
 
+  // Sync service preselection from URL if valid
+  useEffect(() => {
+    if (preselectedSlug) {
+      const found = getServiceBySlug(preselectedSlug);
+      if (found) {
+        setSelectedServiceSlug(found.slug);
+      }
+    }
+  }, [preselectedSlug]);
+
+  const currentService = getServiceBySlug(selectedServiceSlug) || SERVICES_DATA[0];
+  const isBhkService = currentService.slug === 'bhk-deep-cleaning';
+  const isPerUnit = currentService.price.kind === 'per-unit';
+
+  const validateIndianPhone = (val: string) => {
+    // Strips spaces, dashes, +91, 0 prefix
+    const cleaned = val.replace(/[\s\-+]/g, '').replace(/^91/, '').replace(/^0/, '');
+    const valid = /^[6-9]\d{9}$/.test(cleaned);
+    return { valid, cleaned };
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setPhone(val);
+    if (val.trim()) {
+      const { valid } = validateIndianPhone(val);
+      if (!valid) {
+        setPhoneError('Please enter a valid 10-digit Indian mobile number.');
+      } else {
+        setPhoneError('');
+      }
+    } else {
+      setPhoneError('');
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
 
-    const waUrl = buildGarudaInquiryWhatsAppUrl({
-      name: formData.name,
-      phone: formData.phone,
-      service: formData.service || 'Complete Home Deep Cleaning',
-      locality: formData.locality,
-      mapsPin: mapsPin || `https://maps.google.com/?q=${encodeURIComponent(formData.locality + ', Tirupati')}`,
-      message: formData.message || 'Please contact me for free inspection'
+    // Honeypot check for bots
+    if (honeypot.trim() !== '') {
+      return;
+    }
+
+    const { valid, cleaned } = validateIndianPhone(phone);
+    if (!valid) {
+      setPhoneError('Please enter a valid 10-digit Indian mobile number.');
+      return;
+    }
+
+    setSubmitted(true);
+    trackEvent('book_click', {
+      serviceSlug: selectedServiceSlug,
+      sourcePage: '/contact',
+      tier: isBhkService ? bhkTier : undefined,
+      quantity: isPerUnit ? `${unitQuantity} ${currentService.unitLabel}` : undefined
     });
 
+    // Format service description line
+    let serviceLabel = currentService.title;
+    if (isBhkService) {
+      serviceLabel += ` (${bhkTier})`;
+    } else if (isPerUnit) {
+      serviceLabel += ` (${unitQuantity} ${currentService.unitLabel})`;
+    }
+
+    // Build prefilled WhatsApp message
+    const waUrl = buildGarudaServiceRequestWhatsAppUrl({
+      appointmentDate: preferredDate,
+      name: name.trim(),
+      phone: cleaned,
+      address: locality.trim() || 'Tirupati',
+      gpsLocation: gpsLocation && gpsLocation !== '-' ? gpsLocation : undefined,
+      serviceRequired: serviceLabel,
+      priorityTime: preferredTime,
+      remarks: notes.trim() || '-'
+    });
+
+    // Open WhatsApp confirmation in new tab
     window.open(waUrl, '_blank');
   };
 
-  const whatsappInquiryUrl = buildGarudaInquiryWhatsAppUrl({
-    name: formData.name || 'Prasad',
-    phone: formData.phone || '7799552084',
-    service: formData.service || 'Complete Home Deep Cleaning',
-    locality: formData.locality,
-    mapsPin: mapsPin,
-    message: formData.message
-  });
+  const contactSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Contact Garuda Cleaning Services Tirupati',
+    description: 'Contact Garuda Cleaning Services in Tirupati for professional cleaning bookings, quotes, and inspections.',
+    url: 'https://garudacleaningservices.in/contact',
+    mainEntity: {
+      '@type': 'LocalBusiness',
+      name: 'Garuda Cleaning Services',
+      telephone: '+917799552084',
+      email: 'contact@garudacleaningservices.com',
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: 'Bhavani Nagar, AIR Bypass Road',
+        addressLocality: 'Tirupati',
+        addressRegion: 'Andhra Pradesh',
+        postalCode: '517501',
+        addressCountry: 'IN'
+      },
+      geo: {
+        '@type': 'GeoCoordinates',
+        latitude: 13.6288,
+        longitude: 79.4192
+      }
+    }
+  };
 
   return (
-    <div className="pt-20 bg-[#F8FAFC]">
-      {/* Header */}
-      <div className="bg-gradient-to-b from-[#041B3B] to-[#07254D] text-white py-16 sm:py-20 px-4 sm:px-8 border-b border-white/10 text-center relative overflow-hidden">
-        <div className="max-w-4xl mx-auto space-y-4 relative z-10">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-emerald-400 text-xs font-bold border border-white/20">
-            <Sparkles className="w-3.5 h-3.5 text-[#22AC33]" />
-            Fast WhatsApp Coordination • Tirupati
+    <div className="bg-slate-50 min-h-screen">
+      {/* React 19 Head */}
+      <title>Contact Garuda Cleaning Services | Tirupati</title>
+      <meta
+        name="description"
+        content="Contact Garuda Cleaning Services in Tirupati. Call +91 77995 52084 or message on WhatsApp for instant price estimates, home inspections, and bookings."
+      />
+      <link rel="canonical" href="https://garudacleaningservices.in/contact" />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactSchema) }}
+      />
+
+      {/* Hero Header */}
+      <div className="bg-[#041B3B] text-white py-14 sm:py-20 px-4 sm:px-8 border-b border-white/10 text-center">
+        <div className="max-w-4xl mx-auto space-y-3">
+          <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#22AC33] border border-white/10">
+            Tirupati Support & Bookings
           </span>
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            Contact Garuda Cleaning Services
+            Contact Garuda Cleaning Services – Tirupati
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Reach out to our Tirupati cleaning coordinators for immediate quotations, custom commercial site assessments, and same-day slots.
+            Reach out directly for upfront quotes, schedule a cleaning crew, or arrange a site inspection across Tirupati.
           </p>
         </div>
       </div>
 
-      {/* Main Grid */}
-      <div className="py-16 sm:py-20 px-4 sm:px-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-        {/* Contact Info */}
-        <div className="lg:col-span-5 space-y-6">
-          <div>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#041B3B]">
-              Tirupati Operations Center
-            </h2>
-            <p className="text-xs sm:text-sm text-slate-500 mt-1">
-              Direct telephone, WhatsApp, and dispatch hub serving all Tirupati localities.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-[#E8F8EC] text-[#22AC33] flex items-center justify-center shrink-0 shadow-xs">
-                <Phone className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Direct Hotline</div>
-                <a
-                  href={BUSINESS_CONFIG.contact.phoneTel}
-                  className="font-black text-lg text-[#041B3B] hover:text-[#22AC33] transition-colors"
-                >
-                  {BUSINESS_CONFIG.contact.phoneDisplay}
-                </a>
-                <div className="text-xs text-slate-500 mt-0.5">Instant booking &amp; emergency inquiries</div>
-              </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+        {/* Top Big Action Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
+          <a
+            href={BUSINESS_CONFIG.contact.phoneTel}
+            onClick={() => trackEvent('call_click', { sourcePage: '/contact' })}
+            className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#22AC33] hover:shadow-md transition-all flex items-center gap-4 group"
+          >
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-[#22AC33] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <Phone className="w-6 h-6" />
             </div>
-
-            <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-[#22AC33] text-white flex items-center justify-center shrink-0 shadow-xs">
-                <MessageCircle className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">WhatsApp Quick Booking</div>
-                <a
-                  href={BUSINESS_CONFIG.buildWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-black text-lg text-[#22AC33] hover:underline"
-                >
-                  Chat with Team on WhatsApp
-                </a>
-                <div className="text-xs text-slate-500 mt-0.5">Average reply time: under 5 minutes</div>
-              </div>
+            <div>
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                Direct Telephone
+              </span>
+              <span className="text-base sm:text-lg font-black text-[#041B3B] block">
+                {BUSINESS_CONFIG.contact.phoneDisplay}
+              </span>
+              <span className="text-xs text-[#22AC33] font-semibold">Tap to call our customer support team</span>
             </div>
+          </a>
 
-            <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-[#041B3B] text-[#FFD700] flex items-center justify-center shrink-0 shadow-xs">
-                <MapPin className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Base Address</div>
-                <div className="font-bold text-sm text-[#041B3B]">
-                  {BUSINESS_CONFIG.contact.address}
-                </div>
-              </div>
+          <a
+            href={BUSINESS_CONFIG.buildWhatsAppUrl()}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => trackEvent('whatsapp_click', { sourcePage: '/contact' })}
+            className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#22AC33] hover:shadow-md transition-all flex items-center gap-4 group"
+          >
+            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-[#22AC33] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <MessageCircle className="w-6 h-6" />
             </div>
-
-            <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-sm flex items-start gap-4">
-              <div className="w-12 h-12 rounded-2xl bg-[#041B3B] text-white flex items-center justify-center shrink-0 shadow-xs">
-                <Clock className="w-6 h-6" />
-              </div>
-              <div>
-                <div className="text-xs text-slate-400 font-bold uppercase tracking-wider">Working Hours</div>
-                <div className="font-bold text-sm text-[#041B3B]">
-                  {BUSINESS_CONFIG.contact.operatingHours}
-                </div>
-                <div className="text-xs text-emerald-600 font-semibold mt-0.5">All 7 days open</div>
-              </div>
+            <div>
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+                Instant WhatsApp Quote
+              </span>
+              <span className="text-base sm:text-lg font-black text-[#041B3B] block">
+                {BUSINESS_CONFIG.contact.whatsappDisplay}
+              </span>
+              <span className="text-xs text-[#22AC33] font-semibold">Chat with photos & get quotes</span>
             </div>
-          </div>
+          </a>
         </div>
 
-        {/* Contact Form with Rapido Style Pin */}
-        <div className="lg:col-span-7">
-          <div className="bg-white p-7 sm:p-10 rounded-3xl border border-slate-200 shadow-xl">
-            {submitted ? (
-              <div className="text-center py-10 space-y-4">
-                <div className="w-16 h-16 rounded-full bg-emerald-100 text-[#22AC33] flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-                <h3 className="text-2xl font-black text-[#041B3B]">
-                  WhatsApp Inquiry Prepared!
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
-                  Thank you <strong>{formData.name}</strong>. If WhatsApp did not launch automatically, tap below to send your request with your exact Google Maps pin:
-                </p>
+        {/* 2-Column Grid: Contact Info & Booking Form */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* Left Info Column */}
+          <div className="lg:col-span-5 space-y-6">
+            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
+              <h2 className="text-xl font-black text-[#041B3B]">Office & Operating Hours</h2>
 
-                <div className="pt-3 max-w-sm mx-auto flex flex-col gap-2.5">
-                  <a
-                    href={whatsappInquiryUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-homecare-green w-full text-xs py-3.5 justify-center font-black shadow-lg"
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                    Open WhatsApp Chat Now
-                  </a>
-                  <button
-                    onClick={() => setSubmitted(false)}
-                    className="py-2.5 px-6 rounded-full bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200 cursor-pointer"
-                  >
-                    Submit Another Inquiry
-                  </button>
+              <div className="space-y-4 text-xs sm:text-sm text-slate-600">
+                <div className="flex items-start gap-3">
+                  <MapPin className="w-5 h-5 text-[#22AC33] shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-[#041B3B] block">Service Hub Address</span>
+                    <span>{BUSINESS_CONFIG.contact.address}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <Clock className="w-5 h-5 text-[#22AC33] shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-[#041B3B] block">Operating Hours</span>
+                    <span>{BUSINESS_CONFIG.contact.operatingHours}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <Mail className="w-5 h-5 text-[#22AC33] shrink-0 mt-0.5" />
+                  <div>
+                    <span className="font-bold text-[#041B3B] block">Email Inquiries</span>
+                    <a
+                      href={`mailto:${BUSINESS_CONFIG.contact.email}`}
+                      className="text-[#22AC33] hover:underline"
+                    >
+                      {BUSINESS_CONFIG.contact.email}
+                    </a>
+                  </div>
                 </div>
               </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-4">
+
+              {/* Service Areas List */}
+              <div className="pt-4 border-t border-slate-100">
+                <span className="text-xs font-bold text-[#041B3B] uppercase tracking-wider block mb-2">
+                  Key Service Localities in Tirupati:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {BUSINESS_CONFIG.serviceAreas.map((area) => (
+                    <span
+                      key={area.name}
+                      className="text-[11px] font-medium bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg"
+                    >
+                      {area.name}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Google Review Box (rendered ONLY when googleReviewUrl exists) */}
+            {TRUST_CONFIG.googleReviewUrl && (
+              <div className="bg-white p-6 rounded-3xl border border-emerald-200 shadow-xs space-y-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center font-bold text-xs">
+                    G
+                  </div>
+                  <h3 className="font-bold text-sm text-[#041B3B]">Customer Feedback</h3>
+                </div>
+                <p className="text-xs text-slate-600">
+                  Had a cleaning service with us? Leave your authentic review on our Google Business Profile.
+                </p>
+                <a
+                  href={TRUST_CONFIG.googleReviewUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#22AC33] hover:underline"
+                >
+                  <span>Open Google Review Page</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            )}
+
+            {/* Tirupati City Coverage Map */}
+            <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3">
+              <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-xl sm:text-2xl font-black text-[#041B3B]">
-                    Send Direct WhatsApp Booking Inquiry
+                  <h3 className="font-extrabold text-sm text-[#041B3B]">Tirupati City Service Coverage</h3>
+                  <p className="text-[11px] text-slate-500">We cover all residential & commercial areas across Tirupati</p>
+                </div>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#E8F8EC] text-[#22AC33] text-[11px] font-bold border border-[#22AC33]/20">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#22AC33] animate-pulse" />
+                  <span>Citywide</span>
+                </div>
+              </div>
+
+              <div className="relative aspect-[16/10] rounded-2xl overflow-hidden bg-slate-100 ring-1 ring-slate-200/80">
+                {!mapLoaded && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-100 text-slate-400 space-y-2">
+                    <MapPin className="w-8 h-8 text-[#22AC33] animate-bounce" />
+                    <span className="text-xs font-semibold">Loading Tirupati Map...</span>
+                  </div>
+                )}
+                <iframe
+                  title="Garuda Cleaning Services Tirupati Service Area Map"
+                  src={BUSINESS_CONFIG.coverage.mapEmbedUrl}
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen={false}
+                  referrerPolicy="no-referrer-when-downgrade"
+                  onLoad={() => setMapLoaded(true)}
+                  className="w-full h-full rounded-2xl"
+                />
+
+                {/* Top-Left Tirupati City Coverage Badge */}
+                <div className="absolute top-3 left-3 z-[var(--z-content)] pointer-events-none flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#041B3B]/90 backdrop-blur-md border border-[#22AC33]/50 text-white shadow-md">
+                  <span className="w-2 h-2 rounded-full bg-[#22AC33] animate-pulse shrink-0" />
+                  <span className="text-xs font-extrabold tracking-wide">Tirupati City</span>
+                </div>
+
+                {/* Stylized coverage area outline */}
+                <svg
+                  className="absolute inset-0 w-full h-full pointer-events-none opacity-45"
+                  viewBox="0 0 800 500"
+                  preserveAspectRatio="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M 170,110 C 270,75 450,70 580,95 C 690,120 735,215 705,320 C 675,410 530,445 385,435 C 240,425 125,385 105,280 C 90,195 115,130 170,110 Z"
+                    fill="rgba(34, 172, 51, 0.04)"
+                    stroke="#22AC33"
+                    strokeWidth="2.5"
+                    strokeDasharray="6 4"
+                  />
+                </svg>
+
+                {/* Vignette */}
+                <div className="absolute inset-0 pointer-events-none rounded-2xl ring-1 ring-inset ring-[#041B3B]/20 shadow-[inset_0_0_40px_rgba(4,27,59,0.22)]" />
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-1 text-xs">
+                <span className="text-slate-500 font-medium">
+                  We bring equipment directly to your location.
+                </span>
+                <a
+                  href={BUSINESS_CONFIG.coverage.mapDirectUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 font-bold text-[#22AC33] hover:underline"
+                >
+                  <span>Open in Google Maps</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Form Column */}
+          <div className="lg:col-span-7">
+            <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-xs">
+              <div className="mb-6">
+                <h2 className="text-xl sm:text-2xl font-black text-[#041B3B]">
+                  Book a Cleaning or Request a Free Estimate
+                </h2>
+                <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                  Fill in your details below. We verify every request and confirm timing before service.
+                </p>
+              </div>
+
+              {submitted ? (
+                <div className="p-8 text-center bg-emerald-50 rounded-2xl border border-emerald-200 space-y-4">
+                  <div className="w-14 h-14 bg-[#22AC33] text-white rounded-2xl flex items-center justify-center mx-auto shadow-md">
+                    <CheckCircle2 className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-lg sm:text-xl font-black text-[#041B3B]">
+                    Booking Request Sent!
                   </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Our team receives your inquiry with your exact Google Maps pin for rapid vehicle navigation.
+                  <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
+                    Thank you, {name}! Your request for <strong>{currentService.title}</strong> has been created. A WhatsApp chat was opened with your booking details. Our Tirupati coordinator will confirm your slot shortly.
                   </p>
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setSubmitted(false)}
+                      className="btn-homecare-navy text-xs py-2 px-4 rounded-xl font-bold cursor-pointer"
+                    >
+                      Submit Another Inquiry
+                    </button>
+                  </div>
                 </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                      Your Name *
-                    </label>
+              ) : (
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Honeypot field (hidden from humans) */}
+                  <div className="hidden" aria-hidden="true">
+                    <label htmlFor="website-field">Leave blank</label>
                     <input
+                      id="website-field"
                       type="text"
-                      required
-                      placeholder="e.g. Prasad"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none"
+                      name="website"
+                      value={honeypot}
+                      onChange={(e) => setHoneypot(e.target.value)}
+                      tabIndex={-1}
+                      autoComplete="off"
                     />
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                      Phone Number *
-                    </label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="e.g. 6302175923"
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none"
-                    />
-                  </div>
-                </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {/* Name and Phone */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        Your Name *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="e.g. Ramesh Kumar"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        10-Digit Mobile Number *
+                      </label>
+                      <input
+                        type="tel"
+                        required
+                        value={phone}
+                        onChange={handlePhoneChange}
+                        placeholder="e.g. 9876543210"
+                        className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none bg-slate-50/50 ${
+                          phoneError ? 'border-red-400 focus:border-red-500' : 'border-slate-300 focus:border-[#22AC33]'
+                        }`}
+                      />
+                      {phoneError && (
+                        <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3 shrink-0" />
+                          <span>{phoneError}</span>
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Service Dropdown */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                      Service *
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Service Required *
                     </label>
                     <select
-                      value={formData.service}
-                      onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                      className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none font-medium"
+                      value={selectedServiceSlug}
+                      onChange={(e) => setSelectedServiceSlug(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-white font-medium text-slate-800"
                     >
-                      <option value="Complete Home Deep Cleaning">Complete Home Deep Cleaning</option>
-                      <option value="Modular Kitchen Degreasing">Modular Kitchen Degreasing</option>
-                      <option value="Bathroom Acid-Free Descaling">Bathroom Acid-Free Descaling</option>
-                      <option value="Sofa & Carpet Shampooing">Sofa &amp; Carpet Shampooing</option>
-                      <option value="Mechanized Floor Scrubbing">Mechanized Floor Scrubbing</option>
-                      <option value="Luxury Villa Deep Cleaning">Luxury Villa Deep Cleaning</option>
-                      <option value="Office & Clinic Commercial Detailing">Office &amp; Clinic Detailing</option>
-                      <option value="Pest Control & Termite Solutions">Pest Control &amp; Termite Solutions</option>
+                      {SERVICES_DATA.map((srv) => (
+                        <option key={srv.slug} value={srv.slug}>
+                          {srv.title} ({srv.category})
+                        </option>
+                      ))}
                     </select>
                   </div>
 
-                  <div>
-                    <div className="flex items-center justify-between mb-1">
-                      <label className="block text-xs font-bold text-slate-700 uppercase">
-                        Locality / Street Address / Google Maps Link *
+                  {/* Conditional: BHK Tier (when BHK Deep Cleaning is chosen) */}
+                  {isBhkService && (
+                    <div className="p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200">
+                      <label className="block text-xs font-bold text-[#041B3B] uppercase tracking-wider mb-1.5">
+                        Select Apartment Size:
+                      </label>
+                      <div className="grid grid-cols-4 gap-2">
+                        {['1 BHK', '2 BHK', '3 BHK', '4 BHK'].map((tier) => (
+                          <button
+                            key={tier}
+                            type="button"
+                            onClick={() => setBhkTier(tier)}
+                            className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                              bhkTier === tier
+                                ? 'bg-[#22AC33] text-white shadow-2xs'
+                                : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+                            }`}
+                          >
+                            {tier}
+                          </button>
+                        ))}
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-1.5">
+                        For larger duplexes or villas, please mention in notes below.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Conditional: Quantity / Area field (for per-unit services) */}
+                  {isPerUnit && (
+                    <div className="p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200 flex items-center justify-between gap-4">
+                      <div>
+                        <label className="block text-xs font-bold text-[#041B3B] uppercase tracking-wider">
+                          Approximate {currentService.unitLabel}:
+                        </label>
+                        <span className="text-[11px] text-slate-500">
+                          Rate: {formatPrice(currentService.price)}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="number"
+                          min={1}
+                          max={50000}
+                          value={unitQuantity}
+                          onChange={(e) => setUnitQuantity(Math.max(1, Number(e.target.value)))}
+                          className="w-24 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm font-bold text-center focus:border-[#22AC33] outline-none"
+                        />
+                        <span className="text-xs font-bold text-slate-600">{currentService.unitLabel}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Locality and Date */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        Locality / Area in Tirupati *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={locality}
+                        onChange={(e) => setLocality(e.target.value)}
+                        placeholder="e.g. MR Palli, AIR Bypass, Balaji Colony"
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                        Preferred Date
+                      </label>
+                      <input
+                        type="date"
+                        value={preferredDate}
+                        onChange={(e) => setPreferredDate(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50 text-slate-700"
+                      />
+                    </div>
+                  </div>
+
+                  {/* GPS Location Auto-Pin Field */}
+                  <div className="space-y-1.5 p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                        <MapPin className="w-3.5 h-3.5 text-[#22AC33]" />
+                        <span>GPS Location</span>
                       </label>
                       <button
                         type="button"
                         onClick={handleDetectLocation}
                         disabled={locating}
-                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#22AC33] hover:underline cursor-pointer bg-[#E8F8EC] px-2.5 py-1 rounded-lg border border-[#22AC33]/20 shadow-2xs"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#22AC33] hover:text-[#1c8f2b] cursor-pointer bg-[#E8F8EC] px-3.5 py-1.5 rounded-xl border border-[#22AC33]/25 shadow-2xs transition-all hover:bg-[#d5f3dc]"
                       >
                         {locating ? (
                           <>
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                            <span>Detecting...</span>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <span>Detecting GPS...</span>
                           </>
                         ) : (
                           <>
-                            <MapPin className="w-3 h-3 text-[#22AC33]" />
-                            <span>Auto-Detect Live GPS</span>
+                            <Navigation className="w-3.5 h-3.5" />
+                            <span>Auto-Pin My Location</span>
                           </>
                         )}
                       </button>
                     </div>
-                    <div className="relative">
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. Doctor M H Marigowda Road / Balaji Colony"
-                        value={formData.locality}
-                        onChange={(e) => setFormData({ ...formData, locality: e.target.value })}
-                        className="w-full pl-9 pr-4 py-3 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none"
-                      />
-                      <MapPin className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
-                    </div>
-                    <span className="text-[11px] text-slate-400 block mt-1">
-                      Type your address manually, or tap "Auto-Detect Live GPS" to automatically fill your coordinates.
-                    </span>
+                    <input
+                      type="text"
+                      placeholder="Auto-detected or paste Google Maps link"
+                      value={gpsLocation}
+                      onChange={(e) => setGpsLocation(e.target.value)}
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-white font-mono text-slate-700"
+                    />
                   </div>
-                </div>
 
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Special Message / Requirements
-                  </label>
-                  <textarea
-                    rows={3}
-                    placeholder="e.g. Please contact me for free inspection"
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    className="w-full px-4 py-3 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none resize-none"
-                  />
-                </div>
+                  {/* Time Slot */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Preferred Time Slot
+                    </label>
+                    <select
+                      value={preferredTime}
+                      onChange={(e) => setPreferredTime(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-white text-slate-800"
+                    >
+                      <option value="Morning (8 AM - 12 PM)">Morning (8:00 AM – 12:00 PM)</option>
+                      <option value="Afternoon (12 PM - 4 PM)">Afternoon (12:00 PM – 4:00 PM)</option>
+                      <option value="Evening (4 PM - 8 PM)">Evening (4:00 PM – 8:00 PM)</option>
+                      <option value="Flexible / Any Time">Flexible / Any Time</option>
+                    </select>
+                  </div>
 
-                <button
-                  type="submit"
-                  className="btn-homecare-green w-full text-sm py-4 justify-center font-black cursor-pointer shadow-xl shine-effect"
-                >
-                  <Send className="w-4 h-4 text-[#FFD700]" />
-                  Submit Inquiry on WhatsApp
-                </button>
+                  {/* Notes */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      Special Requirements / Notes (Optional)
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={notes}
+                      onChange={(e) => setNotes(e.target.value)}
+                      placeholder="Any specific stains, floor type, or access requirements..."
+                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50 resize-none"
+                    />
+                  </div>
 
-                <div className="text-center pt-2">
-                  <a
-                    href={BUSINESS_CONFIG.contact.phoneTel}
-                    className="text-xs font-bold text-slate-600 hover:text-[#22AC33] transition-colors"
-                  >
-                    Need immediate assistance? Call <strong>+91 77995 52084</strong>
-                  </a>
-                </div>
-              </form>
-            )}
+                  {/* Submit Button */}
+                  <div className="pt-2">
+                    <button
+                      type="submit"
+                      className="w-full btn-homecare-green py-3.5 px-6 font-bold text-sm justify-center flex items-center gap-2 shadow-xs cursor-pointer"
+                    >
+                      <Send className="w-4 h-4" />
+                      <span>Send Booking Request via WhatsApp</span>
+                    </button>
+                    <p className="text-[11px] text-slate-400 text-center mt-2">
+                      Zero advance payment required. Free re-inspection upon completion.
+                    </p>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </div>
-
-      <AreasList />
-      <FAQAccordionSection />
     </div>
   );
 };

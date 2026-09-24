@@ -1,0 +1,6 @@
+# robots.txt for Garuda Cleaning Services Tirupati
+User-agent: *
+Allow: /
+
+# Sitemaps
+Sitemap: https://garudacleaningservices.in/sitemap.xml

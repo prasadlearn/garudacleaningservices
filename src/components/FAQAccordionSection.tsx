@@ -2,31 +2,32 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Minus, HelpCircle, PhoneCall } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
+import { SafeImage } from './SafeImage';
 
 const FAQS = [
   {
-    q: 'Do I need to supply cleaning tools, vacuum machines, or chemicals?',
-    a: 'Not at all! Our professional crew arrives completely self-sufficient with heavy-duty single-disc rotary floor scrubbers, industrial wet & dry extractors, chemical-resistant microfiber wipers, aluminium extension ladders, and certified Taski / Diversey eco-safe formulations.'
+    q: 'Do I need to provide any cleaning tools, machines, or supplies?',
+    a: 'No, you don\'t need to provide anything. Our team brings all the equipment needed, including rotary floor scrubbers, vacuum machines, cleaning cloths, and surface-safe cleaning products.'
   },
   {
-    q: 'Are your cleaning products safe for marble floors, children, and pets?',
-    a: '100% Yes. We strictly enforce a total ban on raw corrosive muriatic acid. We utilize biological descalers and pH-neutral sanitizers that gently dissolve calcium and grease without etching marble, vitrified tile glaze, or releasing pungent chemical fumes.'
+    q: 'Are your cleaning products safe for floors, children, and pets?',
+    a: 'Yes. We use acid-free cleaning solutions and surface-safe liquids. They clean thoroughly without damaging tiles, marble, or fittings, and they do not produce harsh fumes.'
   },
   {
-    q: 'How long does a standard 2 BHK or 3 BHK deep cleaning session take?',
-    a: 'A 2 BHK deep clean generally takes between 4 to 5.5 hours with a certified team of 3 technicians. A 3 BHK or independent villa takes 5.5 to 7.5 hours with 4 to 5 specialists, including full machine floor scrubbing and glass detailing.'
+    q: 'How long does a deep cleaning service take?',
+    a: 'A 1 or 2 BHK apartment usually takes about 4 to 5 hours. Larger 3 BHK apartments and villas take 6 to 8 hours depending on property size and condition.'
   },
   {
-    q: 'How do you handle hard water scale common in Tirupati borewell water?',
-    a: 'Tirupati groundwater is notoriously high in calcium deposits. We apply specialized Taski R9 organic salt descaling foam to tiles, taps, and glass shower cubicles, allowing it to dissolve mineral crusts before mechanical scrubbing and mirror-shine buffing.'
+    q: 'How do you clean hard water stains on tiles and taps?',
+    a: 'We apply acid-free descaling foam to taps, tiles, and glass surfaces to break down mineral deposits before scrubbing and wiping them clean.'
   },
   {
-    q: 'What is your payment procedure? Are there hidden transport costs?',
-    a: 'Zero hidden fees. We provide clear, fixed upfront pricing. We do NOT charge transport fees anywhere within the Tirupati municipal limits. Payment is collected only after our team supervisor conducts a comprehensive walkthrough handover with you.'
+    q: 'How does payment work? Are there any hidden travel charges?',
+    a: 'We have fixed, upfront pricing with zero hidden travel charges anywhere within Tirupati. You pay only after the cleaning is completed and you have checked the work.'
   },
   {
-    q: 'Can I book a same-day urgent cleaning slot in Tirupati?',
-    a: 'Yes! Subject to crew availability, we offer express same-day deployment within 2 hours across MR Palli, Alipiri, Korlagunta, Bhavani Nagar, and Balaji Colony.'
+    q: 'How do I book a cleaning appointment?',
+    a: 'You can book online by clicking Book Now or Get Free Quote, or message us directly on WhatsApp with your location and property details to confirm a time slot.'
   }
 ];
 
@@ -44,10 +45,10 @@ export const FAQAccordionSection: React.FC = () => {
           transition={{ duration: 0.6 }}
           className="lg:col-span-5 relative"
         >
-          <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-[4/5] bg-slate-900 relative group">
-            <img
-              src="/images/kitchen-clean.jpg"
-              alt="Professional Cleaning in Tirupati"
+          <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-white aspect-4/5 bg-slate-900 relative group">
+            <SafeImage
+              src="/images/kitchen-clean.webp"
+              alt="Cleaning Services in Tirupati"
               className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#041B3B]/80 via-transparent to-transparent" />
@@ -58,9 +59,9 @@ export const FAQAccordionSection: React.FC = () => {
                   <PhoneCall className="w-5 h-5" />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-slate-500 uppercase">Have a specific question?</div>
+                  <div className="text-xs font-bold text-slate-500 uppercase">Have a Question?</div>
                   <a href={BUSINESS_CONFIG.contact.phoneTel} className="text-sm font-black text-[#041B3B] hover:text-[#22AC33] transition-colors">
-                    Call: {BUSINESS_CONFIG.contact.phoneDisplay}
+                    Call {BUSINESS_CONFIG.contact.phoneDisplay}
                   </a>
                 </div>
               </div>
@@ -79,13 +80,13 @@ export const FAQAccordionSection: React.FC = () => {
           <div>
             <span className="homecare-pill mb-2">
               <HelpCircle className="w-3.5 h-3.5" />
-              Got Questions?
+              Questions & Answers
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-[#041B3B] mt-1 tracking-tight">
               Frequently Asked Questions
             </h2>
             <p className="text-slate-600 text-sm mt-1">
-              Everything you need to know about our home & commercial cleaning standards in Tirupati.
+              Common questions about our cleaning services and booking process in Tirupati.
             </p>
           </div>
 

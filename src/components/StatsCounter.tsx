@@ -1,18 +1,13 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { TRUST_CONFIG, hasVerifiedProjects } from '../config/trustConfig';
+import { BUSINESS_CONFIG } from '../config/businessConfig';
 
 interface StatItem {
   target: number;
   suffix: string;
   label: string;
 }
-
-const STATS_DATA: StatItem[] = [
-  { target: 450, suffix: '+', label: 'Projects Completed' },
-  { target: 30, suffix: '+', label: 'Trained Specialists' },
-  { target: 3000, suffix: '+', label: 'Happy Client Ratings' },
-  { target: 5, suffix: '+ Years', label: 'Tirupati Local Experience' },
-];
 
 const AnimatedNumber: React.FC<{ target: number; suffix: string; isInView: boolean }> = ({
   target,
@@ -55,10 +50,21 @@ export const StatsCounter: React.FC = () => {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: '-50px' });
 
+  // Ground Rule 1: Auto-hide block if verified project count is null/empty
+  if (!hasVerifiedProjects() || !TRUST_CONFIG.projectsCompleted) {
+    return null;
+  }
+
+  const statsData: StatItem[] = [
+    { target: TRUST_CONFIG.projectsCompleted, suffix: '+', label: 'Projects Completed' },
+    { target: BUSINESS_CONFIG.serviceAreas.length, suffix: ' Areas', label: 'Localities Served' },
+    { target: 7, suffix: ' Days/Wk', label: 'Available Across Tirupati' },
+  ];
+
   return (
     <section ref={ref} className="bg-[#E8F8EC] py-12 px-4 sm:px-8 border-y border-emerald-100 relative overflow-hidden">
-      <div className="max-w-7xl mx-auto grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center relative z-10">
-        {STATS_DATA.map((s, idx) => (
+      <div className="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 text-center relative z-[var(--z-content)]">
+        {statsData.map((s, idx) => (
           <motion.div
             key={idx}
             initial={{ opacity: 0, y: 20 }}

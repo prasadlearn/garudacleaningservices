@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { X, Send, CheckCircle, Phone, MessageCircle, MapPin, Sparkles, Loader2, Calendar, Clock } from 'lucide-react';
+import { X, Send, CheckCircle, Phone, MapPin, Sparkles, Loader2, Calendar, Clock } from 'lucide-react';
 import { useQuoteModal } from '../context/QuoteModalContext';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
 import { buildGarudaServiceRequestWhatsAppUrl } from '../utils/whatsappFormatter';
+import { SERVICES_DATA } from '../data/servicesData';
+import { trackEvent } from '../utils/analytics';
 
 export const BookingModal: React.FC = () => {
   const { isOpen, initialService, closeModal } = useQuoteModal();
   const [submitted, setSubmitted] = useState(false);
   const [locating, setLocating] = useState(false);
 
-  // Default appointment date: DD/MM/YYYY
   const getTodayFormatted = () => {
     const today = new Date();
     const dd = String(today.getDate()).padStart(2, '0');
@@ -19,17 +20,17 @@ export const BookingModal: React.FC = () => {
   };
 
   const [formData, setFormData] = useState({
-    name: 'Dhana',
-    phone: '7799552084',
+    name: '',
+    phone: '',
     appointmentDate: getTodayFormatted(),
-    address: 'Tata nagar',
-    landmark: 'Tata nagar',
+    address: '',
+    landmark: '',
     gpsLocation: '-',
-    serviceRequired: 'House Deep Cleaning (2BHK) (₹2999)',
-    totalAmount: 'To be confirmed',
+    serviceRequired: 'BHK Deep Cleaning',
+    totalAmount: 'To be confirmed after inspection',
     subscriptionClient: 'No',
-    priorityTime: '10 am',
-    remarks: '-',
+    priorityTime: '10:00 AM',
+    remarks: '',
   });
 
   useEffect(() => {
@@ -44,7 +45,6 @@ export const BookingModal: React.FC = () => {
 
   if (!isOpen) return null;
 
-  // Auto-detect GPS pin into the GPS Location field
   const handleDetectLocation = () => {
     if (!navigator.geolocation) {
       alert('Geolocation is not supported by your browser.');
@@ -72,95 +72,79 @@ export const BookingModal: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
+    trackEvent('book_click', {
+      serviceSlug: formData.serviceRequired,
+      sourcePage: 'booking_modal'
+    });
 
     const waUrl = buildGarudaServiceRequestWhatsAppUrl({
       appointmentDate: formData.appointmentDate,
       name: formData.name,
       phone: formData.phone,
-      address: formData.address,
+      address: formData.address || 'Tirupati',
       landmark: formData.landmark,
       gpsLocation: formData.gpsLocation,
       serviceRequired: formData.serviceRequired,
       totalAmount: formData.totalAmount,
       subscriptionClient: formData.subscriptionClient,
       priorityTime: formData.priorityTime,
-      remarks: formData.remarks,
+      remarks: formData.remarks || '-',
     });
 
     window.open(waUrl, '_blank');
   };
 
-  const whatsappInquiryUrl = buildGarudaServiceRequestWhatsAppUrl({
-    appointmentDate: formData.appointmentDate,
-    name: formData.name,
-    phone: formData.phone,
-    address: formData.address,
-    landmark: formData.landmark,
-    gpsLocation: formData.gpsLocation,
-    serviceRequired: formData.serviceRequired,
-    totalAmount: formData.totalAmount,
-    subscriptionClient: formData.subscriptionClient,
-    priorityTime: formData.priorityTime,
-    remarks: formData.remarks,
-  });
-
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/75 flex items-center justify-center p-3 sm:p-4 backdrop-blur-xs"
-      onClick={closeModal}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Schedule Cleaning Appointment"
+      className="fixed inset-0 z-[var(--z-modal)] flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs overflow-y-auto"
     >
-      <div
-        className="relative max-w-lg w-full bg-white rounded-3xl shadow-2xl border-2 border-[#041B3B] max-h-[92vh] flex flex-col overflow-hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Sticky Header: ALWAYS visible, close button pinned at top-right */}
-        <div className="sticky top-0 bg-white z-30 px-6 pt-5 pb-4 border-b border-slate-100 flex items-center justify-between gap-3 shrink-0">
-          <div>
-            <span className="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-[#E8F8EC] text-[#22AC33] uppercase tracking-wider inline-flex items-center gap-1">
-              <Sparkles className="w-3 h-3" />
-              Garuda Cleaning Services • Tirupati
-            </span>
-            <h3 className="text-lg sm:text-xl font-black text-[#041B3B] mt-1 leading-tight">
-              New Service Request
-            </h3>
-          </div>
-
+      <div className="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden my-8">
+        {/* Header */}
+        <div className="bg-[#041B3B] text-white p-6 relative">
           <button
+            type="button"
             onClick={closeModal}
-            className="w-10 h-10 rounded-full bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-700 flex items-center justify-center cursor-pointer transition-colors shrink-0 border border-slate-200 shadow-xs"
-            aria-label="Close dialog"
+            className="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors cursor-pointer"
+            aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
+
+          <div className="flex items-center gap-2 mb-2">
+            <Sparkles className="w-4 h-4 text-[#22AC33]" />
+            <span className="text-xs font-bold uppercase tracking-wider text-[#22AC33]">
+              Instant Service Booking
+            </span>
+          </div>
+          <h2 className="text-xl sm:text-2xl font-black tracking-tight !text-white">
+            Schedule Cleaning Appointment
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-300 mt-1 font-medium">
+            Dispatching specialized cleaning crews across all Tirupati localities.
+          </p>
         </div>
 
-        {/* Scrollable Form Body */}
-        <div className="p-6 sm:p-7 overflow-y-auto flex-1 space-y-4">
+        {/* Content */}
+        <div className="p-6 max-h-[75vh] overflow-y-auto">
           {submitted ? (
-            <div className="text-center py-6 space-y-4">
-              <div className="w-16 h-16 rounded-full bg-emerald-100 text-[#22AC33] flex items-center justify-center mx-auto">
-                <CheckCircle className="w-8 h-8" />
+            <div className="text-center py-8 space-y-4">
+              <div className="w-16 h-16 bg-emerald-100 text-[#22AC33] rounded-full flex items-center justify-center mx-auto shadow-inner">
+                <CheckCircle className="w-10 h-10" />
               </div>
               <h3 className="text-2xl font-black text-[#041B3B]">
-                Service Request Formatted!
+                Request Sent via WhatsApp!
               </h3>
-              <p className="text-slate-600 text-sm">
-                Thank you <strong>{formData.name}</strong>. If WhatsApp did not open automatically, tap below to send your service request to our team:
+              <p className="text-slate-600 text-sm max-w-md mx-auto">
+                Thank you! Our WhatsApp coordinator has received your details. We will confirm your timing and price quote shortly.
               </p>
-
-              <div className="pt-3 flex flex-col gap-2.5">
-                <a
-                  href={whatsappInquiryUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-homecare-green w-full text-xs py-3.5 justify-center font-extrabold shadow-lg"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  Send Request on WhatsApp
-                </a>
+              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <button
+                  type="button"
                   onClick={closeModal}
-                  className="py-2.5 px-6 rounded-full bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200 cursor-pointer"
+                  className="btn-homecare-navy w-full sm:w-auto px-6 py-3 min-h-[48px] text-xs font-bold cursor-pointer"
                 >
                   Close Window
                 </button>
@@ -168,33 +152,38 @@ export const BookingModal: React.FC = () => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Customer Name & Phone Number */}
+              {/* Customer Name & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  <label htmlFor="modal-name" className="block text-xs font-bold text-slate-700 uppercase mb-1">
                     Customer Name *
                   </label>
                   <input
+                    id="modal-name"
                     type="text"
                     required
-                    placeholder="e.g. Dhana"
+                    autoComplete="name"
+                    placeholder="Your Name"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none font-medium"
+                    className="w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl border border-slate-200 text-base focus:border-[#22AC33] focus:ring-2 focus:ring-[#22AC33]/20 outline-none font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  <label htmlFor="modal-phone" className="block text-xs font-bold text-slate-700 uppercase mb-1">
                     Phone Number *
                   </label>
                   <input
+                    id="modal-phone"
                     type="tel"
                     required
-                    placeholder="e.g. 7799552084"
+                    inputMode="tel"
+                    autoComplete="tel"
+                    placeholder="10-digit mobile number"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none font-medium"
+                    className="w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl border border-slate-200 text-base focus:border-[#22AC33] focus:ring-2 focus:ring-[#22AC33]/20 outline-none font-medium"
                   />
                 </div>
               </div>
@@ -202,86 +191,95 @@ export const BookingModal: React.FC = () => {
               {/* Appointment Date & Priority Time */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1 flex items-center gap-1">
+                  <label htmlFor="modal-date" className="block text-xs font-bold text-slate-700 uppercase mb-1 flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5 text-[#22AC33]" />
                     Appointment Date *
                   </label>
                   <input
+                    id="modal-date"
                     type="text"
                     required
-                    placeholder="DD/MM/YYYY e.g. 06/09/2026"
+                    placeholder="DD/MM/YYYY"
                     value={formData.appointmentDate}
                     onChange={(e) => setFormData({ ...formData, appointmentDate: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none font-medium"
+                    className="w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl border border-slate-200 text-base focus:border-[#22AC33] focus:ring-2 focus:ring-[#22AC33]/20 outline-none font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1 flex items-center gap-1">
+                  <label htmlFor="modal-time" className="block text-xs font-bold text-slate-700 uppercase mb-1 flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5 text-[#22AC33]" />
                     Priority Time *
                   </label>
                   <input
+                    id="modal-time"
                     type="text"
                     required
-                    placeholder="e.g. 10 am"
+                    placeholder="e.g. 10:00 AM"
                     value={formData.priorityTime}
                     onChange={(e) => setFormData({ ...formData, priorityTime: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none font-medium"
+                    className="w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl border border-slate-200 text-base focus:border-[#22AC33] focus:ring-2 focus:ring-[#22AC33]/20 outline-none font-medium"
                   />
                 </div>
               </div>
 
               {/* Service Required */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                <label htmlFor="modal-service" className="block text-xs font-bold text-slate-700 uppercase mb-1">
                   Service Required *
                 </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. House Deep Cleaning (2BHK) (₹2999)"
+                <select
+                  id="modal-service"
                   value={formData.serviceRequired}
                   onChange={(e) => setFormData({ ...formData, serviceRequired: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none font-semibold text-[#041B3B]"
-                />
+                  className="w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl border border-slate-200 text-base focus:border-[#22AC33] focus:ring-2 focus:ring-[#22AC33]/20 outline-none font-semibold text-[#041B3B] bg-white"
+                >
+                  {SERVICES_DATA.map((s) => (
+                    <option key={s.slug} value={s.title}>
+                      {s.title} ({s.category})
+                    </option>
+                  ))}
+                  <option value="Custom / Multiple Services">Custom / Multiple Services</option>
+                </select>
               </div>
 
               {/* Address & Landmark */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Address *
+                  <label htmlFor="modal-address" className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                    Address / Colony *
                   </label>
                   <input
+                    id="modal-address"
                     type="text"
                     required
-                    placeholder="e.g. Tata nagar"
+                    autoComplete="street-address"
+                    placeholder="e.g. AIR Bypass Road"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none font-medium"
+                    className="w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl border border-slate-200 text-base focus:border-[#22AC33] focus:ring-2 focus:ring-[#22AC33]/20 outline-none font-medium"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Landmark *
+                  <label htmlFor="modal-landmark" className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                    Landmark
                   </label>
                   <input
+                    id="modal-landmark"
                     type="text"
-                    required
-                    placeholder="e.g. Tata nagar"
+                    placeholder="e.g. Near Bus Stand"
                     value={formData.landmark}
                     onChange={(e) => setFormData({ ...formData, landmark: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] outline-none font-medium"
+                    className="w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl border border-slate-200 text-base focus:border-[#22AC33] focus:ring-2 focus:ring-[#22AC33]/20 outline-none font-medium"
                   />
                 </div>
               </div>
 
-              {/* GPS Location (Input Field + Auto Detect Button) */}
+              {/* GPS Location Auto Detect */}
               <div>
                 <div className="flex items-center justify-between mb-1">
-                  <label className="block text-xs font-bold text-slate-700 uppercase flex items-center gap-1">
+                  <label htmlFor="modal-gps" className="block text-xs font-bold text-slate-700 uppercase flex items-center gap-1">
                     <MapPin className="w-3.5 h-3.5 text-[#22AC33]" />
                     GPS Location
                   </label>
@@ -289,7 +287,7 @@ export const BookingModal: React.FC = () => {
                     type="button"
                     onClick={handleDetectLocation}
                     disabled={locating}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-[#22AC33] hover:text-[#1c8f2b] cursor-pointer bg-[#E8F8EC] px-2.5 py-1 rounded-lg border border-[#22AC33]/20 shadow-2xs"
+                    className="min-h-[36px] inline-flex items-center gap-1 text-xs font-bold text-[#22AC33] hover:text-[#1c8f2b] cursor-pointer bg-[#E8F8EC] px-3 py-1.5 rounded-xl border border-[#22AC33]/20 shadow-2xs"
                   >
                     {locating ? (
                       <>
@@ -298,80 +296,55 @@ export const BookingModal: React.FC = () => {
                       </>
                     ) : (
                       <>
-                        <MapPin className="w-3 h-3 text-[#22AC33]" />
-                        <span>Auto-Detect Live GPS</span>
+                        <MapPin className="w-3 h-3" />
+                        <span>Auto-Pin My Location</span>
                       </>
                     )}
                   </button>
                 </div>
-
                 <input
+                  id="modal-gps"
                   type="text"
-                  placeholder="e.g. - or Google Maps URL"
+                  placeholder="Auto-detected or paste Google Maps link"
                   value={formData.gpsLocation}
                   onChange={(e) => setFormData({ ...formData, gpsLocation: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-xs sm:text-sm focus:border-[#22AC33] outline-none font-medium text-slate-700"
+                  className="w-full min-h-[44px] px-3.5 py-2 rounded-2xl border border-slate-200 text-sm focus:border-[#22AC33] focus:ring-2 focus:ring-[#22AC33]/20 outline-none font-mono text-slate-600 bg-slate-50"
                 />
-              </div>
-
-              {/* Total Amount & Subscription Client */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Total Amount
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.totalAmount}
-                    onChange={(e) => setFormData({ ...formData, totalAmount: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-xs sm:text-sm focus:border-[#22AC33] outline-none font-medium bg-slate-50"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                    Subscription Client
-                  </label>
-                  <select
-                    value={formData.subscriptionClient}
-                    onChange={(e) => setFormData({ ...formData, subscriptionClient: e.target.value })}
-                    className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-xs sm:text-sm focus:border-[#22AC33] outline-none font-medium bg-slate-50"
-                  >
-                    <option value="No">No</option>
-                    <option value="Yes">Yes</option>
-                  </select>
-                </div>
               </div>
 
               {/* Remarks */}
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase mb-1">
-                  Remarks
+                <label htmlFor="modal-remarks" className="block text-xs font-bold text-slate-700 uppercase mb-1">
+                  Special Remarks / Requests (Optional)
                 </label>
                 <input
+                  id="modal-remarks"
                   type="text"
-                  placeholder="e.g. -"
+                  placeholder="Any specific stains, priority areas..."
                   value={formData.remarks}
                   onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
-                  className="w-full px-3.5 py-2.5 rounded-2xl border border-slate-200 text-xs sm:text-sm focus:border-[#22AC33] outline-none font-medium"
+                  className="w-full min-h-[48px] px-3.5 py-2.5 rounded-2xl border border-slate-200 text-base focus:border-[#22AC33] focus:ring-2 focus:ring-[#22AC33]/20 outline-none font-medium"
                 />
               </div>
 
-              <button
-                type="submit"
-                className="btn-homecare-green w-full text-xs py-3.5 justify-center cursor-pointer shadow-lg font-black"
-              >
-                <Send className="w-4 h-4 text-[#FFD700]" />
-                Submit & Open WhatsApp
-              </button>
+              {/* Action Buttons */}
+              <div className="pt-2 flex flex-col sm:flex-row gap-3">
+                <button
+                  type="submit"
+                  className="btn-homecare-green flex-1 min-h-[48px] py-3.5 text-sm font-bold justify-center flex items-center gap-2 cursor-pointer"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>Send Booking to WhatsApp</span>
+                </button>
+              </div>
 
-              <div className="pt-1 text-center">
+              <div className="text-center pt-1">
                 <a
                   href={BUSINESS_CONFIG.contact.phoneTel}
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#041B3B] hover:text-[#22AC33]"
+                  className="min-h-[44px] text-xs font-bold text-slate-600 hover:text-[#22AC33] inline-flex items-center justify-center gap-1.5"
                 >
-                  <Phone className="w-3.5 h-3.5 text-[#22AC33]" />
-                  Prefer calling directly? +91 77995 52084
+                  <Phone className="w-3.5 h-3.5" />
+                  <span>Or call directly: {BUSINESS_CONFIG.contact.phoneDisplay}</span>
                 </a>
               </div>
             </form>
