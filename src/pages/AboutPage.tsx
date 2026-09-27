@@ -28,8 +28,11 @@ export const AboutPage: React.FC = () => {
         '@type': 'PostalAddress',
         addressLocality: 'Tirupati',
         addressRegion: 'Andhra Pradesh',
-        postalCode: '517501',
         addressCountry: 'IN'
+      },
+      areaServed: {
+        '@type': 'City',
+        name: 'Tirupati'
       }
     }
   };
@@ -69,7 +72,7 @@ export const AboutPage: React.FC = () => {
           </motion.h1>
 
           <p className="text-slate-200 text-sm sm:text-base max-w-2xl mx-auto font-medium">
-            Providing reliable residential, commercial, and mechanized deep cleaning solutions tailored for homes and businesses across Tirupati.
+            Providing reliable deep cleaning for homes, flats, villas, and offices all across Tirupati using modern cleaning machines and safe cleaning liquids.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
@@ -99,31 +102,31 @@ export const AboutPage: React.FC = () => {
       <section className="py-20 px-4 sm:px-8 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           <div className="lg:col-span-6 space-y-6">
-            <span className="homecare-pill">Our Founding Story</span>
+            <span className="homecare-pill">Why We Started Garuda</span>
             <h2 className="text-3xl sm:text-4xl font-black text-[#041B3B] leading-tight">
-              Raising Cleaning Standards in the Holy City of Tirupati
+              Clean, Fresh & Spotless Spaces for Every Home in Tirupati
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Founded with a clear mission, <strong>Garuda Cleaning Services</strong> was established to provide organized, mechanized cleaning solutions without relying on hazardous corrosive acids.
+              We started <strong>Garuda Cleaning Services</strong> in Tirupati to provide professional, machine-based deep cleaning without using harsh, dangerous acids that damage tiles and leave strong fumes.
             </p>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Tirupati homes face specific local challenges: high calcium borewell water that scales bathroom tiles, heavy airborne dust, and greasy cooking films in modular kitchens. Standard manual mopping simply spreads the dirt around.
+              Homes and offices in Tirupati often face tough cleaning challenges: hard borewell water white marks (uppu neellu karalu) on bathroom tiles, thick road dust, and sticky oil grease in kitchens. Normal daily broom-and-mop cleaning only moves the dirt around.
             </p>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              We deploy single-disc rotary scrubbers, wet and dry vacuum extractors, and surface-safe biological sanitizers to deliver noticeable results that keep Tirupati homes hygienic and fresh.
+              Our trained team brings modern single-disc floor scrubbers, wet and dry vacuum machines, and gentle surface-safe cleaning liquids to make your floors, bathrooms, kitchen, and sofas look clean, spotless, and like new.
             </p>
 
             <div className="grid grid-cols-2 gap-4 pt-2">
               <div className="p-4 rounded-2xl bg-[#E8F8EC] border border-emerald-200">
-                <div className="text-2xl font-black text-[#22AC33]">Acid-Free</div>
-                <div className="text-xs font-bold text-[#041B3B] mt-1">Descaling Chemistry</div>
-                <div className="text-[11px] text-slate-600">Zero enamel erosion or fumes</div>
+                <div className="text-2xl font-black text-[#22AC33]">100% Acid-Free</div>
+                <div className="text-xs font-bold text-[#041B3B] mt-1">Safe Cleaning Liquids</div>
+                <div className="text-[11px] text-slate-600">Protects tiles, taps & fittings with no bad smell</div>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
-                <div className="text-2xl font-black text-[#041B3B]">7 Days</div>
-                <div className="text-xs font-bold text-[#041B3B] mt-1">Weekly Availability</div>
-                <div className="text-[11px] text-slate-600">7:00 AM – 9:00 PM in Tirupati</div>
+                <div className="text-2xl font-black text-[#041B3B]">7 Days a Week</div>
+                <div className="text-xs font-bold text-[#041B3B] mt-1">Available Daily in Tirupati</div>
+                <div className="text-[11px] text-slate-600">8:00 AM – 8:00 PM for all localities</div>
               </div>
             </div>
           </div>
@@ -131,9 +134,9 @@ export const AboutPage: React.FC = () => {
           <div className="lg:col-span-6 relative">
             <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-100 aspect-4/3 bg-slate-900 group">
               <SafeImage
-                src="/images/office-clean.webp"
-                alt="Garuda Cleaning Services Uniformed Team in Tirupati"
-                fallbackLabel="Garuda Cleaning Team"
+                src="/images/equipment/full-kit.webp"
+                alt="Garuda Cleaning Services Machinery and Equipment Kit in Tirupati"
+                fallbackLabel="Garuda Cleaning Equipment Kit"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
             </div>
@@ -143,7 +146,7 @@ export const AboutPage: React.FC = () => {
                 <Award className="w-6 h-6" />
               </div>
               <div>
-                <div className="text-sm font-black text-[#041B3B]">Dedicated Cleaning Specialists</div>
+                <div className="text-sm font-black text-[#041B3B]">Trained Cleaning Specialists</div>
                 <div className="text-xs text-slate-500">Uniformed & Equipped In-House</div>
               </div>
             </div>
@@ -160,30 +163,30 @@ export const AboutPage: React.FC = () => {
               The 4 Pillars of Garuda Excellence
             </h2>
             <p className="text-slate-600 text-sm mt-2">
-              Our core commitments to homeowners and commercial clients in Tirupati.
+              Our simple promises to every homeowner and business client in Tirupati.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               {
-                title: 'Mechanized Equipment',
-                desc: 'Single-disc rotary scrubbers, pressure washers, and wet-dry extraction machines delivering deep cleaning results.',
+                title: 'Modern Cleaning Machines',
+                desc: 'Single-disc floor scrubbers, vacuum cleaners, and high-pressure washers for deep cleaning that manual mopping cannot do.',
                 icon: Sparkles,
               },
               {
-                title: 'Surface-Safe Formulations',
-                desc: 'Zero corrosive muriatic acids. We utilize pH-neutral descalers and degreasers designed for vitrified tiles and chrome.',
+                title: 'Safe, Acid-Free Liquids',
+                desc: 'We never use harsh harmful acids. Our specialized liquids remove tough hard water salt stains and grease without damaging tiles or taps.',
                 icon: ShieldCheck,
               },
               {
-                title: 'Trained Specialists',
-                desc: 'Our staff are uniformed, equipped with personal protective gear, and trained on delicate tile and wooden finishes.',
+                title: 'Trained & Verified Staff',
+                desc: 'Our staff comes in proper uniform with masks and gloves. They handle your home, wooden work, and glass items with utmost care.',
                 icon: Award,
               },
               {
-                title: 'Joint Inspection Signoff',
-                desc: 'Zero upfront payment required. You inspect each room with our supervisor before making payment.',
+                title: 'Pay Only After Inspection',
+                desc: 'No advance payment needed. Check each room with our supervisor after the work is done, and pay only when you are 100% satisfied.',
                 icon: HeartHandshake,
               },
             ].map((pillar, idx) => {
@@ -211,13 +214,13 @@ export const AboutPage: React.FC = () => {
           <div className="text-center max-w-3xl mx-auto mb-12">
             <span className="homecare-pill mb-2">
               <Wrench className="w-3.5 h-3.5 inline mr-1" />
-              Machinery & Formulations
+              Our Machines & Tools
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-[#041B3B] mt-1">
-              Commercial-Grade Cleaning Equipment
+              Professional Cleaning Equipment
             </h2>
             <p className="text-slate-600 text-sm mt-2">
-              We invest in professional machinery that cleans faster, deeper, and safer than manual labour.
+              We invest in modern machines so your home gets cleaned faster, deeper, and completely safe.
             </p>
           </div>
 
@@ -256,12 +259,12 @@ export const AboutPage: React.FC = () => {
       <section className="py-16 sm:py-20 px-4 sm:px-8 bg-[#F4F8FC] border-b border-slate-200">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-12">
-            <span className="homecare-pill mb-2">Our People</span>
+            <span className="homecare-pill mb-2">Our Team</span>
             <h2 className="text-2xl sm:text-4xl font-black text-[#041B3B] mt-1">
-              Uniformed, Trained & Supervised Teams
+              Uniformed, Trained & Supervised Cleaning Staff
             </h2>
             <p className="text-slate-600 text-sm mt-2">
-              Every project is led by a lead coordinator who oversees strict hygiene protocols.
+              Every cleaning job is supervised by an on-site team lead to ensure high quality and care.
             </p>
           </div>
 

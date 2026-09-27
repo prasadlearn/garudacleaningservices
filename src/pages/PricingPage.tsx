@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ShieldCheck, ArrowRight, MessageCircle, ChevronDown, ChevronUp, Search, Phone } from 'lucide-react';
 import {
   getServicesByCategory,
@@ -160,15 +161,15 @@ export const PricingPage: React.FC = () => {
                   return (
                     <div key={srv.slug} className="pt-4 first:pt-0 space-y-3">
                       <div className="flex items-start justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <div className="w-8 h-8 rounded-xl bg-emerald-50 text-[#22AC33] flex items-center justify-center shrink-0">
+                        <Link to={`/services/${srv.slug}`} className="flex items-center gap-2 group cursor-pointer">
+                          <div className="w-8 h-8 rounded-xl bg-emerald-50 text-[#22AC33] flex items-center justify-center shrink-0 group-hover:bg-[#22AC33] group-hover:text-white transition-colors">
                             <ServiceIcon slug={srv.slug} name={srv.icon} className="w-4 h-4" />
                           </div>
                           <div>
-                            <h3 className="font-bold text-[#041B3B] text-sm leading-snug">{srv.title}</h3>
+                            <h3 className="font-bold text-[#041B3B] group-hover:text-[#22AC33] text-sm leading-snug transition-colors">{srv.title}</h3>
                             <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">{basisLabel}</span>
                           </div>
-                        </div>
+                        </Link>
                         <div className="text-right shrink-0">
                           <span className="text-base font-black text-[#1A8C28] block">{formatted}</span>
                         </div>
@@ -269,10 +270,10 @@ export const PricingPage: React.FC = () => {
                         <React.Fragment key={srv.slug}>
                           <tr className="hover:bg-slate-50/70 transition-colors">
                             <td className="py-4 px-4 sm:px-6 font-bold text-[#041B3B] sticky left-0 bg-white z-[var(--z-content)] shadow-xs">
-                              <div className="flex items-center gap-2.5">
-                                <ServiceIcon slug={srv.slug} name={srv.icon} className="w-4 h-4 text-[#22AC33] shrink-0" />
-                                <span>{srv.title}</span>
-                              </div>
+                              <Link to={`/services/${srv.slug}`} className="flex items-center gap-2.5 group cursor-pointer">
+                                <ServiceIcon slug={srv.slug} name={srv.icon} className="w-4 h-4 text-[#22AC33] shrink-0 group-hover:scale-110 transition-transform" />
+                                <span className="group-hover:text-[#22AC33] transition-colors">{srv.title}</span>
+                              </Link>
                               <p className="text-[11px] text-slate-500 font-normal mt-0.5 max-w-md hidden sm:block">
                                 {srv.shortDescription}
                               </p>

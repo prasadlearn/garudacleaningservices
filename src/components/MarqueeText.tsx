@@ -7,7 +7,7 @@ const TAGS = [
   "Villa Cleaning",
   "Sofa Shampooing",
   "Carpet Cleaning",
-  "Water Tank Cleaning",
+  "Water Tank & Sump Cleaning",
   "Floor Scrubbing",
   "Office Deep Cleaning"
 ];

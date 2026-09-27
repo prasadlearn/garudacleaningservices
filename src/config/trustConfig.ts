@@ -66,7 +66,7 @@ export const TRUST_CONFIG: TrustConfig = {
     {
       id: 'all-week-availability',
       title: 'Open 7 Days a Week',
-      description: 'We work Monday to Sunday, 7:00 AM to 9:00 PM across Tirupati.',
+      description: 'We work Monday to Sunday, 8:00 AM to 8:00 PM across Tirupati.',
       ownerConfirmed: true, // Backed by businessConfig.contact.operatingHours
     },
     {
@@ -83,8 +83,8 @@ export const TRUST_CONFIG: TrustConfig = {
     },
     {
       id: 'non-toxic-chemicals',
-      title: 'Eco-Safe & Acid-Free Chemicals',
-      description: 'Zero corrosive muriatic acids. Safe for children, pets, and modern tiles.',
+      title: 'Eco-Safe & Acid-Free Cleaning Liquids',
+      description: 'Zero harsh toilet acids. Safe for children, pets, tile shine, and chrome fittings.',
       ownerConfirmed: false, // TODO_OWNER: Confirm exact chemical brands (Taski/Diversey/etc.) used
     },
     {

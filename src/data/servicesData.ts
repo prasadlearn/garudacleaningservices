@@ -35,16 +35,65 @@ export const formatPrice = (model: PriceModel): string => {
     case 'fixed':
       return formatAmount(model.amount);
     case 'from':
-      return `from ${formatAmount(model.amount)}`;
+      return formatAmount(model.amount);
     case 'per-unit':
       if (model.max !== undefined && model.max !== model.min) {
         return `${formatAmount(model.min)}–${formatAmount(model.max)} / ${model.unit}`;
       }
       return `${formatAmount(model.min)} / ${model.unit}`;
     case 'tiers':
-      return `from ${formatAmount(model.tiers[0]?.amount || 0)}`;
+      return formatAmount(model.tiers[0]?.amount || 0);
     case 'inspection':
-      return 'Site inspection';
+      return 'Inspection';
+  }
+};
+
+export const getServiceHighlights = (service: ServiceItem): string[] => {
+  switch (service.slug) {
+    case 'bhk-deep-cleaning':
+      return ['Floor Scrubbing', 'Kitchen & Bathrooms', 'Fans & Windows'];
+    case 'villa-deep-cleaning':
+      return ['All Floors & Rooms', 'Bathrooms & Balconies', 'Fans & Windows'];
+    case 'full-home-deep-cleaning-package':
+      return ['Floor Scrubbing', 'Kitchen Degrease', 'Bath Descaling'];
+    case 'kitchen-deep-cleaning':
+      return ['Platform & Tiles', 'Chimney & Exhaust', 'Oil Stain Removal'];
+    case 'bathroom-deep-cleaning':
+      return ['Hard Water Scale', 'Taps & Commode', 'Tile Descaling'];
+    case 'sofa-cleaning':
+      return ['Foam Shampooing', 'Dust Extraction', 'Stain Removal'];
+    case 'floor-deep-cleaning':
+      return ['Single-Disc Machine', 'Tile & Grout Scrub', 'Slurry Extraction'];
+    case 'office-deep-cleaning':
+      return ['Desk Wipe-Down', 'Floor Scrubbing', 'Glass Partitions'];
+    case 'water-tank-cleaning':
+      return ['Overhead & Sump', 'Pressure Jet Wash', 'Antibacterial Rinse'];
+    case 'window-cleaning':
+      return ['Glass Streak-Free', 'Track Vacuuming', 'Grille Wiping'];
+    case 'carpet-cleaning':
+      return ['Foam Wash', 'Dirt Extraction', 'Fabric Care'];
+    case 'fan-cleaning':
+      return ['Blade Degreasing', 'Motor Dusting', 'Sparkling Clean'];
+    case 'glass-cleaning':
+      return ['Streak-Free Shine', 'Frame Detailing', 'Spotless Glass'];
+    case 'move-in-cleaning':
+      return ['Full Sanitization', 'Cupboard Cleaning', 'Move-In Ready'];
+    case 'move-out-cleaning':
+      return ['Deposit Handover', 'Floor Scrubbing', 'Full Deep Clean'];
+    case 'post-construction-cleaning':
+      return ['Paint & Cement Scrub', 'Dust Extraction', 'Floor Buffing'];
+    case 'commercial-cleaning':
+      return ['Workspaces & Floors', 'Restrooms & Lobby', 'Deep Machine Wash'];
+    case 'shop-cleaning':
+      return ['Showroom Floors', 'Glass Facade', 'Display Dusting'];
+    case 'school-classroom-cleaning':
+      return ['Desk & Bench Wash', 'Classroom Floors', 'Sanitized Space'];
+    case 'hotel-guest-house-cleaning':
+      return ['Room Deep Clean', 'Linens & Floors', 'Restroom Shine'];
+    case 'mattress-cleaning':
+      return ['Deep Dust Suction', 'Stain Removal', 'Allergen Refresh'];
+    default:
+      return service.whatsIncluded.slice(0, 3).map((item) => item.split(',')[0]);
   }
 };
 
@@ -59,22 +108,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'BHK Deep Cleaning',
     category: 'residential',
     icon: 'Home',
-    shortDescription: 'Comprehensive interior deep cleaning tailored by apartment size for homes in Tirupati.',
-    shortDesc: 'Comprehensive interior deep cleaning tailored by apartment size for homes in Tirupati.',
+    shortDescription: 'Complete deep cleaning for all rooms, hall, kitchen, and bathrooms in your flat.',
+    shortDesc: 'Complete deep cleaning for all rooms, hall, kitchen, and bathrooms in your flat.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Living room, bedroom, and dining area floor scrubbing and dust removal',
-      'Kitchen countertop degreasing, sink wash, and exterior cabinet wipe-down',
-      'Bathroom tile scrubbing, commode cleaning, and chrome fitting wash',
-      'Window glass cleaning, track dusting, and grille wiping',
-      'Ceiling fan wiping, switchboard cleaning, and doorway dust removal'
+      'Floor machine scrubbing across living room, bedrooms, and dining area',
+      'Kitchen platform degreasing, sink wash, and outer cabinet wipe-down',
+      'Bathroom wall and floor tile washing, commode cleaning, and tap shine',
+      'Window glass cleaning, sliding track vacuuming, and safety grille wiping',
+      'Ceiling fan wiping, switchboard cleaning, and door frame dusting'
     ],
     inclusions: [
-      'Living room, bedroom, and dining area floor scrubbing and dust removal',
-      'Kitchen countertop degreasing, sink wash, and exterior cabinet wipe-down',
-      'Bathroom tile scrubbing, commode cleaning, and chrome fitting wash',
-      'Window glass cleaning, track dusting, and grille wiping',
-      'Ceiling fan wiping, switchboard cleaning, and doorway dust removal'
+      'Floor machine scrubbing across living room, bedrooms, and dining area',
+      'Kitchen platform degreasing, sink wash, and outer cabinet wipe-down',
+      'Bathroom wall and floor tile washing, commode cleaning, and tap shine',
+      'Window glass cleaning, sliding track vacuuming, and safety grille wiping',
+      'Ceiling fan wiping, switchboard cleaning, and door frame dusting'
     ],
     enabled: true,
     price: {
@@ -96,22 +145,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Villa Deep Cleaning',
     category: 'residential',
     icon: 'Building2',
-    shortDescription: 'Full-property deep cleaning for independent houses, duplexes, and multi-storey villas.',
-    shortDesc: 'Full-property deep cleaning for independent houses, duplexes, and multi-storey villas.',
+    shortDescription: 'Complete deep cleaning for independent houses, duplexes, and multi-floor villas.',
+    shortDesc: 'Complete deep cleaning for independent houses, duplexes, and multi-floor villas.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Complete multi-level floor scrubbing and edge cleaning',
-      'All bathrooms, master suites, and guest rooms detailed',
-      'Kitchen and utility area deep washing and surface degreasing',
-      'Staircase railings, balconies, and terrace floor cleaning',
-      'Windows, grilles, and exterior access doors washed'
+      'Machine scrubbing for all room floors, halls, and corridors',
+      'All bathrooms cleaned, tiles washed, and hard water marks removed',
+      'Kitchen deep cleaning, platform washing, and stove grease removal',
+      'Staircase railings, balconies, sit-outs, and open terrace washing',
+      'Windows, sliding tracks, grilles, ceiling fans, and doors cleaned'
     ],
     inclusions: [
-      'Complete multi-level floor scrubbing and edge cleaning',
-      'All bathrooms, master suites, and guest rooms detailed',
-      'Kitchen and utility area deep washing and surface degreasing',
-      'Staircase railings, balconies, and terrace floor cleaning',
-      'Windows, grilles, and exterior access doors washed'
+      'Machine scrubbing for all room floors, halls, and corridors',
+      'All bathrooms cleaned, tiles washed, and hard water marks removed',
+      'Kitchen deep cleaning, platform washing, and stove grease removal',
+      'Staircase railings, balconies, sit-outs, and open terrace washing',
+      'Windows, sliding tracks, grilles, ceiling fans, and doors cleaned'
     ],
     enabled: true,
     price: { kind: 'from', amount: 10000 },
@@ -125,22 +174,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Full Home Deep Cleaning Package',
     category: 'residential',
     icon: 'Sparkles',
-    shortDescription: 'All-inclusive deep cleaning covering floors, kitchen, bathrooms, fixtures, and balconies.',
-    shortDesc: 'All-inclusive deep cleaning covering floors, kitchen, bathrooms, fixtures, and balconies.',
+    shortDescription: 'All-in-one home cleaning covering floors, kitchen, bathrooms, windows, and balconies.',
+    shortDesc: 'All-in-one home cleaning covering floors, kitchen, bathrooms, windows, and balconies.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Thorough floor washing across all bedrooms and living spaces',
-      'Complete kitchen deep clean including slabs, sink, and tiles',
-      'Intensive bathroom descaling and sanitaryware cleaning',
-      'Balcony floor washing and drain clearance',
-      'Light fixtures, ceiling fans, and switchboards dry dusted'
+      'Floor machine wash across all bedrooms, living hall, and dining areas',
+      'Kitchen platform, wall tiles, steel sink, and chimney exterior cleaned',
+      'Bathroom tile washing, commode sanitization, and tap descaling',
+      'Balcony floor washing and drain cleaning',
+      'Ceiling fan blades, light fixtures, switchboards, and doors dusted'
     ],
     inclusions: [
-      'Thorough floor washing across all bedrooms and living spaces',
-      'Complete kitchen deep clean including slabs, sink, and tiles',
-      'Intensive bathroom descaling and sanitaryware cleaning',
-      'Balcony floor washing and drain clearance',
-      'Light fixtures, ceiling fans, and switchboards dry dusted'
+      'Floor machine wash across all bedrooms, living hall, and dining areas',
+      'Kitchen platform, wall tiles, steel sink, and chimney exterior cleaned',
+      'Bathroom tile washing, commode sanitization, and tap descaling',
+      'Balcony floor washing and drain cleaning',
+      'Ceiling fan blades, light fixtures, switchboards, and doors dusted'
     ],
     enabled: true,
     price: { kind: 'from', amount: 7000 },
@@ -154,22 +203,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Move-In Cleaning',
     category: 'residential',
     icon: 'DoorOpen',
-    shortDescription: 'Sanitizing and preparing vacant houses or flats before moving your family in.',
-    shortDesc: 'Sanitizing and preparing vacant houses or flats before moving your family in.',
+    shortDescription: 'Deep cleaning and sanitizing empty flats or houses before your family moves in.',
+    shortDesc: 'Deep cleaning and sanitizing empty flats or houses before your family moves in.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Interior cabinet, wardrobe, and shelf vacuuming and wiping',
-      'Complete bathroom disinfection and descaling',
-      'Kitchen storage area wipe-down and degreasing',
-      'Floor wash and dust extraction across all rooms',
-      'Window channel vacuuming and surface wipe-down'
+      'Cupboards, wardrobes, and kitchen shelves cleaned inside and outside',
+      'Complete bathroom sanitization, tile scrubbing, and commode cleaning',
+      'Kitchen counter, sink, and storage areas washed and degreased',
+      'Floor machine scrubbing and dust removal across all rooms',
+      'Window channels vacuuming, glass wiping, and main door cleaning'
     ],
     inclusions: [
-      'Interior cabinet, wardrobe, and shelf vacuuming and wiping',
-      'Complete bathroom disinfection and descaling',
-      'Kitchen storage area wipe-down and degreasing',
-      'Floor wash and dust extraction across all rooms',
-      'Window channel vacuuming and surface wipe-down'
+      'Cupboards, wardrobes, and kitchen shelves cleaned inside and outside',
+      'Complete bathroom sanitization, tile scrubbing, and commode cleaning',
+      'Kitchen counter, sink, and storage areas washed and degreased',
+      'Floor machine scrubbing and dust removal across all rooms',
+      'Window channels vacuuming, glass wiping, and main door cleaning'
     ],
     enabled: true,
     price: { kind: 'from', amount: 8000 },
@@ -183,22 +232,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Move-Out Cleaning',
     category: 'residential',
     icon: 'LogOut',
-    shortDescription: 'Thorough cleaning of vacated properties for tenancy handover and deposit clearance.',
-    shortDesc: 'Thorough cleaning of vacated properties for tenancy handover and deposit clearance.',
+    shortDescription: 'Complete cleaning of vacated flats to get your full security deposit back from the owner.',
+    shortDesc: 'Complete cleaning of vacated flats to get your full security deposit back from the owner.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Complete property dust removal and sweeping',
-      'Kitchen grease and oil stain cleaning',
-      'Bathroom scale clearing and tile scrubbing',
-      'Floor wash across living, dining, and bedrooms',
-      'Balcony and utility area wash'
+      'Complete dust removal and floor machine wash in all rooms',
+      'Kitchen tough grease, oil stains, and cooking marks removed',
+      'Bathroom white scale marks cleared, commode, and tiles scrubbed',
+      'Balcony, wash area, and corner cobwebs cleaned',
+      'Window glass, switchboards, and door handles wiped clean'
     ],
     inclusions: [
-      'Complete property dust removal and sweeping',
-      'Kitchen grease and oil stain cleaning',
-      'Bathroom scale clearing and tile scrubbing',
-      'Floor wash across living, dining, and bedrooms',
-      'Balcony and utility area wash'
+      'Complete dust removal and floor machine wash in all rooms',
+      'Kitchen tough grease, oil stains, and cooking marks removed',
+      'Bathroom white scale marks cleared, commode, and tiles scrubbed',
+      'Balcony, wash area, and corner cobwebs cleaned',
+      'Window glass, switchboards, and door handles wiped clean'
     ],
     enabled: true,
     price: { kind: 'from', amount: 8000 },
@@ -212,22 +261,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Kitchen Deep Cleaning',
     category: 'residential',
     icon: 'UtensilsCrossed',
-    shortDescription: 'Targeted degreasing for kitchen slabs, tiles, sink, chimney exterior, and exhaust areas.',
-    shortDesc: 'Targeted degreasing for kitchen slabs, tiles, sink, chimney exterior, and exhaust areas.',
+    shortDescription: 'Removes sticky cooking oil and grease from kitchen slabs, tiles, sink, stove, and chimney.',
+    shortDesc: 'Removes sticky cooking oil and grease from kitchen slabs, tiles, sink, stove, and chimney.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Kitchen platform, granite counter, and tile backsplash degreasing',
-      'Exhaust fan and chimney exterior surface wipe-down',
-      'Stainless steel sink wash and tap descaling',
-      'External cabinet and drawer facade wiping',
-      'Kitchen floor scrubbing and grease removal'
+      'Kitchen granite platform and wall tiles cleaned with oil degreaser',
+      'Exhaust fan blades and chimney mesh exterior wiped clean',
+      'Stainless steel sink washed and water marks removed from taps',
+      'Outer surfaces of kitchen cabinets and drawers wiped clean',
+      'Kitchen floor machine scrubbed to remove sticky oil stains'
     ],
     inclusions: [
-      'Kitchen platform, granite counter, and tile backsplash degreasing',
-      'Exhaust fan and chimney exterior surface wipe-down',
-      'Stainless steel sink wash and tap descaling',
-      'External cabinet and drawer facade wiping',
-      'Kitchen floor scrubbing and grease removal'
+      'Kitchen granite platform and wall tiles cleaned with oil degreaser',
+      'Exhaust fan blades and chimney mesh exterior wiped clean',
+      'Stainless steel sink washed and water marks removed from taps',
+      'Outer surfaces of kitchen cabinets and drawers wiped clean',
+      'Kitchen floor machine scrubbed to remove sticky oil stains'
     ],
     enabled: true,
     price: { kind: 'fixed', amount: 1500 },
@@ -241,22 +290,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Bathroom Deep Cleaning',
     category: 'residential',
     icon: 'Bath',
-    shortDescription: 'Hard water scale clearing, tile scrubbing, and fixture cleaning for bathrooms.',
-    shortDesc: 'Hard water scale clearing, tile scrubbing, and fixture cleaning for bathrooms.',
+    shortDescription: 'Removes hard water stains (white salt marks), cleans wall tiles, taps, and commode.',
+    shortDesc: 'Removes hard water stains (white salt marks), cleans wall tiles, taps, and commode.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Wall tile scrubbing and floor tile scale clearing',
-      'Toilet bowl, commode exterior, and seat sanitization',
-      'Washbasin, mirror, and tap mineral deposit wiping',
-      'Shower area and glass partition wiping',
-      'Drain clearing and exhaust vent dusting'
+      'Wall and floor tiles washed to remove white hard water stains and soap scum',
+      'Toilet bowl, commode exterior, and seat sanitized and cleaned',
+      'Washbasin, mirror, and steel taps polished and descaled',
+      'Shower area and glass partition cleaned streak-free',
+      'Drain floor cleared and exhaust vent dusted'
     ],
     inclusions: [
-      'Wall tile scrubbing and floor tile scale clearing',
-      'Toilet bowl, commode exterior, and seat sanitization',
-      'Washbasin, mirror, and tap mineral deposit wiping',
-      'Shower area and glass partition wiping',
-      'Drain clearing and exhaust vent dusting'
+      'Wall and floor tiles washed to remove white hard water stains and soap scum',
+      'Toilet bowl, commode exterior, and seat sanitized and cleaned',
+      'Washbasin, mirror, and steel taps polished and descaled',
+      'Shower area and glass partition cleaned streak-free',
+      'Drain floor cleared and exhaust vent dusted'
     ],
     enabled: true,
     price: { kind: 'fixed', amount: 600 },
@@ -270,22 +319,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Sofa Cleaning',
     category: 'residential',
     icon: 'Sofa',
-    shortDescription: 'Fabric and leatherette sofa shampooing, dry vacuuming, and stain spot treatment.',
-    shortDesc: 'Fabric and leatherette sofa shampooing, dry vacuuming, and stain spot treatment.',
+    shortDescription: 'Machine foam washing and vacuuming to remove stains, dust, and bad smells from sofas.',
+    shortDesc: 'Machine foam washing and vacuuming to remove stains, dust, and bad smells from sofas.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Dry vacuuming of fabric seams, cushions, and crevices',
-      'Foam shampoo application for surface dirt loosening',
-      'Extraction of dissolved grime and moisture',
-      'Armrest and backrest spot cleaning',
-      'Leatherette or wooden frame surface wiping'
+      'Deep dry vacuuming of sofa seats, cushions, and corners',
+      'Safe foam shampoo applied to break down dirt and food stains',
+      'High-power vacuum extraction of dirty foam and moisture',
+      'Armrest, backrest, and headrest spot cleaning',
+      'Wooden and leatherette borders wiped clean'
     ],
     inclusions: [
-      'Dry vacuuming of fabric seams, cushions, and crevices',
-      'Foam shampoo application for surface dirt loosening',
-      'Extraction of dissolved grime and moisture',
-      'Armrest and backrest spot cleaning',
-      'Leatherette or wooden frame surface wiping'
+      'Deep dry vacuuming of sofa seats, cushions, and corners',
+      'Safe foam shampoo applied to break down dirt and food stains',
+      'High-power vacuum extraction of dirty foam and moisture',
+      'Armrest, backrest, and headrest spot cleaning',
+      'Wooden and leatherette borders wiped clean'
     ],
     enabled: true,
     price: { kind: 'from', amount: 600 },
@@ -299,20 +348,20 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Mattress Cleaning',
     category: 'residential',
     icon: 'BedDouble',
-    shortDescription: 'Deep dry vacuuming, dust mite removal, and surface shampooing for sleeping mattresses.',
-    shortDesc: 'Deep dry vacuuming, dust mite removal, and surface shampooing for sleeping mattresses.',
+    shortDescription: 'Deep vacuuming and dust mite removal for clean, fresh, hygienic sleeping mattresses.',
+    shortDesc: 'Deep vacuuming and dust mite removal for clean, fresh, hygienic sleeping mattresses.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Two-sided high-suction dry vacuuming',
-      'Dust mite extraction and surface allergen removal',
-      'Targeted fabric shampooing for light stains',
-      'Edge piping and quilting seam dusting'
+      'Both sides vacuumed with high-suction machine',
+      'Extracts hidden dust mites, dead skin, and fine dust',
+      'Spot shampoo treatment for light stains and spots',
+      'Mattress border and seam dusting'
     ],
     inclusions: [
-      'Two-sided high-suction dry vacuuming',
-      'Dust mite extraction and surface allergen removal',
-      'Targeted fabric shampooing for light stains',
-      'Edge piping and quilting seam dusting'
+      'Both sides vacuumed with high-suction machine',
+      'Extracts hidden dust mites, dead skin, and fine dust',
+      'Spot shampoo treatment for light stains and spots',
+      'Mattress border and seam dusting'
     ],
     enabled: true,
     price: { kind: 'from', amount: 700 },
@@ -326,20 +375,20 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Carpet Cleaning',
     category: 'residential',
     icon: 'Layers',
-    shortDescription: 'Deep shampooing, pile vacuuming, and dirt extraction for living room carpets and rugs.',
-    shortDesc: 'Deep shampooing, pile vacuuming, and dirt extraction for living room carpets and rugs.',
+    shortDescription: 'Deep carpet washing and vacuuming to remove ground-in dirt, dust, and food spots.',
+    shortDesc: 'Deep carpet washing and vacuuming to remove ground-in dirt, dust, and food spots.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'High-filtration dry vacuuming of carpet fibers',
-      'Fabric shampoo application and gentle scrubbing',
-      'Moisture and dirt extraction',
-      'Edge fringe dusting and odor freshening'
+      'High-power dry vacuuming across all carpet fibers',
+      'Fabric-safe shampoo application and gentle scrubbing',
+      'Dirty foam and moisture extracted with wet vacuum',
+      'Carpet border cleaning and freshening'
     ],
     inclusions: [
-      'High-filtration dry vacuuming of carpet fibers',
-      'Fabric shampoo application and gentle scrubbing',
-      'Moisture and dirt extraction',
-      'Edge fringe dusting and odor freshening'
+      'High-power dry vacuuming across all carpet fibers',
+      'Fabric-safe shampoo application and gentle scrubbing',
+      'Dirty foam and moisture extracted with wet vacuum',
+      'Carpet border cleaning and freshening'
     ],
     enabled: true,
     price: { kind: 'per-unit', min: 8, unit: 'sq.ft' },
@@ -358,20 +407,20 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Floor Deep Cleaning',
     category: 'specialized',
     icon: 'Grid3X3',
-    shortDescription: 'Rotary scrubbing for vitrified, ceramic, marble, granite, and tile flooring.',
-    shortDesc: 'Rotary scrubbing for vitrified, ceramic, marble, granite, and tile flooring.',
+    shortDescription: 'Machine floor scrubbing to remove tough dirt, black tile lines, and bring back shine.',
+    shortDesc: 'Machine floor scrubbing to remove tough dirt, black tile lines, and bring back tile shine.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Mechanical single-disc scrubbing across open floor areas',
-      'Tile joint and grout line agitation',
-      'Slurry suction and moisture extraction',
-      'Skirting board wiping and corner detailing'
+      'Single-disc rotary machine scrubbing across open floors',
+      'Deep cleaning of tile joints and black grout lines',
+      'Dirty water suction with wet commercial vacuum',
+      'Skirting tiles and floor corner cleaning'
     ],
     inclusions: [
-      'Mechanical single-disc scrubbing across open floor areas',
-      'Tile joint and grout line agitation',
-      'Slurry suction and moisture extraction',
-      'Skirting board wiping and corner detailing'
+      'Single-disc rotary machine scrubbing across open floors',
+      'Deep cleaning of tile joints and black grout lines',
+      'Dirty water suction with wet commercial vacuum',
+      'Skirting tiles and floor corner cleaning'
     ],
     enabled: true,
     price: { kind: 'per-unit', min: 6, unit: 'sq.ft' },
@@ -382,24 +431,24 @@ export const SERVICES_DATA: ServiceItem[] = [
   {
     id: 'water-tank-cleaning',
     slug: 'water-tank-cleaning',
-    title: 'Water Tank Cleaning',
-    name: 'Water Tank Cleaning',
+    title: 'Water Tank & Sump Cleaning',
+    name: 'Water Tank & Sump Cleaning',
     category: 'specialized',
     icon: 'Droplets',
-    shortDescription: 'De-sludging, high-pressure washing, and wall scrubbing for overhead and underground tanks.',
-    shortDesc: 'De-sludging, high-pressure washing, and wall scrubbing for overhead and underground tanks.',
+    shortDescription: 'Drains dirty water, removes bottom mud, scrubs wall algae, and sanitizes overhead water tanks and underground sumps.',
+    shortDesc: 'Drains dirty water, removes bottom mud, scrubs wall algae, and sanitizes overhead water tanks and underground sumps.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Draining remaining water and manual de-sludging',
-      'High-pressure water washing of tank walls and floor',
-      'Manual scrubbing of algae and sediment layers',
-      'Slurry vacuuming and final rinse'
+      'Draining stagnant dirty water and pumping out bottom mud from overhead tank and underground sump',
+      'High-pressure water jet washing of tank and sump inner walls and floor',
+      'Manual scrubbing of green algae, mud stains, and white salt scaling',
+      'Vacuum suction of dirty water and final antibacterial clean water wash'
     ],
     inclusions: [
-      'Draining remaining water and manual de-sludging',
-      'High-pressure water washing of tank walls and floor',
-      'Manual scrubbing of algae and sediment layers',
-      'Slurry vacuuming and final rinse'
+      'Draining stagnant dirty water and pumping out bottom mud from overhead tank and underground sump',
+      'High-pressure water jet washing of tank and sump inner walls and floor',
+      'Manual scrubbing of green algae, mud stains, and white salt scaling',
+      'Vacuum suction of dirty water and final antibacterial clean water wash'
     ],
     enabled: true,
     price: { kind: 'from', amount: 1000 },
@@ -413,22 +462,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Post-Construction Cleaning',
     category: 'specialized',
     icon: 'HardHat',
-    shortDescription: 'Removal of paint splatter, fine cement dust, adhesive residues, and debris after renovation.',
-    shortDesc: 'Removal of paint splatter, fine cement dust, adhesive residues, and debris after renovation.',
+    shortDescription: 'Cleans paint drops, cement marks, and white dust after painting or renovation work.',
+    shortDesc: 'Cleans paint drops, cement marks, and white dust after painting or renovation work.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Floor paint and plaster residue careful scraping',
-      'Fine drywall and cement dust extraction from floors and ledges',
-      'Window frame, glass, and sliding track detailing',
-      'Switchboards, fixtures, and hardware wiping',
-      'Final mechanical floor wash'
+      'Careful scraping of paint drops and cement stains from floor tiles',
+      'Fine white plaster and cement dust vacuuming from all corners and ledges',
+      'Window glass, aluminum sliding tracks, and frame tape removal',
+      'Switchboards, door frames, and electrical fittings wiped clean',
+      'Final floor machine scrubbing and dry mop polish'
     ],
     inclusions: [
-      'Floor paint and plaster residue careful scraping',
-      'Fine drywall and cement dust extraction from floors and ledges',
-      'Window frame, glass, and sliding track detailing',
-      'Switchboards, fixtures, and hardware wiping',
-      'Final mechanical floor wash'
+      'Careful scraping of paint drops and cement stains from floor tiles',
+      'Fine white plaster and cement dust vacuuming from all corners and ledges',
+      'Window glass, aluminum sliding tracks, and frame tape removal',
+      'Switchboards, door frames, and electrical fittings wiped clean',
+      'Final floor machine scrubbing and dry mop polish'
     ],
     enabled: true,
     price: { kind: 'per-unit', min: 10, unit: 'sq.ft' },
@@ -443,20 +492,20 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Window Cleaning',
     category: 'specialized',
     icon: 'AppWindow',
-    shortDescription: 'Wiping of glass panes, sliding track vacuuming, and iron grille dusting.',
-    shortDesc: 'Wiping of glass panes, sliding track vacuuming, and iron grille dusting.',
+    shortDescription: 'Cleans window glass, sliding channel dust, mosquito mesh, and safety iron grilles.',
+    shortDesc: 'Cleans window glass, sliding channel dust, mosquito mesh, and safety iron grilles.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Sliding track vacuuming and dirt removal',
-      'Interior and reachable exterior glass panel wiping',
+      'Sliding track vacuuming to remove accumulated dust and insects',
+      'Glass panels washed and wiped streak-free with rubber squeegee',
       'Window sill, frame, and mosquito mesh dusting',
-      'Safety grille wipe-down'
+      'Iron safety grille wipe-down'
     ],
     inclusions: [
-      'Sliding track vacuuming and dirt removal',
-      'Interior and reachable exterior glass panel wiping',
+      'Sliding track vacuuming to remove accumulated dust and insects',
+      'Glass panels washed and wiped streak-free with rubber squeegee',
       'Window sill, frame, and mosquito mesh dusting',
-      'Safety grille wipe-down'
+      'Iron safety grille wipe-down'
     ],
     enabled: true,
     price: { kind: 'per-unit', min: 150, unit: 'window' },
@@ -471,18 +520,18 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Glass Cleaning',
     category: 'specialized',
     icon: 'Scan',
-    shortDescription: 'Streak-free cleaning for partition glass, mirrors, showcase panels, and glass doors.',
-    shortDesc: 'Streak-free cleaning for partition glass, mirrors, showcase panels, and glass doors.',
+    shortDescription: 'Streak-free cleaning for glass doors, partition glass, mirrors, and glass showcases.',
+    shortDesc: 'Streak-free cleaning for glass doors, partition glass, mirrors, and glass showcases.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Glass surface dusting and spot wiping',
-      'Squeegee cleaning for streak-free finish',
-      'Frame edge and handle cleaning'
+      'Dusting and spot cleaning of glass panels',
+      'Rubber squeegee wipe for clear, crystal finish with no water marks',
+      'Glass frame and handle cleaning'
     ],
     inclusions: [
-      'Glass surface dusting and spot wiping',
-      'Squeegee cleaning for streak-free finish',
-      'Frame edge and handle cleaning'
+      'Dusting and spot cleaning of glass panels',
+      'Rubber squeegee wipe for clear, crystal finish with no water marks',
+      'Glass frame and handle cleaning'
     ],
     enabled: true,
     price: { kind: 'per-unit', min: 100, unit: 'window' },
@@ -497,20 +546,20 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Fan Cleaning',
     category: 'specialized',
     icon: 'Fan',
-    shortDescription: 'Blade degreasing, motor canopy dusting, and wipe-down for ceiling and exhaust fans.',
-    shortDesc: 'Blade degreasing, motor canopy dusting, and wipe-down for ceiling and exhaust fans.',
+    shortDescription: 'Cleans oily dust and sticky grease from ceiling fan blades, rods, and motors.',
+    shortDesc: 'Cleans oily dust and sticky grease from ceiling fan blades, rods, and motors.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
       'Dry dusting of fan blades and motor housing',
-      'Wet wipe degreasing for sticky dust buildup',
-      'Rod and canopy cleaning',
-      'Drop cloth protection for furniture underneath'
+      'Wet cloth degreasing to remove sticky kitchen and bedroom dust',
+      'Fan rod and motor top canopy cleaning',
+      'Protective floor cloth placed underneath to keep furniture safe'
     ],
     inclusions: [
       'Dry dusting of fan blades and motor housing',
-      'Wet wipe degreasing for sticky dust buildup',
-      'Rod and canopy cleaning',
-      'Drop cloth protection for furniture underneath'
+      'Wet cloth degreasing to remove sticky kitchen and bedroom dust',
+      'Fan rod and motor top canopy cleaning',
+      'Protective floor cloth placed underneath to keep furniture safe'
     ],
     enabled: true,
     price: { kind: 'per-unit', min: 125, unit: 'fan' },
@@ -529,22 +578,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Office Deep Cleaning',
     category: 'commercial',
     icon: 'Briefcase',
-    shortDescription: 'Deep cleaning for corporate workspaces, cabins, meeting rooms, and office floors.',
-    shortDesc: 'Deep cleaning for corporate workspaces, cabins, meeting rooms, and office floors.',
+    shortDescription: 'Complete office cleaning for workstations, chairs, meeting rooms, glass, and floors.',
+    shortDesc: 'Complete office cleaning for workstations, chairs, meeting rooms, glass, and floors.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Workstation desk wiping and seat surface dust removal',
-      'Rotary machine floor scrubbing across circulation areas',
-      'Conference room and reception area detailing',
-      'Office washroom and pantry area deep wash',
-      'Glass partition wiping and entryway cleaning'
+      'Workstation desks and office chairs wiped and dusted',
+      'Machine floor scrubbing across hallways and cabins',
+      'Conference room table and reception area detailing',
+      'Office washroom and pantry deep cleaning',
+      'Glass partition wiping and main door glass shine'
     ],
     inclusions: [
-      'Workstation desk wiping and seat surface dust removal',
-      'Rotary machine floor scrubbing across circulation areas',
-      'Conference room and reception area detailing',
-      'Office washroom and pantry area deep wash',
-      'Glass partition wiping and entryway cleaning'
+      'Workstation desks and office chairs wiped and dusted',
+      'Machine floor scrubbing across hallways and cabins',
+      'Conference room table and reception area detailing',
+      'Office washroom and pantry deep cleaning',
+      'Glass partition wiping and main door glass shine'
     ],
     enabled: true,
     price: { kind: 'per-unit', min: 6, unit: 'sq.ft' },
@@ -559,22 +608,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Shop Cleaning',
     category: 'commercial',
     icon: 'Store',
-    shortDescription: 'Floor scrubbing, glass facade cleaning, and shelf dusting for retail shops and showrooms.',
-    shortDesc: 'Floor scrubbing, glass facade cleaning, and shelf dusting for retail shops and showrooms.',
+    shortDescription: 'Floor machine wash, glass front cleaning, and shelf dusting for retail shops and showrooms.',
+    shortDesc: 'Floor machine wash, glass front cleaning, and shelf dusting for retail shops and showrooms.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Retail floor mechanical scrubbing',
-      'Frontage display glass and entrance wiping',
-      'Countertop and accessible display ledge dusting',
-      'Storage or trial room floor wash',
-      'Signboard and shutter perimeter dusting'
+      'Retail showroom floor machine scrubbing',
+      'Front glass entrance and display window cleaning',
+      'Billing counter and display shelf dusting',
+      'Stock room and trial room floor wash',
+      'Signboard border and shutter area dusting'
     ],
     inclusions: [
-      'Retail floor mechanical scrubbing',
-      'Frontage display glass and entrance wiping',
-      'Countertop and accessible display ledge dusting',
-      'Storage or trial room floor wash',
-      'Signboard and shutter perimeter dusting'
+      'Retail showroom floor machine scrubbing',
+      'Front glass entrance and display window cleaning',
+      'Billing counter and display shelf dusting',
+      'Stock room and trial room floor wash',
+      'Signboard border and shutter area dusting'
     ],
     enabled: true,
     price: { kind: 'per-unit', min: 5, unit: 'sq.ft' },
@@ -589,22 +638,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'School / Classroom Cleaning',
     category: 'commercial',
     icon: 'GraduationCap',
-    shortDescription: 'Sanitizing classrooms, desks, benches, corridors, and school restrooms.',
-    shortDesc: 'Sanitizing classrooms, desks, benches, corridors, and school restrooms.',
+    shortDescription: 'Sanitizing school classrooms, student benches, desks, corridors, and restrooms.',
+    shortDesc: 'Sanitizing school classrooms, student benches, desks, corridors, and restrooms.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Classroom floor scrubbing and hallway washing',
+      'Classroom floor machine wash and hallway cleaning',
       'Student bench and desk wipe-down',
-      'Blackboard / whiteboard perimeter and ledge dusting',
-      'Student washroom intensive sanitization',
-      'Window sill and doorway wiping'
+      'Blackboard and whiteboard border dusting',
+      'Student washroom deep sanitization and washing',
+      'Window sills and classroom doors wiped'
     ],
     inclusions: [
-      'Classroom floor scrubbing and hallway washing',
+      'Classroom floor machine wash and hallway cleaning',
       'Student bench and desk wipe-down',
-      'Blackboard / whiteboard perimeter and ledge dusting',
-      'Student washroom intensive sanitization',
-      'Window sill and doorway wiping'
+      'Blackboard and whiteboard border dusting',
+      'Student washroom deep sanitization and washing',
+      'Window sills and classroom doors wiped'
     ],
     enabled: true,
     price: { kind: 'per-unit', min: 5, max: 7, unit: 'sq.ft' },
@@ -619,22 +668,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Hotel / Guest House Cleaning',
     category: 'commercial',
     icon: 'Hotel',
-    shortDescription: 'Turnover and periodic deep cleaning for guest rooms, pilgrim lodges, and dormitories in Tirupati.',
-    shortDesc: 'Turnover and periodic deep cleaning for guest rooms, pilgrim lodges, and dormitories in Tirupati.',
+    shortDescription: 'Deep cleaning for hotel rooms, guest lodges, and pilgrim stay rooms in Tirupati.',
+    shortDesc: 'Deep cleaning for hotel rooms, guest lodges, and pilgrim stay rooms in Tirupati.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Guest room floor scrubbing and dusting',
-      'Attached bathroom descaling and commode disinfection',
+      'Guest room floor scrubbing and bed area dusting',
+      'Attached bathroom tile descaling and commode sanitization',
       'Mattress vacuuming and headboard wiping',
-      'Lobby, staircase, and corridor washing',
-      'Window and door frame cleaning'
+      'Lobby, staircase, and hallway washing',
+      'Window glass and door frame cleaning'
     ],
     inclusions: [
-      'Guest room floor scrubbing and dusting',
-      'Attached bathroom descaling and commode disinfection',
+      'Guest room floor scrubbing and bed area dusting',
+      'Attached bathroom tile descaling and commode sanitization',
       'Mattress vacuuming and headboard wiping',
-      'Lobby, staircase, and corridor washing',
-      'Window and door frame cleaning'
+      'Lobby, staircase, and hallway washing',
+      'Window glass and door frame cleaning'
     ],
     enabled: true,
     price: { kind: 'inspection' },
@@ -648,22 +697,22 @@ export const SERVICES_DATA: ServiceItem[] = [
     name: 'Commercial Cleaning',
     category: 'commercial',
     icon: 'Building',
-    shortDescription: 'Tailored contract and one-time deep cleaning for clinics, banks, function halls, and institutions.',
-    shortDesc: 'Tailored contract and one-time deep cleaning for clinics, banks, function halls, and institutions.',
+    shortDescription: 'Tailored deep cleaning for commercial offices, banks, clinics, function halls, and buildings.',
+    shortDesc: 'Tailored deep cleaning for commercial offices, banks, clinics, function halls, and buildings.',
     // TODO_OWNER: confirm inclusions
     whatsIncluded: [
-      'Custom site assessment and mechanized floor cleaning',
-      'Public area and waiting lounge sanitization',
-      'Restroom block deep scrubbing and sanitizing',
-      'Glass entrance and reception detailing',
-      'Waste clearance and perimeter wash'
+      'Site visit assessment and mechanized floor machine scrubbing',
+      'Public lobby and waiting area sanitization',
+      'Restroom block deep washing and sanitization',
+      'Main glass entrance and reception area cleaning',
+      'Waste clearance and outer boundary cleaning'
     ],
     inclusions: [
-      'Custom site assessment and mechanized floor cleaning',
-      'Public area and waiting lounge sanitization',
-      'Restroom block deep scrubbing and sanitizing',
-      'Glass entrance and reception detailing',
-      'Waste clearance and perimeter wash'
+      'Site visit assessment and mechanized floor machine scrubbing',
+      'Public lobby and waiting area sanitization',
+      'Restroom block deep washing and sanitization',
+      'Main glass entrance and reception area cleaning',
+      'Waste clearance and outer boundary cleaning'
     ],
     enabled: true,
     price: { kind: 'inspection' },

@@ -56,19 +56,9 @@ export const FooterSection: React.FC = () => {
               <div className="flex items-start gap-2.5">
                 <MapPin className="w-4 h-4 text-[#1A8C28] shrink-0 mt-0.5" />
                 <div>
-                  <span>{BUSINESS_CONFIG.contact.address}</span>
-                  <a
-                    href={
-                      BUSINESS_CONFIG.contact.mapsPlaceUrl ||
-                      `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(BUSINESS_CONFIG.contact.city + ', ' + BUSINESS_CONFIG.contact.state)}`
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-xs font-bold text-[#1A8C28] hover:underline flex items-center gap-1 mt-1"
-                  >
-                    <span>Find us on Google Maps</span>
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
+                  <span className="font-bold text-[#041B3B] block">Service Area</span>
+                  <span>{BUSINESS_CONFIG.contact.serviceArea}</span>
+                  <span className="text-xs text-slate-500 block mt-0.5">Serving customers across Tirupati, Andhra Pradesh.</span>
                 </div>
               </div>
               <div className="flex items-center gap-2.5 text-slate-800 font-semibold">

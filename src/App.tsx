@@ -29,10 +29,10 @@ export const App: React.FC = () => {
       <QuoteModalProvider>
         <ScrollToTop />
 
-        <div className="w-full min-h-screen bg-white text-[#0F172A] flex flex-col selection:bg-[#22AC33]/20 selection:text-[#041B3B]">
+        <div className="w-full max-w-full overflow-x-hidden min-h-screen bg-white text-[#0F172A] flex flex-col selection:bg-[#22AC33]/20 selection:text-[#041B3B]">
           <Header />
 
-          <main className="flex-1 w-full pt-[var(--header-h,64px)] pb-[calc(var(--bar-h,60px)+env(safe-area-inset-bottom,0px)+16px)] sm:pb-0">
+          <main className="flex-1 w-full max-w-full overflow-x-hidden pt-[var(--header-h,64px)] pb-[calc(var(--bar-h,60px)+env(safe-area-inset-bottom,0px)+16px)] sm:pb-0">
             <Suspense fallback={<div className="min-h-screen bg-slate-50" />}>
               <Routes>
                 <Route path="/" element={<HomePage />} />

@@ -28,7 +28,7 @@ export const ContactPage: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [selectedServiceSlug, setSelectedServiceSlug] = useState('bhk-deep-cleaning');
   const [bhkTier, setBhkTier] = useState('2 BHK');
-  const [unitQuantity, setUnitQuantity] = useState<number>(500);
+  const [unitQuantity, setUnitQuantity] = useState<number | ''>(500);
   const [locality, setLocality] = useState('');
   const [gpsLocation, setGpsLocation] = useState('');
   const [locating, setLocating] = useState(false);
@@ -157,19 +157,16 @@ export const ContactPage: React.FC = () => {
       '@type': 'LocalBusiness',
       name: 'Garuda Cleaning Services',
       telephone: '+917799552084',
-      email: 'contact@garudacleaningservices.com',
+      email: 'garudacleaningservices1@gmail.com',
       address: {
         '@type': 'PostalAddress',
-        streetAddress: 'Bhavani Nagar, AIR Bypass Road',
         addressLocality: 'Tirupati',
         addressRegion: 'Andhra Pradesh',
-        postalCode: '517501',
         addressCountry: 'IN'
       },
-      geo: {
-        '@type': 'GeoCoordinates',
-        latitude: 13.6288,
-        longitude: 79.4192
+      areaServed: {
+        '@type': 'City',
+        name: 'Tirupati'
       }
     }
   };
@@ -252,14 +249,15 @@ export const ContactPage: React.FC = () => {
           {/* Left Info Column */}
           <div className="lg:col-span-5 space-y-6">
             <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-              <h2 className="text-xl font-black text-[#041B3B]">Office & Operating Hours</h2>
+              <h2 className="text-xl font-black text-[#041B3B]">Service Information</h2>
 
               <div className="space-y-4 text-xs sm:text-sm text-slate-600">
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#22AC33] shrink-0 mt-0.5" />
                   <div>
-                    <span className="font-bold text-[#041B3B] block">Service Hub Address</span>
-                    <span>{BUSINESS_CONFIG.contact.address}</span>
+                    <span className="font-bold text-[#041B3B] block">Service Area</span>
+                    <span>{BUSINESS_CONFIG.contact.serviceArea}</span>
+                    <span className="text-xs text-slate-500 block mt-0.5">{BUSINESS_CONFIG.contact.serviceAreaNote}</span>
                   </div>
                 </div>
 
@@ -554,7 +552,12 @@ export const ContactPage: React.FC = () => {
                           min={1}
                           max={50000}
                           value={unitQuantity}
-                          onChange={(e) => setUnitQuantity(Math.max(1, Number(e.target.value)))}
+                          onChange={(e) => setUnitQuantity(e.target.value === '' ? '' : Math.max(1, Number(e.target.value)))}
+                          onBlur={() => {
+                            if (unitQuantity === '' || unitQuantity < 1) {
+                              setUnitQuantity(1);
+                            }
+                          }}
                           className="w-24 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm font-bold text-center focus:border-[#22AC33] outline-none"
                         />
                         <span className="text-xs font-bold text-slate-600">{currentService.unitLabel}</span>

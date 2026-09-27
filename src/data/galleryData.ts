@@ -222,7 +222,7 @@ export const BENTO_GALLERY_ITEMS: GalleryItem[] = [
     title: 'Rooftop Domestic Water Tank High-Pressure Wash',
     category: 'Equipment',
     image: '/images/services/water-tank-cleaning.webp',
-    description: 'High-pressure wash, de-sludging, and sediment scrubbing for overhead Sintex tanks.',
+    description: 'High-pressure jet wash, bottom mud extraction, and algae scrubbing for overhead tanks and sumps.',
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Rooftop domestic water tank on residential terrace',
@@ -238,10 +238,10 @@ export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
   {
     id: 'ba-1',
     serviceSlug: 'floor-deep-cleaning',
-    title: 'Vitrified Tile Floor Machine Scrubbing',
+    title: 'Floor Scrubbing & Deep Cleaning',
     category: 'Before & After',
-    problem: 'Grout lines filled with dark dirt buildup and dull unpolished surface from daily foot traffic.',
-    work: 'Rotary single-disc machine scrubbing with neutral pH cleaning solution, grout extraction, and mop buffering.',
+    problem: 'Dark dirt in tile lines and dull muddy stains from daily foot traffic.',
+    work: 'Single-disc machine scrubbing and deep dirt extraction.',
     before: '/images/gallery/floor-before.webp',
     after: '/images/gallery/floor-after.webp',
     altBefore: 'Dull tiled floor with muddy dirt marks before cleaning',
@@ -252,10 +252,10 @@ export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
   {
     id: 'ba-2',
     serviceSlug: 'kitchen-deep-cleaning',
-    title: 'Kitchen Platform & Backsplash Degreasing',
+    title: 'Kitchen Platform & Wall Degreasing',
     category: 'Before & After',
-    problem: 'Sticky cooking oil residue, turmeric stains on countertops, and hardened grease along tile seams.',
-    work: 'Food-safe degreasing solution application, manual agitation with non-scratch scrub pads, and stainless steel sink polishing.',
+    problem: 'Sticky cooking oil grease and turmeric stains on kitchen tiles & slab.',
+    work: 'Safe degreasing solution and deep scrub wash for a spotless finish.',
     before: '/images/gallery/kitchen-before.webp',
     after: '/images/gallery/kitchen-after.webp',
     altBefore: 'Greasy kitchen countertop with oil smudges before cleaning',
@@ -266,10 +266,10 @@ export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
   {
     id: 'ba-3',
     serviceSlug: 'bathroom-deep-cleaning',
-    title: 'Hard-Water Scale Removal on Wall Tiles',
+    title: 'Bathroom Wall Tiles & Tap Cleaning',
     category: 'Before & After',
-    problem: 'Chalky mineral deposits on ceramic wall tiles, cloudy mirror, and dull chrome taps.',
-    work: 'Acid-free non-corrosive descaling liquid applied to tiles and chrome fittings, agitated, rinsed, and squeegeed dry.',
+    problem: 'Hard borewell water white salt stains (uppu karalu) on taps and tiles.',
+    work: 'Acid-free safe descaling liquid restoring original shine without damage.',
     before: '/images/gallery/bathroom-before.webp',
     after: '/images/gallery/bathroom-after.webp',
     altBefore: 'Cloudy bathroom tiles with hard water stains and scale',
@@ -280,10 +280,10 @@ export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
   {
     id: 'ba-4',
     serviceSlug: 'sofa-cleaning',
-    title: 'Upholstered Fabric Sofa Stain Removal',
+    title: 'Fabric Sofa Shampooing & Stain Removal',
     category: 'Before & After',
-    problem: 'Dust accumulation in fabric pores, beverage stains on armrests, and dull appearance.',
-    work: 'High-suction dry vacuuming, targeted foam shampoo application, and moisture extraction.',
+    problem: 'Deep dust, food marks, and sweat stains on sofa fabric.',
+    work: 'Foam shampooing and high-power vacuum water extraction.',
     before: '/images/gallery/sofa-before.webp',
     after: '/images/gallery/sofa-after.webp',
     altBefore: 'Fabric sofa with visible dirt and beverage stains before cleaning',
@@ -366,33 +366,33 @@ export const TEAM_GALLERY_ITEMS: TeamGalleryItem[] = [
     id: 'team-1',
     title: 'Uniformed & Trained Cleaners',
     role: 'On-Site Team',
-    image: '/images/hero-interior.webp',
+    image: '/images/team/team-equipment-kit.webp',
     description: 'Our cleaners arrive in neat uniforms with professional floor scrubbers and vacuum kits.',
-    alt: 'Trained cleaning professionals on site'
+    alt: 'Professional cleaning uniforms, single-disc scrubber, vacuum, and safety kit'
   },
   {
     id: 'team-2',
     title: 'Supervised Project Execution',
     role: 'Quality Lead',
-    image: '/images/services/villa-deep-cleaning.webp',
+    image: '/images/team/supervisor-checklist-audit.webp',
     description: 'Every job is coordinated by an experienced lead who oversees checklist completion.',
-    alt: 'Lead supervising on-site cleaning'
+    alt: 'Supervisor quality inspection audit checklist and measurement tool'
   },
   {
     id: 'team-3',
     title: 'Safety & Surface Care Standards',
     role: 'Operational Safety',
-    image: '/images/services/post-construction-cleaning.webp',
+    image: '/images/team/surface-safety-chemicals.webp',
     description: 'We use non-acidic descalers and safe techniques to protect your delicate floors and fittings.',
-    alt: 'Safety practices and surface care'
+    alt: 'Surface-safe acid-free descalers, neutral cleaners, and safety gloves'
   },
   {
     id: 'team-4',
     title: 'Final Walkthrough With Customer',
     role: 'Customer Inspection',
-    image: '/images/services/bhk-deep-cleaning.webp',
+    image: '/images/team/final-handover-audit.webp',
     description: 'We walk through each room together with you before packing up to ensure 100% satisfaction.',
-    alt: 'Final walkthrough and inspection'
+    alt: 'Final walkthrough sign-off sheet and keys ready in gleaming spotless living room'
   }
 ];
 
@@ -404,7 +404,7 @@ export const EQUIPMENT_ITEMS: EquipmentItem[] = [
     id: 'eq-1',
     name: 'Rotary Single-Disc Floor Scrubber',
     category: 'Floor Restoration',
-    image: '/images/services/floor-deep-cleaning.webp',
+    image: '/images/equipment/floor-machine.webp',
     description: 'Heavy-duty rotating brushes that lift embedded dirt from tile, marble, and granite pores.',
     alt: 'Rotary floor scrubber machine'
   },
@@ -412,7 +412,7 @@ export const EQUIPMENT_ITEMS: EquipmentItem[] = [
     id: 'eq-2',
     name: 'High-Suction Wet & Dry Vacuum',
     category: 'Slurry & Dust Extraction',
-    image: '/images/services/sofa-cleaning.webp',
+    image: '/images/equipment/sofa-vacuum.webp',
     description: 'Commercial vacuum extractor for deep sofa fabric cleaning, window tracks, and slurry suction.',
     alt: 'High-suction vacuum extractor'
   },
@@ -420,7 +420,7 @@ export const EQUIPMENT_ITEMS: EquipmentItem[] = [
     id: 'eq-3',
     name: 'Surface-Safe Descaling Solutions',
     category: 'Chemical Safety',
-    image: '/images/services/bathroom-deep-cleaning.webp',
+    image: '/images/equipment/bathroom-tools.webp',
     description: 'Non-corrosive, acid-free descaling formulas that remove mineral deposits without damaging chrome or grout.',
     alt: 'Surface-safe cleaning solutions'
   },
@@ -428,7 +428,7 @@ export const EQUIPMENT_ITEMS: EquipmentItem[] = [
     id: 'eq-4',
     name: 'Professional Glass Squeegees & Scrapers',
     category: 'Glass Detailing',
-    image: '/images/services/window-cleaning.webp',
+    image: '/images/equipment/window-tools.webp',
     description: 'Rubber squeegee blades and safety scrapers for streak-free windows and partition glass.',
     alt: 'Professional glass cleaning squeegee'
   }
@@ -440,37 +440,37 @@ export const EQUIPMENT_ITEMS: EquipmentItem[] = [
 export const PROJECT_PROCESS_STEPS: ProcessStep[] = [
   {
     stepNumber: 1,
-    title: 'Site Assessment',
-    description: 'We check the rooms, floor condition, and specific stain areas to choose the right tools and products.',
-    image: '/images/services/move-in-cleaning.webp',
-    highlight: 'Inspection'
+    title: 'Site Inspection & Setup',
+    description: 'Our team inspects each room, checks tile stains and bathroom scale, and selects the right tools and cleaning liquids.',
+    image: '/images/process/step-1-inspection.webp',
+    highlight: 'Initial Inspection'
   },
   {
     stepNumber: 2,
-    title: 'Surface Preparation',
-    description: 'We dry-vacuum loose debris, cover sensitive electronics, and pretreat heavy oil or hard-water scale.',
-    image: '/images/services/kitchen-deep-cleaning.webp',
-    highlight: 'Pretreatment'
+    title: 'Dusting & Surface Prep',
+    description: 'We remove cobwebs, dry-vacuum loose debris, cover switchboards, and pretreat stubborn oil grease or grout stains.',
+    image: '/images/process/step-2-dusting.webp',
+    highlight: 'Dry Dusting & Prep'
   },
   {
     stepNumber: 3,
-    title: 'Mechanized Deep Cleaning',
-    description: 'We operate rotary scrubbers, fabric shampoo extractors, and surface-safe descaling liquids.',
-    image: '/images/services/floor-deep-cleaning.webp',
-    highlight: 'Machine Scrubbing'
+    title: 'Machine Scrub & Deep Clean',
+    description: 'We run heavy-duty rotary floor scrubbers, spray foam shampoo on upholstery, and apply surface-safe descaling liquid.',
+    image: '/images/process/step-3-machine-scrub.webp',
+    highlight: 'Rotary Scrubbing'
   },
   {
     stepNumber: 4,
-    title: 'Detailing & Moisture Extraction',
-    description: 'Window channels, switchboards, fan blades, and tile edges are detailed and wiped dry.',
-    image: '/images/services/window-cleaning.webp',
-    highlight: 'Fine Detailing'
+    title: 'Fine Detailing & Wiping Dry',
+    description: 'Window sliding tracks, fan blades, switch plates, and tile edges are detailed by hand and vacuumed completely dry.',
+    image: '/images/process/step-4-fine-detailing.webp',
+    highlight: 'Edge & Window Detailing'
   },
   {
     stepNumber: 5,
-    title: 'Final Quality Walkthrough',
-    description: 'We inspect the finished property room-by-room together with you to verify every corner is clean.',
-    image: '/images/services/bhk-deep-cleaning.webp',
-    highlight: 'Final Check'
+    title: 'Quality Audit & Handover',
+    description: 'We conduct a room-by-room walkthrough together with you to verify every corner is clean before supervisor sign-off.',
+    image: '/images/process/step-5-handover.webp',
+    highlight: 'Joint Walkthrough'
   }
 ];

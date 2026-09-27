@@ -17,6 +17,8 @@ dist-ssr
 qa-screenshots
 qa-report.md
 gallery-raw
+scripts/qa
+scripts/*.cjs
 
 # Editor directories and files
 .vscode/*

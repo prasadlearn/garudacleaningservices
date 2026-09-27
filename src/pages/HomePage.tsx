@@ -26,20 +26,13 @@ export const HomePage: React.FC = () => {
     logo: 'https://garudacleaningservices.in/icon-512.png',
     image: 'https://garudacleaningservices.in/images/services/bhk-deep-cleaning.webp',
     telephone: '+917799552084',
-    email: 'contact@garudacleaningservices.com',
+    email: 'garudacleaningservices1@gmail.com',
     priceRange: '₹399 - ₹8499',
     address: {
       '@type': 'PostalAddress',
-      streetAddress: 'Bhavani Nagar, AIR Bypass Road',
       addressLocality: 'Tirupati',
       addressRegion: 'Andhra Pradesh',
-      postalCode: '517501',
       addressCountry: 'IN'
-    },
-    geo: {
-      '@type': 'GeoCoordinates',
-      latitude: 13.6288,
-      longitude: 79.4192
     },
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
@@ -52,8 +45,8 @@ export const HomePage: React.FC = () => {
         'Saturday',
         'Sunday'
       ],
-      opens: '07:00',
-      closes: '21:00'
+      opens: '08:00',
+      closes: '20:00'
     },
     areaServed: [
       { '@type': 'AdministrativeArea', name: 'Tirupati' },
@@ -74,7 +67,7 @@ export const HomePage: React.FC = () => {
       'Rotary Machine Floor Scrubbing',
       'Kitchen Platform Degreasing',
       'Commercial Office Cleaning',
-      'Overhead Water Tank Cleaning'
+      'Overhead Water Tank & Sump Cleaning'
     ]
   };
 

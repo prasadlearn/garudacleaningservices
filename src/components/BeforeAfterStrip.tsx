@@ -93,12 +93,12 @@ export const BeforeAfterStrip: React.FC = () => {
                   </h3>
 
                   <div className="space-y-1.5 text-xs">
-                    <p className="text-slate-600 line-clamp-2">
-                      <strong className="text-red-700 font-bold">Problem: </strong>
+                    <p className="text-slate-700">
+                      <strong className="text-red-600 font-bold">Problem: </strong>
                       {entry.problem}
                     </p>
-                    <p className="text-slate-600 line-clamp-2">
-                      <strong className="text-emerald-700 font-bold">What we did: </strong>
+                    <p className="text-slate-700">
+                      <strong className="text-[#1A8C28] font-bold">Solution: </strong>
                       {entry.work}
                     </p>
                   </div>

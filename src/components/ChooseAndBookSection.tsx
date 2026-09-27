@@ -3,7 +3,7 @@ import { Phone, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
 import { useQuoteModal } from '../context/QuoteModalContext';
-import { getEnabledServices, formatPrice, type ServiceItem } from '../data/servicesData';
+import { getEnabledServices, formatPrice, getServiceHighlights, type ServiceItem } from '../data/servicesData';
 import { ServiceIcon } from './ServiceIcon';
 import { SafeImage } from './SafeImage';
 
@@ -39,65 +39,88 @@ export const ChooseAndBookSection: React.FC = () => {
           </p>
         </div>
 
-        {/* 2 Rows of 4 Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredServices.map((service) => (
-            <div
-              key={service.slug}
-              className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-lg transition-all flex flex-col justify-between"
-            >
-              <div>
-                <div className="aspect-[16/10] overflow-hidden bg-slate-100 relative">
-                  <SafeImage
-                    src={service.image || '/images/hero-interior.webp'}
-                    alt={service.title}
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                  />
-                  <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs p-2 rounded-xl text-[#22AC33] shadow-xs">
-                    <ServiceIcon slug={service.slug} name={service.icon} className="w-4 h-4" />
-                  </div>
-                  {service.imageSource === 'illustrative' && (
-                    <div className="absolute bottom-2.5 right-2.5 bg-black/60 backdrop-blur-xs text-white/90 text-[10px] font-medium px-2 py-0.5 rounded-md pointer-events-none">
-                      Representative image
-                    </div>
-                  )}
-                </div>
-                <div className="p-5">
-                  <h3 className="font-extrabold text-lg text-[#041B3B]">{service.title}</h3>
-                  <p className="text-xs text-slate-500 mt-1 line-clamp-2">{service.shortDescription}</p>
-                  <div className="mt-4 font-extrabold text-sm text-[#041B3B]">
-                    Starting <span className="text-[#22AC33]">{formatPrice(service.price)}</span>
-                  </div>
-                </div>
-              </div>
+        {/* 2 Rows of 4 Cards (2 cols on mobile) */}
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
+          {featuredServices.map((service) => {
+            const highlights = getServiceHighlights(service);
 
-              <div className="p-5 pt-0 space-y-2">
-                <div className="flex gap-2">
-                  <a
-                    href={BUSINESS_CONFIG.contact.phoneTel}
-                    className="btn-homecare-green flex-1 text-center justify-center text-xs py-2 px-2"
+            return (
+              <div
+                key={service.slug}
+                className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-xl hover:border-[#22AC33]/40 transition-all duration-300 flex flex-col justify-between group"
+              >
+                <div className="flex-1 flex flex-col">
+                  {/* Clickable Image */}
+                  <Link
+                    to={`/services/${service.slug}`}
+                    className="block relative aspect-[16/11] sm:aspect-[16/10] overflow-hidden bg-slate-900 cursor-pointer"
+                    aria-label={`View details for ${service.title}`}
                   >
-                    <Phone className="w-3 h-3" />
-                    Call
-                  </a>
-                  <button
-                    type="button"
-                    onClick={() => openModal({ serviceTitle: service.title, sourcePage: '/' })}
-                    className="btn-homecare-navy flex-1 text-center justify-center text-xs py-2 px-2 cursor-pointer"
-                  >
-                    Book
-                  </button>
+                    <SafeImage
+                      src={service.image || '/images/hero-interior.webp'}
+                      alt={service.title}
+                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
+                    />
+                    <div className="absolute top-2 left-2 bg-white/95 backdrop-blur-xs p-1.5 rounded-lg text-[#22AC33] shadow-xs">
+                      <ServiceIcon slug={service.slug} name={service.icon} className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                    </div>
+                    {service.imageSource === 'illustrative' && (
+                      <div className="absolute bottom-1.5 right-1.5 bg-black/60 backdrop-blur-xs text-white/90 text-[8px] sm:text-[9px] font-medium px-1.5 py-0.5 rounded-md pointer-events-none">
+                        Representative image
+                      </div>
+                    )}
+                  </Link>
+
+                  {/* Card Body */}
+                  <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between">
+                    <div>
+                      <Link to={`/services/${service.slug}`} className="block group-hover:text-[#22AC33] transition-colors">
+                        <h3 className="font-extrabold text-xs sm:text-base text-[#041B3B] group-hover:text-[#22AC33] transition-colors line-clamp-1 leading-snug">
+                          {service.title}
+                        </h3>
+                      </Link>
+
+                      {/* What's Included Quick Tags */}
+                      <div className="mt-1.5 flex flex-wrap gap-1">
+                        {highlights.slice(0, 2).map((item, i) => (
+                          <span key={i} className="inline-flex items-center gap-1 text-[8.5px] sm:text-[10px] text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md font-semibold truncate max-w-full">
+                            <span className="text-[#22AC33] font-black">✓</span> {item}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-baseline justify-between">
+                      <span className="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">Starting</span>
+                      <span className="text-xs sm:text-base font-black text-[#1A8C28]">{formatPrice(service.price)}</span>
+                    </div>
+                  </div>
                 </div>
-                <Link
-                  to={`/services/${service.slug}`}
-                  className="w-full text-center text-xs font-bold text-slate-600 hover:text-[#22AC33] py-1 flex items-center justify-center gap-1 transition-colors"
-                >
-                  <span>View Details</span>
-                  <ArrowRight className="w-3 h-3" />
-                </Link>
+
+                {/* Action Buttons: Book Now + WhatsApp / Call */}
+                <div className="p-3 sm:p-4 pt-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <button
+                      type="button"
+                      onClick={() => openModal({ serviceTitle: service.title, sourcePage: '/' })}
+                      className="btn-homecare-green flex-1 text-center justify-center text-[11px] sm:text-xs py-2 sm:py-2.5 px-2 font-bold cursor-pointer shadow-xs"
+                    >
+                      Book Now
+                    </button>
+                    <a
+                      href={BUSINESS_CONFIG.buildWhatsAppUrl()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`WhatsApp about ${service.title}`}
+                      className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-[#22AC33] hover:text-white text-[#041B3B] flex items-center justify-center shrink-0 border border-slate-200 transition-colors"
+                    >
+                      <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                    </a>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         <div className="mt-12 text-center">

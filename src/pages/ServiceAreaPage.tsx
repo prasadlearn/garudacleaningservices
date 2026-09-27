@@ -62,10 +62,8 @@ export const ServiceAreaPage: React.FC = () => {
         "priceRange": "₹₹",
         "address": {
           "@type": "PostalAddress",
-          "streetAddress": BUSINESS_CONFIG.contact.address,
           "addressLocality": "Tirupati",
           "addressRegion": "Andhra Pradesh",
-          "postalCode": "517501",
           "addressCountry": "IN"
         },
         "areaServed": [

@@ -78,8 +78,11 @@ export const GalleryPage: React.FC = () => {
         '@type': 'PostalAddress',
         addressLocality: 'Tirupati',
         addressRegion: 'Andhra Pradesh',
-        postalCode: '517501',
         addressCountry: 'IN'
+      },
+      areaServed: {
+        '@type': 'City',
+        name: 'Tirupati'
       }
     }
   };

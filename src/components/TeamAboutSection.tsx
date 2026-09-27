@@ -26,16 +26,16 @@ export const TeamAboutSection: React.FC = () => {
 
               {/* Verified Badge or Local Badge */}
               {showRating ? (
-                <div className="absolute -bottom-4 -left-2 sm:-left-3 bg-[#FFD700] text-[#041B3B] p-3 sm:p-4 rounded-2xl shadow-xl flex items-center gap-2 border-2 border-white">
-                  <span className="text-2xl sm:text-3xl font-black">{TRUST_CONFIG.googleRating}★</span>
-                  <div className="text-[10px] sm:text-xs font-black leading-tight uppercase">
+                <div className="absolute bottom-3 left-3 sm:-bottom-4 sm:left-4 bg-[#FFD700] text-[#041B3B] p-2.5 sm:p-4 rounded-2xl shadow-xl flex items-center gap-2 border-2 border-white">
+                  <span className="text-xl sm:text-3xl font-black">{TRUST_CONFIG.googleRating}★</span>
+                  <div className="text-[9px] sm:text-xs font-black leading-tight uppercase">
                     Google<br />Verified
                   </div>
                 </div>
               ) : (
-                <div className="absolute -bottom-4 -left-2 sm:-left-3 bg-[#041B3B] text-white p-3 sm:p-4 rounded-2xl shadow-xl flex items-center gap-2 border-2 border-white">
-                  <MapPin className="w-5 h-5 text-[#22AC33]" />
-                  <div className="text-[11px] sm:text-xs font-black leading-tight">
+                <div className="absolute bottom-3 left-3 sm:-bottom-4 sm:left-4 bg-[#041B3B] text-white p-2.5 sm:p-4 rounded-2xl shadow-xl flex items-center gap-2 border-2 border-white">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 text-[#22AC33]" />
+                  <div className="text-[10px] sm:text-xs font-black leading-tight">
                     Tirupati<br /><span className="text-[#4ADE80]">Local Service</span>
                   </div>
                 </div>

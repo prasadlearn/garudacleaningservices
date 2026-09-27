@@ -6,6 +6,7 @@ import {
   type ServiceCategory,
   formatPrice,
   formatAmount,
+  getServiceHighlights,
   type PriceModel
 } from '../data/servicesData';
 import { ServiceIcon } from '../components/ServiceIcon';
@@ -22,7 +23,7 @@ export const ServicesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   // Per-unit custom estimator states keyed by service slug
-  const [unitValues, setUnitValues] = useState<Record<string, number>>({
+  const [unitValues, setUnitValues] = useState<Record<string, number | ''>>({
     'carpet-cleaning': 100,
     'floor-deep-cleaning': 800,
     'post-construction-cleaning': 1000,
@@ -45,14 +46,29 @@ export const ServicesPage: React.FC = () => {
   const bhkTiers = bhkService?.price.kind === 'tiers' ? bhkService.price.tiers : [];
   const activeBhkObj = bhkTiers.find((t) => t.label === selectedBhkTier) || bhkTiers[0];
 
-  const handleUnitChange = (slug: string, val: number) => {
-    setUnitValues((prev) => ({
-      ...prev,
-      [slug]: Math.max(1, Math.min(50000, val || 1))
-    }));
+  const handleUnitChange = (slug: string, rawVal: string) => {
+    if (rawVal === '') {
+      setUnitValues((prev) => ({ ...prev, [slug]: '' }));
+      return;
+    }
+    const parsed = parseInt(rawVal, 10);
+    if (!isNaN(parsed)) {
+      setUnitValues((prev) => ({ ...prev, [slug]: Math.min(50000, Math.max(0, parsed)) }));
+    }
   };
 
-  const calculateEstimate = (price: PriceModel, qty: number) => {
+  const handleUnitBlur = (slug: string) => {
+    setUnitValues((prev) => {
+      const current = prev[slug];
+      if (current === '' || current === 0) {
+        return { ...prev, [slug]: 1 };
+      }
+      return prev;
+    });
+  };
+
+  const calculateEstimate = (price: PriceModel, rawQty: number | '') => {
+    const qty = typeof rawQty === 'number' && rawQty > 0 ? rawQty : 1;
     if (price.kind === 'per-unit') {
       if (price.max !== undefined && price.max !== price.min) {
         const minTot = price.min * qty;
@@ -105,13 +121,6 @@ export const ServicesPage: React.FC = () => {
       {/* Hero Header */}
       <div className="bg-[#041B3B] text-white py-14 sm:py-20 px-4 sm:px-8 border-b border-white/10 text-center">
         <div className="max-w-4xl mx-auto space-y-4">
-          {confirmedCommitments.length > 0 && (
-            <div className="inline-flex flex-wrap items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-emerald-400 text-xs font-bold border border-white/15">
-              <ShieldCheck className="w-4 h-4 text-[#22AC33]" />
-              <span>{confirmedCommitments.map((c) => c.title).join(' • ')}</span>
-            </div>
-          )}
-
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
             Cleaning Services in Tirupati – Prices & Booking
           </h1>
@@ -168,7 +177,7 @@ export const ServicesPage: React.FC = () => {
         </div>
 
         {/* 21 Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
           {SERVICES_DATA.map((service) => {
             const matchesCategory = activeTab === 'all' || service.category === activeTab;
             const matchesQuery =
@@ -210,176 +219,153 @@ export const ServicesPage: React.FC = () => {
               <div
                 key={service.slug}
                 style={{ display: isVisible ? 'flex' : 'none' }}
-                className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-xs hover:shadow-xl transition-all duration-300 flex-col justify-between"
+                className="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-xl hover:border-[#22AC33]/40 transition-all duration-300 flex-col justify-between group"
               >
-                <div>
-                  {/* Top Image + Category Pill */}
-                  <div className="aspect-[16/9] bg-slate-100 relative overflow-hidden">
+                <div className="flex-1 flex flex-col">
+                  {/* Clickable Top Image + Category Pill */}
+                  <Link
+                    to={`/services/${service.slug}`}
+                    className="block aspect-[4/3] sm:aspect-[16/10] bg-slate-900 relative overflow-hidden cursor-pointer"
+                    aria-label={`View details for ${service.title}`}
+                  >
                     <SafeImage
                       src={service.image || '/images/hero-interior.webp'}
                       alt={service.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-500"
                     />
-                    <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-xs px-2.5 py-1 rounded-full text-[11px] font-extrabold text-[#041B3B] shadow-xs uppercase tracking-wider">
+                    <div className="absolute top-2 left-2 bg-white/95 backdrop-blur-xs px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-extrabold text-[#041B3B] shadow-xs uppercase tracking-wider">
                       {service.category}
                     </div>
-                    <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-xs p-2 rounded-xl text-[#22AC33] shadow-xs">
-                      <ServiceIcon slug={service.slug} name={service.icon} className="w-4 h-4" />
+                    <div className="absolute top-2 right-2 bg-white/95 backdrop-blur-xs p-1.5 rounded-lg sm:rounded-xl text-[#22AC33] shadow-xs">
+                      <ServiceIcon slug={service.slug} name={service.icon} className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </div>
                     {service.imageSource === 'illustrative' && (
-                      <div className="absolute bottom-2.5 right-2.5 bg-black/60 backdrop-blur-xs text-white/90 text-[10px] font-medium px-2 py-0.5 rounded-md pointer-events-none">
+                      <div className="absolute bottom-1.5 right-1.5 bg-black/60 backdrop-blur-xs text-white/90 text-[8px] sm:text-[9px] font-medium px-1.5 py-0.5 rounded-md pointer-events-none">
                         Representative image
                       </div>
                     )}
-                  </div>
+                  </Link>
 
                   {/* Body Content */}
-                  <div className="p-6">
-                    <h2 className="text-xl font-black text-[#041B3B]">{service.title}</h2>
-                    <p className="text-xs text-slate-600 mt-2 leading-relaxed min-h-[36px]">
-                      {service.shortDescription}
-                    </p>
+                  <div className="p-3 sm:p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                      <Link to={`/services/${service.slug}`} className="block group-hover:text-[#22AC33] transition-colors">
+                        <h2 className="text-xs sm:text-lg font-black text-[#041B3B] group-hover:text-[#22AC33] transition-colors line-clamp-1 leading-snug">
+                          {service.title}
+                        </h2>
+                      </Link>
 
-                    {/* DYNAMIC CARD COMPONENT: BHK SEGMENTED SELECTOR */}
-                    {isBhkService && bhkTiers.length > 0 && (
-                      <div className="mt-4 p-3 bg-slate-50 rounded-2xl border border-slate-200">
-                        <span className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider block mb-2">
-                          Select Apartment Size:
-                        </span>
-                        <div className="grid grid-cols-4 gap-1.5">
-                          {bhkTiers.map((t) => (
-                            <button
-                              key={t.label}
-                              type="button"
-                              onClick={() => setSelectedBhkTier(t.label)}
-                              className={`py-1.5 text-xs font-black rounded-lg transition-colors cursor-pointer ${
-                                selectedBhkTier === t.label
-                                  ? 'bg-[#22AC33] text-white shadow-2xs'
-                                  : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'
-                              }`}
-                            >
-                              {t.label}
-                            </button>
-                          ))}
-                        </div>
-                        <div className="mt-2 text-right">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              openModal({
-                                serviceTitle: 'Custom Large Home Cleaning',
-                                sourcePage: '/services'
-                              })
-                            }
-                            className="text-[11px] font-bold text-[#041B3B] hover:text-[#22AC33] inline-flex items-center gap-0.5"
-                          >
-                            <span>Larger home? Request a quote</span>
-                            <ArrowRight className="w-3 h-3" />
-                          </button>
-                        </div>
+                      {/* What's Included Quick Tags */}
+                      <div className="mt-1.5 flex flex-wrap gap-1">
+                        {getServiceHighlights(service).slice(0, 2).map((item, i) => (
+                          <span key={i} className="inline-flex items-center gap-1 text-[8.5px] sm:text-[10px] text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md font-semibold truncate max-w-full">
+                            <span className="text-[#22AC33] font-black">✓</span> {item}
+                          </span>
+                        ))}
                       </div>
-                    )}
 
-                    {/* DYNAMIC CARD COMPONENT: PER-UNIT ESTIMATOR */}
-                    {isPerUnit && (
-                      <div className="mt-4 p-3 bg-slate-50 rounded-2xl border border-slate-200">
-                        <div className="flex items-center justify-between gap-2">
-                          <label className="text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">
-                            Enter {service.unitLabel}:
-                          </label>
-                          <div className="flex items-center gap-1.5">
+                      {/* DYNAMIC CARD COMPONENT: BHK SEGMENTED SELECTOR */}
+                      {isBhkService && bhkTiers.length > 0 && (
+                        <div className="mt-2.5 p-2 bg-slate-50 rounded-xl border border-slate-200">
+                          <span className="text-[8px] sm:text-[9px] font-extrabold text-slate-500 uppercase tracking-wider block mb-1">
+                            Apartment Size:
+                          </span>
+                          <div className="grid grid-cols-4 gap-1">
+                            {bhkTiers.map((t) => (
+                              <button
+                                key={t.label}
+                                type="button"
+                                onClick={() => setSelectedBhkTier(t.label)}
+                                className={`py-1 text-[9px] sm:text-[11px] font-bold rounded-lg transition-colors cursor-pointer ${
+                                  selectedBhkTier === t.label
+                                    ? 'bg-[#22AC33] text-white shadow-2xs'
+                                    : 'bg-white text-slate-700 hover:bg-slate-200 border border-slate-200'
+                                }`}
+                              >
+                                {t.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* DYNAMIC CARD COMPONENT: PER-UNIT ESTIMATOR */}
+                      {isPerUnit && (
+                        <div className="mt-2.5 p-2 bg-slate-50 rounded-xl border border-slate-200">
+                          <div className="flex items-center justify-between gap-1">
+                            <label className="text-[8px] sm:text-[9px] font-extrabold text-slate-500 uppercase tracking-wider">
+                              Qty ({service.unitLabel}):
+                            </label>
                             <input
                               type="number"
                               min={1}
                               max={50000}
-                              value={currentUnitQty}
-                              onChange={(e) => handleUnitChange(service.slug, Number(e.target.value))}
-                              className="w-20 px-2 py-1 bg-white border border-slate-300 rounded-lg text-xs font-bold text-slate-800 text-center focus:outline-none focus:border-[#22AC33]"
+                              value={unitValues[service.slug] ?? ''}
+                              onChange={(e) => handleUnitChange(service.slug, e.target.value)}
+                              onBlur={() => handleUnitBlur(service.slug)}
+                              className="w-16 px-1.5 py-0.5 bg-white border border-slate-300 rounded-lg text-[10px] sm:text-xs font-bold text-slate-800 text-center focus:outline-none focus:border-[#22AC33]"
                             />
-                            <span className="text-[11px] font-bold text-slate-500">{service.unitLabel}</span>
                           </div>
                         </div>
-                        <p className="text-[10px] text-slate-500 mt-1.5 italic">
-                          {perUnitEstimate?.rawDisplay}, indicative; final quote after inspection.
-                        </p>
-                      </div>
-                    )}
+                      )}
+                    </div>
 
                     {/* Price Indicator */}
-                    <div className="mt-5 flex items-baseline justify-between border-t border-slate-100 pt-3">
-                      <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
-                        {isInspection ? 'Assessment' : 'Indicative Rate'}
+                    <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-baseline justify-between">
+                      <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">
+                        {isInspection ? 'Assessment' : 'Starting'}
                       </span>
-                      <span className="text-xl font-black text-[#22AC33]">{activePriceLabel}</span>
+                      <span className="text-sm sm:text-lg font-black text-[#1A8C28] truncate">{activePriceLabel}</span>
                     </div>
                   </div>
                 </div>
 
                 {/* Card Action Buttons */}
-                <div className="p-6 pt-0 space-y-2">
-                  <div className="grid grid-cols-2 gap-2">
-                    {/* Primary Button: Book Now / Request Site Inspection */}
-                    {isInspection ? (
-                      <button
-                        type="button"
-                        onClick={() => {
-                          trackEvent('book_click', { serviceSlug: service.slug, sourcePage: '/services' });
-                          openModal({ serviceTitle: service.title, sourcePage: '/services' });
-                        }}
-                        className="col-span-2 btn-homecare-navy text-xs py-2.5 font-bold flex items-center justify-center gap-1.5 cursor-pointer"
-                      >
-                        <Phone className="w-3.5 h-3.5" />
-                        <span>Request Site Inspection</span>
-                      </button>
-                    ) : (
-                      <>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            trackEvent('book_click', {
-                              serviceSlug: service.slug,
-                              tier: activeWhatsAppDetail,
-                              sourcePage: '/services'
-                            });
-                            openModal({
-                              serviceTitle: service.title,
-                              tier: activeWhatsAppDetail,
-                              sourcePage: '/services'
-                            });
-                          }}
-                          className="btn-homecare-navy text-xs py-2.5 font-bold flex items-center justify-center gap-1.5 cursor-pointer"
-                        >
-                          <Phone className="w-3.5 h-3.5" />
-                          <span>Book Now</span>
-                        </button>
-                        <a
-                          href={whatsappUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() =>
-                            trackEvent('whatsapp_click', {
-                              serviceSlug: service.slug,
-                              tier: activeWhatsAppDetail,
-                              sourcePage: '/services'
-                            })
-                          }
-                          className="btn-homecare-green text-xs py-2.5 font-bold flex items-center justify-center gap-1.5"
-                        >
-                          <MessageCircle className="w-3.5 h-3.5" />
-                          <span>WhatsApp</span>
-                        </a>
-                      </>
-                    )}
-                  </div>
+                <div className="p-3 sm:p-5 pt-0">
+                  <div className="flex items-center gap-1.5 sm:gap-2">
+                    <Link
+                      to={`/services/${service.slug}`}
+                      className="btn-homecare-navy flex-1 text-[10px] sm:text-xs py-2 sm:py-2.5 font-bold flex items-center justify-center gap-1 cursor-pointer shadow-xs text-center"
+                    >
+                      <span>View Details</span>
+                    </Link>
 
-                  {/* Details Link */}
-                  <Link
-                    to={`/services/${service.slug}`}
-                    className="w-full text-center text-xs font-bold text-slate-600 hover:text-[#22AC33] py-1.5 flex items-center justify-center gap-1 transition-colors"
-                  >
-                    <span>View Inclusions & Details</span>
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                  </Link>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        trackEvent('book_click', {
+                          serviceSlug: service.slug,
+                          tier: activeWhatsAppDetail,
+                          sourcePage: '/services'
+                        });
+                        openModal({
+                          serviceTitle: service.title,
+                          tier: activeWhatsAppDetail,
+                          sourcePage: '/services'
+                        });
+                      }}
+                      className="btn-homecare-green flex-1 text-[10px] sm:text-xs py-2 sm:py-2.5 font-bold flex items-center justify-center gap-1 cursor-pointer shadow-xs"
+                    >
+                      <span>{isInspection ? 'Inspect' : 'Book Now'}</span>
+                    </button>
+
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`WhatsApp about ${service.title}`}
+                      onClick={() =>
+                        trackEvent('whatsapp_click', {
+                          serviceSlug: service.slug,
+                          tier: activeWhatsAppDetail,
+                          sourcePage: '/services'
+                        })
+                      }
+                      className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-[#22AC33] hover:text-white text-[#041B3B] flex items-center justify-center shrink-0 border border-slate-200 transition-colors"
+                    >
+                      <MessageCircle className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
                 </div>
               </div>
             );

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { getEnabledServices, formatPrice, type ServiceCategory } from '../data/servicesData';
-import { useQuoteModal } from '../context/QuoteModalContext';
-import { Phone, ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react';
+import { getEnabledServices, formatPrice, getServiceHighlights, type ServiceCategory } from '../data/servicesData';
+import { Phone, Sparkles } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
 import { SafeImage } from './SafeImage';
+import { useQuoteModal } from '../context/QuoteModalContext';
 
 export const ServicesGrid: React.FC = () => {
   const { openModal } = useQuoteModal();
@@ -53,89 +53,99 @@ export const ServicesGrid: React.FC = () => {
           </div>
         </div>
 
-        <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div layout className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
           <AnimatePresence>
-            {filtered.map((service) => (
-              <motion.div
-                key={service.id}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.3 }}
-                className="rounded-3xl bg-white border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 flex flex-col justify-between group"
-              >
-                <div>
-                  <div className="relative aspect-16/10 overflow-hidden bg-slate-900">
-                    <SafeImage
-                      src={service.image}
-                      alt={service.title}
-                      fallbackLabel={service.title}
-                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
-                    />
-                    <div className="absolute top-3 left-3 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">
-                      {service.category}
-                    </div>
-                    {service.imageSource === 'illustrative' && (
-                      <div className="absolute bottom-2.5 right-2.5 bg-black/60 backdrop-blur-xs text-white/90 text-[10px] font-medium px-2 py-0.5 rounded-md pointer-events-none">
-                        Representative image
-                      </div>
-                    )}
-                  </div>
+            {filtered.map((service) => {
+              const highlights = getServiceHighlights(service);
 
-                  <div className="p-6">
-                    <h3 className="text-xl font-extrabold text-[#041B3B] group-hover:text-[#22AC33] transition-colors mb-2 leading-snug">
-                      {service.title}
-                    </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed mb-4 line-clamp-2">
-                      {service.shortDescription}
-                    </p>
-
-                    <div className="space-y-1.5 mb-6">
-                      {service.whatsIncluded.slice(0, 3).map((hl, i) => (
-                        <div key={i} className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#22AC33] shrink-0" />
-                          <span>{hl}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6 pt-0 border-t border-slate-100 mt-2">
-                  <div className="flex items-center justify-between pt-4 mb-4">
-                    <div>
-                      <div className="text-[10px] uppercase font-bold text-slate-400">Pricing</div>
-                      <div className="text-xl font-black text-[#22AC33]">{formatPrice(service.price)}</div>
-                    </div>
+              return (
+                <motion.div
+                  key={service.id}
+                  layout
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.3 }}
+                  className="rounded-2xl sm:rounded-3xl bg-white border border-slate-200/90 overflow-hidden shadow-xs hover:shadow-xl hover:border-[#22AC33]/40 transition-all duration-300 flex flex-col justify-between group"
+                >
+                  <div className="flex-1 flex flex-col">
+                    {/* Clickable Image & Category */}
                     <Link
                       to={`/services/${service.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs font-bold text-[#041B3B] hover:text-[#22AC33] transition-colors"
+                      className="block relative aspect-[16/11] sm:aspect-[16/10] overflow-hidden bg-slate-900 cursor-pointer"
+                      aria-label={`View details for ${service.title}`}
                     >
-                      View Details
-                      <ArrowRight className="w-4 h-4" />
+                      <SafeImage
+                        src={service.image}
+                        alt={service.title}
+                        fallbackLabel={service.title}
+                        className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700"
+                      />
+                      <div className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[9px] sm:text-[10px] font-black px-2 sm:px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                        {service.category}
+                      </div>
+                      {service.imageSource === 'illustrative' && (
+                        <div className="absolute bottom-1.5 right-1.5 bg-black/60 backdrop-blur-xs text-white/90 text-[8px] sm:text-[9px] font-medium px-1.5 py-0.5 rounded-md pointer-events-none">
+                          Representative image
+                        </div>
+                      )}
                     </Link>
+
+                    {/* Card Body - Title & Details */}
+                    <div className="p-3 sm:p-4 flex-1 flex flex-col justify-between">
+                      <div>
+                        <Link to={`/services/${service.slug}`} className="block group-hover:text-[#22AC33] transition-colors">
+                          <h3 className="text-xs sm:text-base font-black text-[#041B3B] group-hover:text-[#22AC33] transition-colors line-clamp-1 leading-snug">
+                            {service.title}
+                          </h3>
+                        </Link>
+
+                        {/* What's Included Quick Tags */}
+                        <div className="mt-1.5 flex flex-wrap gap-1">
+                          {highlights.slice(0, 2).map((item, i) => (
+                            <span key={i} className="inline-flex items-center gap-1 text-[8.5px] sm:text-[10px] text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded-md font-semibold truncate max-w-full">
+                              <span className="text-[#22AC33] font-black">✓</span> {item}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-baseline justify-between">
+                        <span className="text-[9px] sm:text-[10px] uppercase font-bold text-slate-400">Starting</span>
+                        <span className="text-xs sm:text-base font-black text-[#1A8C28]">{formatPrice(service.price)}</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => openModal({ serviceTitle: service.title, sourcePage: '/services' })}
-                      className="btn-homecare-green py-2.5 px-3 text-xs w-full text-center"
-                    >
-                      Book Slot
-                    </button>
-                    <a
-                      href={BUSINESS_CONFIG.contact.phoneTel}
-                      className="btn-homecare-outline py-2.5 px-3 text-xs w-full justify-center flex items-center gap-1"
-                    >
-                      <Phone className="w-3.5 h-3.5" />
-                      Call Us
-                    </a>
+                  <div className="p-3 sm:p-4 pt-0">
+                    <div className="flex items-center gap-1.5 sm:gap-2">
+                      <Link
+                        to={`/services/${service.slug}`}
+                        className="btn-homecare-navy flex-1 py-2 sm:py-2.5 px-2 text-[10px] sm:text-xs font-bold text-center justify-center cursor-pointer shadow-xs"
+                      >
+                        View Details
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => openModal({ serviceTitle: service.title, sourcePage: '/services' })}
+                        className="btn-homecare-green flex-1 py-2 sm:py-2.5 px-2 text-[10px] sm:text-xs font-bold text-center justify-center cursor-pointer shadow-xs"
+                      >
+                        Book Slot
+                      </button>
+                      <a
+                        href={BUSINESS_CONFIG.buildWhatsAppUrl()}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`WhatsApp about ${service.title}`}
+                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-[#22AC33] hover:text-white text-[#041B3B] flex items-center justify-center shrink-0 border border-slate-200 transition-colors"
+                      >
+                        <Phone className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              );
+            })}
           </AnimatePresence>
         </motion.div>
       </div>

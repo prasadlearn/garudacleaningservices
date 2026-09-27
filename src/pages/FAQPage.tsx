@@ -11,70 +11,70 @@ interface FAQCategory {
 
 const FAQ_DATA: FAQCategory[] = [
   {
-    category: 'Booking & Scheduling',
+    category: 'Booking & Timing',
     items: [
       {
-        q: 'How far in advance should I book my deep cleaning session?',
-        a: 'We recommend booking 24 to 48 hours in advance to secure your preferred morning or afternoon time slot. However, for urgent requirements, we also offer express same-day emergency slots within 2 hours in Tirupati.'
+        q: 'How early should I book my cleaning service?',
+        a: 'We recommend booking 1 to 2 days before to get your preferred morning or afternoon time slot. For urgent needs, we also take same-day bookings in Tirupati.'
       },
       {
-        q: 'Can I reschedule or cancel my booking?',
-        a: 'Yes, rescheduling is free of charge up to 4 hours before the scheduled crew arrival time. Just call us or message our WhatsApp helpline.'
+        q: 'Can I change my booking date or time?',
+        a: 'Yes, you can change your booking date or time for free. Just call us or send a message on WhatsApp.'
       },
       {
-        q: 'Do you work on Sundays and public holidays?',
-        a: 'Yes! Garuda Cleaning Services operates 7 days a week, from 7:00 AM to 9:00 PM, including all Sundays and festival holidays to fit your busy schedule.'
+        q: 'Do you work on Sundays and holidays?',
+        a: 'Yes! We work all 7 days a week from 8:00 AM to 8:00 PM, including Sundays and festival holidays.'
       }
     ]
   },
   {
-    category: 'Equipment & Safe Chemicals',
+    category: 'Machines & Cleaning Liquids',
     items: [
       {
-        q: 'What machines does your team bring?',
-        a: 'Our crew arrives with heavy-duty industrial equipment: German single-disc mechanical floor scrubbers (Taski Ergodisc), commercial wet and dry slurry vacuum extractors, high-pressure washers (140 Bar), and upholstery injection-extraction machines.'
+        q: 'What machines does your cleaning team bring?',
+        a: 'Our team brings single-disc floor scrubbing machines, wet and dry vacuum cleaners, high-pressure water washers, and sofa extraction vacuum machines.'
       },
       {
-        q: 'Do you use hazardous muriatic acid on tiles or bathrooms?',
-        a: 'NEVER. Raw hydrochloric/muriatic acid burns skin, emits toxic fumes that damage lungs, and permanently erodes ceramic tile enamel and cement grout. We exclusively deploy Diversey / Taski biodegradable neutral sanitizers and organic salt descalers.'
+        q: 'Do you use harsh acid in bathrooms or tiles?',
+        a: 'NO, NEVER. We never use harsh acids that burn skin, create bad chemical fumes, or damage tile color. We only use safe, specialized cleaning liquids that remove hard water white salt marks and cooking grease safely.'
       },
       {
-        q: 'Are your solutions safe for infants, pregnant women, and pets?',
-        a: 'Yes! All formulations used by Garuda are hospital-grade, non-carcinogenic, and certified safe. There are zero pungent acid fumes or lingering chemical toxins.'
+        q: 'Are your cleaning liquids safe for children, elders, and pets?',
+        a: 'Yes! All our cleaning liquids are non-toxic, eco-friendly, and completely safe for babies, pregnant women, elders, and pets with no bad chemical smell.'
       }
     ]
   },
   {
-    category: 'Preparation & What to Expect',
+    category: 'Service & What to Expect',
     items: [
       {
-        q: 'Do I need to empty all kitchen cabinets and wardrobes?',
-        a: 'For standard deep cleaning, external surfaces, chimney exterior, backsplash tiles, and appliances are cleaned without opening locked personal wardrobes. If you book full internal modular cabinet detailing, emptying loose utensils is helpful, or our crew can assist.'
+        q: 'Do I need to empty all kitchen shelves and cupboards?',
+        a: 'For regular deep cleaning, we clean all outside surfaces, countertop slabs, tiles, stove, and outer chimney. If you want cupboards cleaned inside as well (like for Move-In cleaning), our crew will gladly help.'
       },
       {
-        q: 'Do I need to be present throughout the entire service?',
-        a: 'You only need to be present at the start to guide our team supervisor regarding special priorities, and at the end for the final inspection handover and payment.'
+        q: 'Do I need to stay home during the entire cleaning?',
+        a: 'You only need to be present at the start to show the team your focus areas, and at the end to inspect the rooms before making payment.'
       },
       {
-        q: 'What do I need to provide for the cleaning crew?',
-        a: 'Just access to running tap water and a working electrical outlet for our machines. We bring all ladders, detergents, scrubbers, vacuum machines, and microfiber wipers.'
+        q: 'What should I provide to the cleaning team?',
+        a: 'Just water from the tap and an electrical plug point for our machines. We bring all machines, ladders, wipers, and cleaning liquids.'
       }
     ]
   },
   {
-    category: 'Pricing & Guarantees',
+    category: 'Pricing & Payment',
     items: [
       {
-        q: 'Are there any hidden costs or transport charges in Tirupati?',
-        a: 'No hidden costs whatsoever. All quotes include labor, equipment, detergents, and transport throughout Tirupati city and neighboring mandals.'
+        q: 'Are there any extra travel or hidden charges in Tirupati?',
+        a: 'No hidden charges. All quotes include team labor, machine use, cleaning liquids, and travel to your doorstep anywhere in Tirupati.'
       },
       {
-        q: 'What if I want to check a specific area after cleaning?',
-        a: 'Before making payment, you and our supervisor walk through every room together so you can verify the cleaning quality and point out any specific focus areas.'
+        q: 'Can I check the cleaning quality before paying?',
+        a: 'Yes, absolutely! Our supervisor walks through each room with you after work is done. You pay only when you are 100% happy with the cleaning.'
       },
       {
-        q: 'What payment options do you accept?',
-        a: 'We accept Google Pay, PhonePe, Paytm, BHIM UPI, Net Banking, and Cash upon successful completion of your service.'
+        q: 'What payment methods do you accept?',
+        a: 'You can pay using PhonePe, Google Pay, Paytm, UPI, Bank Transfer, or Cash after the cleaning is completed.'
       }
     ]
   }
