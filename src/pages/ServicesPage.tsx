@@ -321,15 +321,8 @@ export const ServicesPage: React.FC = () => {
                 </div>
 
                 {/* Card Action Buttons */}
-                <div className="p-3 sm:p-5 pt-0">
-                  <div className="flex items-center gap-1.5 sm:gap-2">
-                    <Link
-                      to={`/services/${service.slug}`}
-                      className="btn-homecare-navy flex-1 text-[10px] sm:text-xs py-2 sm:py-2.5 font-bold flex items-center justify-center gap-1 cursor-pointer shadow-xs text-center"
-                    >
-                      <span>View Details</span>
-                    </Link>
-
+                <div className="p-2.5 sm:p-4 pt-0 flex flex-col gap-1.5">
+                  <div className="flex items-center gap-1.5">
                     <button
                       type="button"
                       onClick={() => {
@@ -344,7 +337,7 @@ export const ServicesPage: React.FC = () => {
                           sourcePage: '/services'
                         });
                       }}
-                      className="btn-homecare-green flex-1 text-[10px] sm:text-xs py-2 sm:py-2.5 font-bold flex items-center justify-center gap-1 cursor-pointer shadow-xs"
+                      className="flex-1 min-h-[38px] sm:min-h-[42px] px-2 py-2 bg-[#22AC33] hover:bg-[#1A8C28] text-white text-[11px] sm:text-xs font-bold rounded-xl flex items-center justify-center gap-1 cursor-pointer shadow-xs transition-colors"
                     >
                       <span>{isInspection ? 'Inspect' : 'Book Now'}</span>
                     </button>
@@ -361,11 +354,19 @@ export const ServicesPage: React.FC = () => {
                           sourcePage: '/services'
                         })
                       }
-                      className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-100 hover:bg-[#22AC33] hover:text-white text-[#041B3B] flex items-center justify-center shrink-0 border border-slate-200 transition-colors"
+                      className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-slate-100 hover:bg-[#22AC33] hover:text-white text-[#041B3B] flex items-center justify-center shrink-0 border border-slate-200 transition-colors"
                     >
                       <MessageCircle className="w-3.5 h-3.5" />
                     </a>
                   </div>
+
+                  <Link
+                    to={`/services/${service.slug}`}
+                    className="w-full py-1 text-[10px] sm:text-[11px] font-bold text-center justify-center text-[#041B3B] hover:text-[#22AC33] hover:bg-slate-50 rounded-lg transition-colors flex items-center gap-1"
+                  >
+                    <span>View Details & Pricing</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
                 </div>
               </div>
             );
