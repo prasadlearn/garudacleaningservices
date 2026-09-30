@@ -390,7 +390,7 @@ export const ProductsPage: React.FC = () => {
               Need Professional Cleaning Services Instead?
             </h2>
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-              Looking for a mechanized cleaning crew to deep clean your house, flat, office, water tank, kitchen, or bathroom in Tirupati?
+              Looking for a mechanized cleaning crew to clean your house, flat, office, water tank, kitchen, or washroom in Tirupati?
             </p>
           </div>
 
@@ -399,7 +399,7 @@ export const ProductsPage: React.FC = () => {
               to="/services"
               className="btn-homecare-green text-xs sm:text-sm min-h-[48px] px-6 py-3 rounded-xl font-bold inline-flex items-center gap-2 shadow-lg"
             >
-              <span>Explore All 21 Services</span>
+              <span>Explore All Services</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link

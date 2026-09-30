@@ -34,13 +34,13 @@ export const FooterSection: React.FC = () => {
                   Garuda <span className="text-[#1A8C28]">Cleaning Services</span>
                 </span>
                 <span className="text-xs font-bold text-slate-600 uppercase tracking-wider block">
-                  Tirupati • Deep Cleaning Solutions
+                  Tirupati & Surroundings • Professional Cleaning Solutions
                 </span>
               </div>
             </Link>
 
             <p className="text-sm text-slate-600 leading-relaxed">
-              Professional cleaning solutions in Tirupati. Providing apartment deep cleaning, villa detailing, bathroom scale clearing, kitchen degreasing, and commercial sanitization.
+              Professional cleaning solutions across Tirupati and surrounding areas. Providing apartment home cleaning, villa detailing, washroom scale clearing, kitchen degreasing, and commercial sanitization.
             </p>
 
             <div className="space-y-3 text-sm text-slate-700">
@@ -94,7 +94,7 @@ export const FooterSection: React.FC = () => {
               <li><Link to="/pricing" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Rate Card & Pricing</Link></li>
               <li><Link to="/products" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Garuda Liquids (Wholesale)</Link></li>
               <li><Link to="/gallery" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Before & After Gallery</Link></li>
-              <li><Link to="/service-areas" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Tirupati Locations</Link></li>
+              <li><Link to="/service-areas" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Tirupati Surroundings</Link></li>
               <li><Link to="/faq" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">FAQ & Guide</Link></li>
               <li><Link to="/contact" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Contact Us</Link></li>
             </ul>

@@ -5,17 +5,17 @@ const BENEFITS = [
   {
     icon: Clock,
     title: 'Saves You Time',
-    desc: 'Enjoy your weekend while our trained team takes care of all the deep scrubbing and dusting.'
+    desc: 'Enjoy your weekend while our trained team takes care of all the scrubbing and dusting.'
   },
   {
     icon: ShieldCheck,
-    title: 'Deep Floor Scrubbing',
-    desc: 'We use rotary floor scrubbers to clean tiles, marble, and grout lines deeper than regular mopping.'
+    title: 'Mechanized Floor Scrubbing',
+    desc: 'We use rotary floor scrubbers to clean tiles, marble, and grout lines far better than regular mopping.'
   },
   {
     icon: HeartPulse,
     title: 'Removes Dust and Allergens',
-    desc: 'High-suction vacuum machines help extract deep dust, dirt, and allergens from mattresses and sofas.'
+    desc: 'High-suction vacuum machines help extract trapped dust, dirt, and allergens from mattresses and sofas.'
   },
   {
     icon: Sparkles,

@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, MessageCircle, Phone, ArrowRight, ShieldCheck, ArrowUpRight } from 'lucide-react';
+import { Search, MessageCircle, ArrowRight } from 'lucide-react';
 import {
   SERVICES_DATA,
   type ServiceCategory,
   formatPrice,
   formatAmount,
   getServiceHighlights,
-  type PriceModel
+  type PriceModel,
+  getServicesByCategory
 } from '../data/servicesData';
 import { ServiceIcon } from '../components/ServiceIcon';
 import { SafeImage } from '../components/SafeImage';
 import { useQuoteModal } from '../context/QuoteModalContext';
-import { getConfirmedCommitments } from '../config/trustConfig';
 import { buildQuickBookingWhatsAppUrl } from '../utils/whatsappFormatter';
 import { trackEvent } from '../utils/analytics';
 
@@ -24,26 +24,26 @@ export const ServicesPage: React.FC = () => {
 
   // Per-unit custom estimator states keyed by service slug
   const [unitValues, setUnitValues] = useState<Record<string, number | ''>>({
-    'carpet-cleaning': 100,
-    'floor-deep-cleaning': 800,
     'post-construction-cleaning': 1000,
     'window-cleaning': 6,
     'glass-cleaning': 4,
     'fan-cleaning': 5,
-    'office-deep-cleaning': 1200,
+    'office-cleaning': 1200,
     'shop-cleaning': 500,
     'school-classroom-cleaning': 1500
   });
 
-  // BHK tier state for bhk-deep-cleaning
+  // BHK tier state for home-cleaning
   const [selectedBhkTier, setSelectedBhkTier] = useState<string>('2 BHK');
 
-  // Trust commitments strictly confirmed by owner
-  const confirmedCommitments = getConfirmedCommitments();
+  const residentialCount = getServicesByCategory('residential').length;
+  const specializedCount = getServicesByCategory('specialized').length;
+  const commercialCount = getServicesByCategory('commercial').length;
+  const totalCount = SERVICES_DATA.length;
 
-  // BHK price helper
-  const bhkService = SERVICES_DATA.find((s) => s.slug === 'bhk-deep-cleaning');
-  const bhkTiers = bhkService?.price.kind === 'tiers' ? bhkService.price.tiers : [];
+  // Home cleaning price helper
+  const homeCleaningService = SERVICES_DATA.find((s) => s.slug === 'home-cleaning');
+  const bhkTiers = homeCleaningService?.price.kind === 'tiers' ? homeCleaningService.price.tiers : [];
   const activeBhkObj = bhkTiers.find((t) => t.label === selectedBhkTier) || bhkTiers[0];
 
   const handleUnitChange = (slug: string, rawVal: string) => {
@@ -87,7 +87,7 @@ export const ServicesPage: React.FC = () => {
     return { formattedText: formatPrice(price), rawDisplay: formatPrice(price) };
   };
 
-  // Structured Data (ItemList schema for 21 services)
+  // Structured Data (ItemList schema for active services)
   const itemListSchema = {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
@@ -110,7 +110,7 @@ export const ServicesPage: React.FC = () => {
       <title>Cleaning Services in Tirupati | Garuda Cleaning Services</title>
       <meta
         name="description"
-        content="Explore all 21 verified cleaning services in Tirupati with upfront pricing. Residential, specialized, and commercial deep cleaning solutions."
+        content={`Explore all ${totalCount} verified cleaning services in Tirupati with upfront pricing. Residential, specialized, and commercial cleaning solutions.`}
       />
       <link rel="canonical" href="https://garudacleaningservices.in/services" />
       <script
@@ -125,7 +125,7 @@ export const ServicesPage: React.FC = () => {
             Cleaning Services in Tirupati – Prices & Booking
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Transparent rate card for flats, villas, and commercial spaces across Tirupati. Inspect inclusions, calculate indicative estimates, and book with zero hidden surprises.
+            Transparent rate card for flats, independent houses, villas, and commercial spaces across Tirupati. Inspect inclusions, calculate indicative estimates, and book with zero hidden surprises.
           </p>
         </div>
       </div>
@@ -138,12 +138,12 @@ export const ServicesPage: React.FC = () => {
             {(['all', 'residential', 'specialized', 'commercial'] as const).map((cat) => {
               const label =
                 cat === 'all'
-                  ? 'All (21)'
+                  ? `All (${totalCount})`
                   : cat === 'residential'
-                  ? 'Residential (10)'
+                  ? `Residential (${residentialCount})`
                   : cat === 'specialized'
-                  ? 'Specialized (6)'
-                  : 'Commercial (5)';
+                  ? `Specialized (${specializedCount})`
+                  : `Commercial (${commercialCount})`;
               const isActive = activeTab === cat;
 
               return (
@@ -170,13 +170,13 @@ export const ServicesPage: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search services (e.g. sofa, tank, floor)..."
+              placeholder="Search services (e.g. sofa, tank, pest, fridge)..."
               className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:border-[#22AC33] text-slate-900"
             />
           </div>
         </div>
 
-        {/* 21 Services Grid */}
+        {/* Services Grid */}
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
           {SERVICES_DATA.map((service) => {
             const matchesCategory = activeTab === 'all' || service.category === activeTab;
@@ -186,9 +186,9 @@ export const ServicesPage: React.FC = () => {
               service.shortDescription.toLowerCase().includes(searchQuery.toLowerCase());
             const isVisible = matchesCategory && matchesQuery;
 
-            const isBhkService = service.slug === 'bhk-deep-cleaning';
+            const isHomeCleaning = service.slug === 'home-cleaning';
             const isPerUnit = service.price.kind === 'per-unit';
-            const isInspection = service.price.kind === 'inspection';
+            const isInspection = service.price.kind === 'inspection' || service.price.kind === 'quote';
 
             // Active calculation values for per-unit
             const currentUnitQty = unitValues[service.slug] || 100;
@@ -199,7 +199,7 @@ export const ServicesPage: React.FC = () => {
             let activeWhatsAppPrice = formatPrice(service.price);
             let activeWhatsAppDetail: string | undefined = undefined;
 
-            if (isBhkService && activeBhkObj) {
+            if (isHomeCleaning && activeBhkObj) {
               activePriceLabel = formatAmount(activeBhkObj.amount);
               activeWhatsAppPrice = activePriceLabel;
               activeWhatsAppDetail = selectedBhkTier;
@@ -265,12 +265,12 @@ export const ServicesPage: React.FC = () => {
                       </div>
 
                       {/* DYNAMIC CARD COMPONENT: BHK SEGMENTED SELECTOR */}
-                      {isBhkService && bhkTiers.length > 0 && (
+                      {isHomeCleaning && bhkTiers.length > 0 && (
                         <div className="mt-2.5 p-2 bg-slate-50 rounded-xl border border-slate-200">
                           <span className="text-[8px] sm:text-[9px] font-extrabold text-slate-500 uppercase tracking-wider block mb-1">
                             Apartment Size:
                           </span>
-                          <div className="grid grid-cols-4 gap-1">
+                          <div className="grid grid-cols-3 gap-1">
                             {bhkTiers.map((t) => (
                               <button
                                 key={t.label}
@@ -313,7 +313,7 @@ export const ServicesPage: React.FC = () => {
                     {/* Price Indicator */}
                     <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-baseline justify-between">
                       <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">
-                        {isInspection ? 'Assessment' : 'Starting'}
+                        {isInspection ? 'Assessment' : (service.price.kind === 'tiers' || service.price.kind === 'from' || (service.price.kind === 'per-unit' && service.price.unit === 'sq.ft')) ? 'Starting' : 'Price'}
                       </span>
                       <span className="text-sm sm:text-lg font-black text-[#1A8C28] truncate">{activePriceLabel}</span>
                     </div>
@@ -389,7 +389,7 @@ export const ServicesPage: React.FC = () => {
             {[
               { step: '01', title: 'Inspection & Setup', desc: 'Our team assesses floor stains, water scale, and covers sensitive electrical switches.' },
               { step: '02', title: 'Machine Scrubbing', desc: 'Single-disc rotary scrubbers and wet extractors lift deeply embedded dirt from tile and fabric pores.' },
-              { step: '03', title: 'Detailing & Extraction', desc: 'Windows channels, kitchen platform degreasing, bathroom descaling, and moisture suction.' },
+              { step: '03', title: 'Detailing & Extraction', desc: 'Window channels, kitchen platform degreasing, washroom descaling, and moisture suction.' },
               { step: '04', title: 'Joint Customer Walkthrough', desc: 'You inspect every room with our supervisor before making final payment.' }
             ].map((p) => (
               <div key={p.step} className="p-5 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col justify-between">
@@ -433,3 +433,5 @@ export const ServicesPage: React.FC = () => {
     </div>
   );
 };
+
+export default ServicesPage;

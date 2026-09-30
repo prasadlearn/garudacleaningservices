@@ -21,13 +21,13 @@ export const HomePage: React.FC = () => {
     '@type': 'HomeAndConstructionBusiness',
     '@id': 'https://garudacleaningservices.in/#business',
     name: 'Garuda Cleaning Services',
-    alternateName: 'Garuda Deep Cleaning Tirupati',
+    alternateName: 'Garuda Cleaning Services Tirupati',
     url: 'https://garudacleaningservices.in/',
     logo: 'https://garudacleaningservices.in/icon-512.png',
-    image: 'https://garudacleaningservices.in/images/services/bhk-deep-cleaning.webp',
+    image: 'https://garudacleaningservices.in/images/services/home-cleaning.webp',
     telephone: '+917799552084',
     email: 'garudacleaningservices1@gmail.com',
-    priceRange: '₹399 - ₹8499',
+    priceRange: '₹99 - ₹4999',
     address: {
       '@type': 'PostalAddress',
       addressLocality: 'Tirupati',
@@ -58,25 +58,27 @@ export const HomePage: React.FC = () => {
       { '@type': 'AdministrativeArea', name: 'AIR Bypass Road' },
       { '@type': 'AdministrativeArea', name: 'MR Palli' }
     ],
-    keywords: 'cleaning services near me, deep cleaning services near me, house cleaning near me, sofa cleaning near me, bathroom cleaning near me, floor scrubbing near me, cleaning services in Tirupati',
+    keywords: 'cleaning services near me, house cleaning near me, sofa cleaning near me, washroom cleaning near me, floor scrubbing near me, home cleaning services in Tirupati',
     knowsAbout: [
-      'House Deep Cleaning',
+      'Home Cleaning',
       'Apartment BHK Cleaning',
-      'Bathroom Acid-Free Descaling',
+      'Washroom Acid-Free Descaling',
       'Fabric Sofa Shampooing & Extraction',
       'Rotary Machine Floor Scrubbing',
       'Kitchen Platform Degreasing',
       'Commercial Office Cleaning',
-      'Overhead Water Tank & Sump Cleaning'
+      'Overhead Water Tank & Sump Cleaning',
+      'Pest Control Services',
+      'Fridge Cleaning'
     ]
   };
 
   return (
     <div className="w-full">
       {/* React 19 Head Hoisting */}
-      <title>Deep Cleaning Services in Tirupati | Garuda Cleaning Services</title>
-      <meta name="description" content="Garuda Cleaning Services provides professional residential & commercial deep cleaning in Tirupati. Upfront pricing, modern machinery, and dedicated teams." />
-      <link rel="canonical" href="https://garudacleaningservices.com/" />
+      <title>Cleaning Services in Tirupati | Garuda Cleaning Services</title>
+      <meta name="description" content="Garuda Cleaning Services provides professional residential & commercial cleaning in Tirupati. Upfront pricing, modern machinery, and dedicated teams." />
+      <link rel="canonical" href="https://garudacleaningservices.in/" />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homeSchema) }}

@@ -37,12 +37,12 @@ export const IntroSection: React.FC = () => {
           </h2>
 
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            Garuda Cleaning Services provides professional deep cleaning for apartments, independent houses, villas, and commercial spaces across Tirupati. Whether you need full house deep cleaning, kitchen and bathroom scrubbing, or sofa care, our team helps keep your property spotless and fresh. We serve homes and offices across Tirupati, including Balaji Colony, MR Palli, and nearby areas.
+            Garuda Cleaning Services provides professional cleaning for apartments, independent houses, villas, and commercial spaces across Tirupati. Whether you need complete home cleaning, kitchen and washroom scrubbing, or sofa care, our team helps keep your property spotless and fresh. We serve homes and offices across Tirupati, including Balaji Colony, MR Palli, and nearby areas.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
             {[
-              'Professional rotary floor scrubbers for deep cleaning',
+              'Professional rotary floor scrubbers for thorough cleaning',
               'Surface-safe, acid-free descaling solutions',
               'Trained and experienced cleaning team',
               'Final quality check with you before we finish'

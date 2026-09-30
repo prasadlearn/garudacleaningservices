@@ -1,8 +1,8 @@
 export const BUSINESS_CONFIG = {
   brandName: "Garuda Cleaning Services",
   shortName: "Garuda Cleaning Services",
-  tagline: "Professional Deep Cleaning & Sanitization Experts",
-  subTagline: "Premium residential, commercial & mechanized deep cleaning solutions tailored for Tirupati and nearby regions.",
+  tagline: "Professional Cleaning & Sanitization Experts",
+  subTagline: "Premium residential, commercial & mechanized cleaning solutions tailored for Tirupati and nearby regions.",
 
   contact: {
     phoneDisplay: "+91 77995 52084",

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ShieldCheck, ArrowRight, MessageCircle, ChevronDown, ChevronUp, Search, Phone } from 'lucide-react';
 import {
+  SERVICES_DATA,
   getServicesByCategory,
   formatPrice,
   formatAmount,
@@ -18,16 +19,29 @@ export const PricingPage: React.FC = () => {
   const { openModal } = useQuoteModal();
   const [activeCategory, setActiveCategory] = useState<'all' | ServiceCategory>('all');
   const [filterText, setFilterText] = useState('');
-  const [bhkExpanded, setBhkExpanded] = useState(true);
+  const [expandedTiers, setExpandedTiers] = useState<Record<string, boolean>>({
+    'home-cleaning': true,
+    'water-tank-cleaning': true,
+    'pest-control': true
+  });
 
   const confirmedCommitments = TRUST_CONFIG.commitments.filter((c) => c.ownerConfirmed);
   const categories: ServiceCategory[] = ['residential', 'specialized', 'commercial'];
+
+  const residentialCount = getServicesByCategory('residential').length;
+  const specializedCount = getServicesByCategory('specialized').length;
+  const commercialCount = getServicesByCategory('commercial').length;
+  const totalCount = SERVICES_DATA.length;
+
+  const toggleTier = (slug: string) => {
+    setExpandedTiers((prev) => ({ ...prev, [slug]: !prev[slug] }));
+  };
 
   const pricingSchema = {
     '@context': 'https://schema.org',
     '@type': 'OfferCatalog',
     name: 'Garuda Cleaning Services Rate Card - Tirupati',
-    description: 'Upfront transparent pricing for flats, villas, water tanks, deep floor scrubbing, and commercial spaces in Tirupati.',
+    description: 'Upfront transparent pricing for flats, villas, water tanks, washrooms, and commercial spaces in Tirupati.',
     url: 'https://garudacleaningservices.in/pricing'
   };
 
@@ -37,7 +51,7 @@ export const PricingPage: React.FC = () => {
       <title>Cleaning Service Prices in Tirupati | Garuda Cleaning Services</title>
       <meta
         name="description"
-        content="Clear, transparent pricing for all 21 cleaning services in Tirupati. Upfront rates for flats, villas, water tanks, deep floor scrubbing, and commercial spaces."
+        content={`Clear, transparent pricing for all ${totalCount} cleaning services in Tirupati. Upfront rates for flats, independent houses, villas, water tanks, washrooms, and commercial spaces.`}
       />
       <link rel="canonical" href="https://garudacleaningservices.in/pricing" />
       <script
@@ -58,7 +72,7 @@ export const PricingPage: React.FC = () => {
             Cleaning Service Rates & Pricing in Tirupati
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-medium">
-            Transparent price catalogue for apartments, houses, and commercial facilities across Tirupati. Zero hidden surprises with clear upfront estimates.
+            Transparent price catalogue for apartments, houses, villas, and commercial facilities across Tirupati. Zero hidden surprises with clear upfront estimates.
           </p>
         </div>
       </div>
@@ -79,12 +93,12 @@ export const PricingPage: React.FC = () => {
                 }`}
               >
                 {cat === 'all'
-                  ? 'All Services (21)'
+                  ? `All Services (${totalCount})`
                   : cat === 'residential'
-                  ? 'Residential (10)'
+                  ? `Residential (${residentialCount})`
                   : cat === 'specialized'
-                  ? 'Specialized (6)'
-                  : 'Commercial (5)'}
+                  ? `Specialized (${specializedCount})`
+                  : `Commercial (${commercialCount})`}
               </button>
             ))}
           </div>
@@ -138,9 +152,9 @@ export const PricingPage: React.FC = () => {
               {/* 1. MOBILE PRESENTATION (< 640px): Touch-Friendly Pricing Cards */}
               <div className="sm:hidden p-4 space-y-4 divide-y divide-slate-100">
                 {services.map((srv) => {
-                  const isBhk = srv.slug === 'bhk-deep-cleaning';
+                  const hasTiers = srv.price.kind === 'tiers';
                   const formatted = formatPrice(srv.price);
-                  const isInspection = srv.price.kind === 'inspection';
+                  const isInspection = srv.price.kind === 'inspection' || srv.price.kind === 'quote';
 
                   const basisLabel =
                     srv.price.kind === 'fixed'
@@ -150,7 +164,9 @@ export const PricingPage: React.FC = () => {
                       : srv.price.kind === 'per-unit'
                       ? `Per ${srv.price.unit}`
                       : srv.price.kind === 'tiers'
-                      ? 'BHK tiered'
+                      ? 'Tiered Pricing'
+                      : srv.price.kind === 'quote'
+                      ? 'Get a Quote'
                       : 'On-site inspection';
 
                   const waUrl = buildQuickBookingWhatsAppUrl({
@@ -179,15 +195,15 @@ export const PricingPage: React.FC = () => {
                         {srv.shortDescription}
                       </p>
 
-                      {/* BHK Tiers on Mobile */}
-                      {isBhk && srv.price.kind === 'tiers' && (
+                      {/* Tiers on Mobile */}
+                      {hasTiers && srv.price.kind === 'tiers' && (
                         <div className="p-3 bg-emerald-50/60 rounded-2xl border border-emerald-100 space-y-2">
-                          <span className="text-[11px] font-black uppercase text-[#041B3B] block">Apartment Rates:</span>
+                          <span className="text-[11px] font-black uppercase text-[#041B3B] block">Rates & Options:</span>
                           <div className="grid grid-cols-2 gap-2">
                             {srv.price.tiers.map((t) => (
                               <div key={t.label} className="bg-white p-2.5 rounded-xl border border-emerald-200 text-center shadow-2xs">
-                                <span className="text-[11px] font-bold text-[#041B3B] block">{t.label}</span>
-                                <span className="text-xs font-black text-[#1A8C28] block mt-0.5">{formatAmount(t.amount)}</span>
+                                <span className="text-[11px] font-bold text-[#041B3B] block truncate">{t.label}</span>
+                                <span className="text-xs font-black text-[#1A8C28] block mt-0.5 whitespace-nowrap">{formatAmount(t.amount)}</span>
                               </div>
                             ))}
                           </div>
@@ -246,9 +262,10 @@ export const PricingPage: React.FC = () => {
                   </thead>
                   <tbody className="divide-y divide-slate-100">
                     {services.map((srv) => {
-                      const isBhk = srv.slug === 'bhk-deep-cleaning';
+                      const hasTiers = srv.price.kind === 'tiers';
+                      const isExpanded = expandedTiers[srv.slug] ?? false;
                       const formatted = formatPrice(srv.price);
-                      const isInspection = srv.price.kind === 'inspection';
+                      const isInspection = srv.price.kind === 'inspection' || srv.price.kind === 'quote';
 
                       const basisLabel =
                         srv.price.kind === 'fixed'
@@ -258,7 +275,9 @@ export const PricingPage: React.FC = () => {
                           : srv.price.kind === 'per-unit'
                           ? `Per ${srv.price.unit}`
                           : srv.price.kind === 'tiers'
-                          ? 'BHK tiered'
+                          ? 'Tiered Pricing'
+                          : srv.price.kind === 'quote'
+                          ? 'Get a Quote'
                           : 'On-site inspection';
 
                       const waUrl = buildQuickBookingWhatsAppUrl({
@@ -289,14 +308,14 @@ export const PricingPage: React.FC = () => {
 
                             <td className="py-4 px-4 sm:px-6 text-right whitespace-nowrap">
                               <div className="inline-flex items-center gap-2">
-                                {isBhk ? (
+                                {hasTiers ? (
                                   <button
                                     type="button"
-                                    onClick={() => setBhkExpanded((prev) => !prev)}
+                                    onClick={() => toggleTier(srv.slug)}
                                     className="inline-flex items-center gap-1 text-xs font-bold text-[#041B3B] hover:text-[#1A8C28] bg-slate-100 hover:bg-slate-200 px-3 py-2 min-h-[44px] rounded-lg transition-colors cursor-pointer"
                                   >
                                     <span>Tiers ({srv.price.kind === 'tiers' ? srv.price.tiers.length : 0})</span>
-                                    {bhkExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                                    {isExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
                                   </button>
                                 ) : (
                                   <>
@@ -337,26 +356,26 @@ export const PricingPage: React.FC = () => {
                             </td>
                           </tr>
 
-                          {/* BHK Expanded Tiers Row */}
-                          {isBhk && bhkExpanded && srv.price.kind === 'tiers' && (
+                          {/* Expanded Tiers Row */}
+                          {hasTiers && isExpanded && srv.price.kind === 'tiers' && (
                             <tr className="bg-emerald-50/50">
                               <td colSpan={4} className="p-4 sm:px-8 border-y border-emerald-100">
                                 <div className="space-y-3">
                                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                                     <span className="text-xs font-black uppercase tracking-wider text-[#041B3B]">
-                                      BHK Deep Cleaning – Tiered Pricing Table
+                                      {srv.title} – Tiered Pricing Table
                                     </span>
                                     <button
                                       type="button"
                                       onClick={() =>
                                         openModal({
-                                          serviceTitle: 'Custom Quote for 5+ BHK / Large Home',
+                                          serviceTitle: `Custom Quote for ${srv.title}`,
                                           sourcePage: '/pricing'
                                         })
                                       }
                                       className="min-h-[44px] text-xs text-[#1A8C28] font-extrabold hover:underline text-left sm:text-right inline-flex items-center"
                                     >
-                                      Larger home? Request a quote →
+                                      Larger area or custom scope? Request a quote →
                                     </button>
                                   </div>
 
@@ -384,7 +403,7 @@ export const PricingPage: React.FC = () => {
                                                 sourcePage: '/pricing'
                                               });
                                               openModal({
-                                                serviceTitle: `BHK Deep Cleaning – ${tier.label}`,
+                                                serviceTitle: `${srv.title} – ${tier.label}`,
                                                 tier: tier.label,
                                                 sourcePage: '/pricing'
                                               });
@@ -450,4 +469,3 @@ export const PricingPage: React.FC = () => {
 };
 
 export default PricingPage;
-

@@ -5,7 +5,7 @@ export interface ServiceRequestData {
   address: string;
   landmark?: string;
   gpsLocation?: string;
-  serviceRequired: string;
+  serviceRequired: string | string[];
   totalAmount?: string;
   subscriptionClient?: string;
   priorityTime?: string;
@@ -29,20 +29,32 @@ export function buildGarudaServiceRequestWhatsAppUrl(data: ServiceRequestData): 
   const gps = data.gpsLocation?.trim() || '-';
   const totalAmount = data.totalAmount?.trim() || 'To be confirmed';
   const subscription = data.subscriptionClient?.trim() || 'No';
-  const priorityTime = data.priorityTime?.trim() || '10 am';
+  const priorityTime = data.priorityTime?.trim() || '10:00 AM - 01:00 PM (Morning Slot)';
   const remarks = data.remarks?.trim() || '-';
 
-  const text = `*New Service Request*
-Appointment Date: ${dateStr}
+  // Format single or multi services
+  let formattedServices = '';
+  if (Array.isArray(data.serviceRequired)) {
+    if (data.serviceRequired.length === 0) {
+      formattedServices = 'Home Cleaning';
+    } else if (data.serviceRequired.length === 1) {
+      formattedServices = data.serviceRequired[0];
+    } else {
+      formattedServices = '\n' + data.serviceRequired.map((s, idx) => `  ${idx + 1}. ${s}`).join('\n');
+    }
+  } else {
+    formattedServices = data.serviceRequired?.trim() || 'Home Cleaning';
+  }
+
+  const text = `*New Cleaning Booking*
 Customer Name: ${data.name.trim()}
 Phone Number: ${data.phone.trim()}
+Services: ${formattedServices}
+Appointment Date: ${dateStr}
+Preferred Time: ${priorityTime}
 Address: ${data.address.trim()}
 Landmark: ${landmark}
 GPS Location: ${gps}
-Service Required: ${data.serviceRequired.trim()}
-Total Amount: ${totalAmount}
-Subscription Client: ${subscription}
-Priority Time: ${priorityTime}
 Remarks: ${remarks}`;
 
   return `https://wa.me/917799552084?text=${encodeURIComponent(text)}`;
@@ -73,7 +85,7 @@ export function buildGarudaInquiryWhatsAppUrl(data: any): string {
     address: data.address || data.location || data.locality || 'Tirupati',
     landmark: data.landmark,
     gpsLocation: data.gpsLocation || data.mapsPin,
-    serviceRequired: data.serviceRequired || data.service || 'Deep Cleaning',
+    serviceRequired: data.serviceRequired || data.service || 'Home Cleaning',
     totalAmount: data.totalAmount,
     subscriptionClient: data.subscriptionClient,
     priorityTime: data.priorityTime,

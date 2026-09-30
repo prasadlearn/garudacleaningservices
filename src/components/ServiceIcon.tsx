@@ -10,7 +10,6 @@ import {
   Sofa,
   BedDouble,
   Layers,
-  Grid3X3,
   Droplets,
   HardHat,
   AppWindow,
@@ -20,8 +19,10 @@ import {
   Store,
   GraduationCap,
   Hotel,
-  Building,
-  CheckCircle2
+  ShieldCheck,
+  CheckCircle2,
+  Grid3X3,
+  Building
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -47,29 +48,35 @@ const ICON_MAP: Record<string, LucideIcon> = {
   GraduationCap,
   Hotel,
   Building,
+  ShieldCheck,
   CheckCircle2,
   // Slugs mapping as fallbacks
+  'home-cleaning': Home,
   'bhk-deep-cleaning': Home,
+  'villa-cleaning': Building2,
   'villa-deep-cleaning': Building2,
-  'full-home-deep-cleaning-package': Sparkles,
+  'move-in-out-cleaning': DoorOpen,
   'move-in-cleaning': DoorOpen,
   'move-out-cleaning': LogOut,
+  'kitchen-cleaning': UtensilsCrossed,
   'kitchen-deep-cleaning': UtensilsCrossed,
+  'washroom-cleaning': Bath,
   'bathroom-deep-cleaning': Bath,
   'sofa-cleaning': Sofa,
   'mattress-cleaning': BedDouble,
   'carpet-cleaning': Layers,
-  'floor-deep-cleaning': Grid3X3,
+  'fridge-cleaning': Sparkles,
+  'pest-control': ShieldCheck,
   'water-tank-cleaning': Droplets,
   'post-construction-cleaning': HardHat,
   'window-cleaning': AppWindow,
   'glass-cleaning': Scan,
   'fan-cleaning': Fan,
+  'office-cleaning': Briefcase,
   'office-deep-cleaning': Briefcase,
   'shop-cleaning': Store,
   'school-classroom-cleaning': GraduationCap,
   'hotel-guest-house-cleaning': Hotel,
-  'commercial-cleaning': Building,
 };
 
 interface ServiceIconProps {

@@ -110,7 +110,7 @@ export const ServiceAreaPage: React.FC = () => {
 
   const handleBookInArea = (areaName: string) => {
     trackEvent('area_chip_click', { area: areaName });
-    openModal('BHK Deep Cleaning');
+    openModal('Home Cleaning');
   };
 
   return (
@@ -143,7 +143,7 @@ export const ServiceAreaPage: React.FC = () => {
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            From Balaji Colony and AIR Bypass Road to Alipiri and MR Palli, Garuda Cleaning Services provides professional mechanized deep cleaning for homes, villas, and commercial spaces throughout Tirupati.
+            From Balaji Colony and AIR Bypass Road to Alipiri and MR Palli, Garuda Cleaning Services provides professional mechanized cleaning for homes, villas, and commercial spaces throughout Tirupati.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
@@ -414,7 +414,7 @@ export const ServiceAreaPage: React.FC = () => {
             to="/services"
             className="inline-flex items-center gap-2 text-sm font-black text-[#22AC33] hover:underline"
           >
-            <span>Explore All 21 Deep Cleaning Services</span>
+            <span>Explore All {SERVICES_DATA.length} Cleaning Services</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>

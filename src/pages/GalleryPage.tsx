@@ -39,7 +39,7 @@ export const GalleryPage: React.FC = () => {
       'All': BENTO_GALLERY_ITEMS.length + BEFORE_AFTER_ITEMS.length,
       'Residential': 0,
       'Commercial': 0,
-      'Deep Cleaning': 0,
+      'Specialized Cleaning': 0,
       'Office Cleaning': 0,
       'Floor & Carpet': 0,
       'Glass Cleaning': 0,

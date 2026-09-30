@@ -228,10 +228,10 @@ export const Header: React.FC = () => {
                       <div className="mb-4 pb-3 border-b border-slate-100 flex items-center justify-between">
                         <span className="flex items-center gap-1.5 text-xs font-extrabold text-[#041B3B]">
                           <MapPin className="w-3.5 h-3.5 text-[#22AC33]" />
-                          Mechanized Deep Cleaning Services Across Tirupati
+                          Mechanized Cleaning Services Across Tirupati
                         </span>
                         <span className="text-[11px] font-bold text-[#22AC33] bg-[#E8F8EC] px-2.5 py-0.5 rounded-full">
-                          All 21 Services
+                          All {residentialServices.length + specializedServices.length + commercialServices.length} Services
                         </span>
                       </div>
 

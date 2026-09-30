@@ -224,7 +224,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, tri
                     onClick={onClose}
                     className="flex-1 flex items-center py-3 text-base font-bold select-none cursor-pointer"
                   >
-                    <span>Services (21)</span>
+                    <span>Services ({residentialServices.length + specializedServices.length + commercialServices.length})</span>
                   </Link>
                   <button
                     type="button"
@@ -253,7 +253,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, tri
                       onClick={onClose}
                       className="min-h-[44px] flex items-center gap-2 text-sm font-black text-[#22AC33] bg-[#E8F8EC] px-3.5 rounded-xl hover:bg-[#d6f2dc] transition-colors"
                     >
-                      <span>View all 21 services</span>
+                      <span>View all {residentialServices.length + specializedServices.length + commercialServices.length} services</span>
                       <ArrowRight className="w-4 h-4" />
                     </Link>
 

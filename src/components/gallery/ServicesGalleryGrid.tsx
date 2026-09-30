@@ -22,7 +22,7 @@ export const ServicesGalleryGrid: React.FC = () => {
             Specialized Service Categories
           </h2>
           <p className="text-slate-600 text-sm sm:text-base">
-            From single-room deep cleaning to complete commercial spaces, explore our full spectrum of professional services in Tirupati.
+            From single-room cleaning to complete commercial spaces, explore our full spectrum of professional services in Tirupati.
           </p>
         </div>
 

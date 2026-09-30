@@ -49,7 +49,7 @@ const FAQ_DATA: FAQCategory[] = [
     items: [
       {
         q: 'Do I need to empty all kitchen shelves and cupboards?',
-        a: 'For regular deep cleaning, we clean all outside surfaces, countertop slabs, tiles, stove, and outer chimney. If you want cupboards cleaned inside as well (like for Move-In cleaning), our crew will gladly help.'
+        a: 'For regular kitchen cleaning, we clean all outside surfaces, countertop slabs, tiles, stove, and outer chimney. If you want cupboards cleaned inside as well (like for Move-In / Move-Out cleaning), our crew will gladly help.'
       },
       {
         q: 'Do I need to stay home during the entire cleaning?',
@@ -123,7 +123,7 @@ export const FAQPage: React.FC = () => {
     <div className="pb-20 bg-[#F8FAFC]">
       {/* React 19 Head Hoisting */}
       <title>FAQ | Garuda Cleaning Services Tirupati</title>
-      <meta name="description" content="Answers to common questions about deep cleaning workflows, chemical safety, equipment, and transparent pricing in Tirupati." />
+      <meta name="description" content="Answers to common questions about mechanized cleaning workflows, chemical safety, equipment, and transparent pricing in Tirupati." />
       <link rel="canonical" href="https://garudacleaningservices.in/faq" />
       <script
         type="application/ld+json"

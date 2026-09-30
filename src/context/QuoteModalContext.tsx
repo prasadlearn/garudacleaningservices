@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import type { ReactNode } from 'react';
 
 export interface QuoteModalOptions {
@@ -15,6 +15,8 @@ interface QuoteModalContextType {
 }
 
 const QuoteModalContext = createContext<QuoteModalContextType | undefined>(undefined);
+
+const AUTO_OPEN_STORAGE_KEY = 'garuda_booking_modal_auto_opened_v1';
 
 export const QuoteModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,6 +40,14 @@ export const QuoteModalProvider: React.FC<{ children: ReactNode }> = ({ children
   const closeModal = useCallback(() => {
     setIsOpen(false);
     setInitialService('');
+  }, []);
+
+  // Automatic booking form opening when user opens the website
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsOpen(true);
+    }, 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (

@@ -14,7 +14,7 @@ const FAQS = [
     a: 'Yes. We use acid-free cleaning solutions and surface-safe liquids. They clean thoroughly without damaging tiles, marble, or fittings, and they do not produce harsh fumes.'
   },
   {
-    q: 'How long does a deep cleaning service take?',
+    q: 'How long does a home cleaning service take?',
     a: 'A 1 or 2 BHK apartment usually takes about 4 to 5 hours. Larger 3 BHK apartments and villas take 6 to 8 hours depending on property size and condition.'
   },
   {

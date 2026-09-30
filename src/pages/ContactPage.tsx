@@ -26,7 +26,7 @@ export const ContactPage: React.FC = () => {
   // Form states
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [selectedServiceSlug, setSelectedServiceSlug] = useState('bhk-deep-cleaning');
+  const [selectedServiceSlug, setSelectedServiceSlug] = useState('home-cleaning');
   const [bhkTier, setBhkTier] = useState('2 BHK');
   const [unitQuantity, setUnitQuantity] = useState<number | ''>(500);
   const [locality, setLocality] = useState('');
@@ -76,7 +76,7 @@ export const ContactPage: React.FC = () => {
   }, [preselectedSlug]);
 
   const currentService = getServiceBySlug(selectedServiceSlug) || SERVICES_DATA[0];
-  const isBhkService = currentService.slug === 'bhk-deep-cleaning';
+  const isBhkService = currentService.slug === 'home-cleaning';
   const isPerUnit = currentService.price.kind === 'per-unit';
 
   const validateIndianPhone = (val: string) => {

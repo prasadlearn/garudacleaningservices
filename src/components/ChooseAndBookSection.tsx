@@ -8,14 +8,14 @@ import { ServiceIcon } from './ServiceIcon';
 import { SafeImage } from './SafeImage';
 
 const FEATURED_SLUGS = [
-  'bhk-deep-cleaning',
-  'villa-deep-cleaning',
-  'full-home-deep-cleaning-package',
-  'kitchen-deep-cleaning',
-  'bathroom-deep-cleaning',
+  'home-cleaning',
+  'villa-cleaning',
+  'move-in-out-cleaning',
+  'kitchen-cleaning',
+  'washroom-cleaning',
   'sofa-cleaning',
-  'floor-deep-cleaning',
-  'office-deep-cleaning'
+  'water-tank-cleaning',
+  'office-cleaning'
 ];
 
 export const ChooseAndBookSection: React.FC = () => {
@@ -35,7 +35,7 @@ export const ChooseAndBookSection: React.FC = () => {
             Featured Cleaning Services in Tirupati
           </h2>
           <p className="text-slate-600 mt-2 text-sm sm:text-base">
-            Choose a service below with clear upfront prices. Available for flats, independent houses, and offices.
+            Choose a service below with clear upfront prices. Available for flats, independent houses, villas, and offices.
           </p>
         </div>
 
@@ -91,7 +91,9 @@ export const ChooseAndBookSection: React.FC = () => {
                     </div>
 
                     <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-baseline justify-between">
-                      <span className="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">Starting</span>
+                      <span className="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">
+                        {service.price.kind === 'tiers' || service.price.kind === 'from' || (service.price.kind === 'per-unit' && service.price.unit === 'sq.ft') ? 'Starting' : 'Price'}
+                      </span>
                       <span className="text-xs sm:text-base font-black text-[#1A8C28]">{formatPrice(service.price)}</span>
                     </div>
                   </div>
@@ -135,7 +137,7 @@ export const ChooseAndBookSection: React.FC = () => {
             to="/services"
             className="inline-flex items-center gap-2 btn-homecare-navy px-8 py-3.5 text-sm font-bold rounded-full"
           >
-            <span>Explore All 21 Services</span>
+            <span>Explore All {allServices.length} Services</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -143,3 +145,5 @@ export const ChooseAndBookSection: React.FC = () => {
     </section>
   );
 };
+
+export default ChooseAndBookSection;

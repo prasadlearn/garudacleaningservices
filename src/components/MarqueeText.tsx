@@ -1,15 +1,18 @@
 import React from 'react';
 
 const TAGS = [
-  "House Deep Cleaning",
-  "Kitchen Deep Cleaning",
-  "Bathroom Deep Cleaning",
+  "Home Cleaning",
+  "Kitchen Cleaning",
+  "Washroom Cleaning",
   "Villa Cleaning",
   "Sofa Shampooing",
+  "Mattress Cleaning",
   "Carpet Cleaning",
   "Water Tank & Sump Cleaning",
-  "Floor Scrubbing",
-  "Office Deep Cleaning"
+  "Move-In / Move-Out Cleaning",
+  "Pest Control",
+  "Fridge Cleaning",
+  "Office Cleaning"
 ];
 
 export const MarqueeText: React.FC = () => {

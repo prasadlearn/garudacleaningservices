@@ -72,7 +72,7 @@ export const AboutPage: React.FC = () => {
           </motion.h1>
 
           <p className="text-slate-200 text-sm sm:text-base max-w-2xl mx-auto font-medium">
-            Providing reliable deep cleaning for homes, flats, villas, and offices all across Tirupati using modern cleaning machines and safe cleaning liquids.
+            Providing reliable cleaning for homes, flats, villas, and offices all across Tirupati using modern cleaning machines and safe cleaning liquids.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
@@ -107,13 +107,13 @@ export const AboutPage: React.FC = () => {
               Clean, Fresh & Spotless Spaces for Every Home in Tirupati
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              We started <strong>Garuda Cleaning Services</strong> in Tirupati to provide professional, machine-based deep cleaning without using harsh, dangerous acids that damage tiles and leave strong fumes.
+              We started <strong>Garuda Cleaning Services</strong> in Tirupati to provide professional, machine-based cleaning without using harsh, dangerous acids that damage tiles and leave strong fumes.
             </p>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Homes and offices in Tirupati often face tough cleaning challenges: hard borewell water white marks (uppu neellu karalu) on bathroom tiles, thick road dust, and sticky oil grease in kitchens. Normal daily broom-and-mop cleaning only moves the dirt around.
+              Homes and offices in Tirupati often face tough cleaning challenges: hard borewell water white marks (uppu neellu karalu) on washroom tiles, thick road dust, and sticky oil grease in kitchens. Normal daily broom-and-mop cleaning only moves the dirt around.
             </p>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Our trained team brings modern single-disc floor scrubbers, wet and dry vacuum machines, and gentle surface-safe cleaning liquids to make your floors, bathrooms, kitchen, and sofas look clean, spotless, and like new.
+              Our trained team brings modern single-disc floor scrubbers, wet and dry vacuum machines, and gentle surface-safe cleaning liquids to make your floors, washrooms, kitchen, and sofas look clean, spotless, and like new.
             </p>
 
             <div className="grid grid-cols-2 gap-4 pt-2">
@@ -171,7 +171,7 @@ export const AboutPage: React.FC = () => {
             {[
               {
                 title: 'Modern Cleaning Machines',
-                desc: 'Single-disc floor scrubbers, vacuum cleaners, and high-pressure washers for deep cleaning that manual mopping cannot do.',
+                desc: 'Single-disc floor scrubbers, vacuum cleaners, and high-pressure washers for thorough cleaning that manual mopping cannot do.',
                 icon: Sparkles,
               },
               {
@@ -220,7 +220,7 @@ export const AboutPage: React.FC = () => {
               Professional Cleaning Equipment
             </h2>
             <p className="text-slate-600 text-sm mt-2">
-              We invest in modern machines so your home gets cleaned faster, deeper, and completely safe.
+              We invest in modern machines so your home gets cleaned faster, thoroughly, and completely safe.
             </p>
           </div>
 

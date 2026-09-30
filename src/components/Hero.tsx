@@ -69,7 +69,7 @@ export const Hero: React.FC = () => {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/15 backdrop-blur-md text-white text-xs font-bold border border-white/20 shadow-lg min-h-[36px]"
           >
             <Sparkles className="w-4 h-4 text-[#4ADE80]" />
-            <span>Deep Cleaning for Homes and Offices in Tirupati</span>
+            <span>Professional Cleaning for Homes and Offices in Tirupati</span>
           </motion.div>
         )}
 

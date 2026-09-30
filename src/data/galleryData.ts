@@ -2,7 +2,7 @@ export type GalleryFilterCategory =
   | 'All'
   | 'Residential'
   | 'Commercial'
-  | 'Deep Cleaning'
+  | 'Specialized Cleaning'
   | 'Office Cleaning'
   | 'Floor & Carpet'
   | 'Glass Cleaning'
@@ -14,7 +14,7 @@ export const GALLERY_FILTER_CATEGORIES: GalleryFilterCategory[] = [
   'All',
   'Residential',
   'Commercial',
-  'Deep Cleaning',
+  'Specialized Cleaning',
   'Office Cleaning',
   'Floor & Carpet',
   'Glass Cleaning',
@@ -87,82 +87,82 @@ export interface ProcessStep {
 export const BENTO_GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 'bento-1',
-    title: 'Apartment Living Room Deep Clean',
+    title: 'Apartment Living Room Home Cleaning',
     category: 'Residential',
-    image: '/images/services/bhk-deep-cleaning.webp',
+    image: '/images/services/home-cleaning.webp',
     description: 'Vitrified tile scrubbing, corner dusting, and furniture care for a multi-room apartment.',
     featured: true,
     bentoSpan: 'col-span-1 md:col-span-2',
     alt: 'Clean living room with polished vitrified floor tiles',
     locality: 'Balaji Colony',
-    serviceSlug: 'bhk-deep-cleaning'
+    serviceSlug: 'home-cleaning'
   },
   {
     id: 'bento-2',
     title: 'Corporate Office Workstations',
     category: 'Office Cleaning',
-    image: '/images/services/office-deep-cleaning.webp',
+    image: '/images/services/office-cleaning.webp',
     description: 'Desk wipe-downs, sanitization, and circulation floor machine scrubbing.',
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Modern corporate office workstation desks and walkways',
     locality: 'AIR Bypass Road',
-    serviceSlug: 'office-deep-cleaning'
+    serviceSlug: 'office-cleaning'
   },
   {
     id: 'bento-3',
     title: 'Modern Kitchen Backsplash & Platform',
-    category: 'Deep Cleaning',
-    image: '/images/services/kitchen-deep-cleaning.webp',
+    category: 'Specialized Cleaning',
+    image: '/images/services/kitchen-cleaning.webp',
     description: 'Degreased granite slabs, stainless steel sink wash, and tile clearing.',
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Spotless clean kitchen countertop and sink',
     locality: 'MR Palli',
-    serviceSlug: 'kitchen-deep-cleaning'
+    serviceSlug: 'kitchen-cleaning'
   },
   {
     id: 'bento-4',
     title: 'Luxury Villa Living & Dining Hall',
     category: 'Residential',
-    image: '/images/services/villa-deep-cleaning.webp',
+    image: '/images/services/villa-cleaning.webp',
     description: 'Full duplex floor scrubbing, wooden handrail dusting, and large window wiping.',
     featured: true,
     bentoSpan: 'col-span-1 md:col-span-2',
     alt: 'Spacious duplex villa living area with staircase and clean floors',
     locality: 'Renigunta Road',
-    serviceSlug: 'villa-deep-cleaning'
+    serviceSlug: 'villa-cleaning'
   },
   {
     id: 'bento-5',
-    title: 'Bathroom Descaling & Chrome Restoration',
-    category: 'Deep Cleaning',
-    image: '/images/services/bathroom-deep-cleaning.webp',
+    title: 'Washroom Descaling & Chrome Restoration',
+    category: 'Specialized Cleaning',
+    image: '/images/services/washroom-cleaning.webp',
     description: 'Wall tile hard-water scale removal, chrome tap polishing, and sanitaryware disinfection.',
     featured: false,
     bentoSpan: 'col-span-1',
-    alt: 'Clean bathroom with descaled ceramic tiles and mirror',
+    alt: 'Clean washroom with descaled ceramic tiles and mirror',
     locality: 'Bhavani Nagar',
-    serviceSlug: 'bathroom-deep-cleaning'
+    serviceSlug: 'washroom-cleaning'
   },
   {
     id: 'bento-6',
-    title: 'Polished Vitrified Floor Machine Scrubbing',
+    title: 'Post-Construction Floor Scrubbing',
     category: 'Floor & Carpet',
-    image: '/images/services/floor-deep-cleaning.webp',
-    description: 'Single-disc rotary scrubbing removing ground-in dirt and restoring floor shine.',
+    image: '/images/services/post-construction-cleaning.webp',
+    description: 'Single-disc rotary scrubbing removing paint and cement dust, restoring floor shine.',
     featured: false,
     bentoSpan: 'col-span-1',
-    alt: 'Gleaming vitrified floor tiles with reflection',
+    alt: 'Gleaming polished floor tiles after machine cleaning',
     locality: 'Chandragiri Road',
-    serviceSlug: 'floor-deep-cleaning'
+    serviceSlug: 'post-construction-cleaning'
   },
   {
     id: 'bento-7',
     title: 'Sliding Glass Window & Track Detailing',
     category: 'Glass Cleaning',
     image: '/images/services/window-cleaning.webp',
-    description: 'Streak-free window glass wiping, channel vacuuming, and aluminum frame detailing.',
+    description: 'Streak-free window glass wiping, channel vacuuming, and frame detailing.',
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Clear sliding glass window with aluminum frame',
@@ -195,31 +195,31 @@ export const BENTO_GALLERY_ITEMS: GalleryItem[] = [
   },
   {
     id: 'bento-10',
-    title: 'Vacated Flat Handover Deep Cleaning',
+    title: 'Move-In / Move-Out Flat Handover Cleaning',
     category: 'Residential',
     image: '/images/services/move-in-cleaning.webp',
-    description: 'Comprehensive vacant flat wash, bathroom scrubbing, and kitchen detailing ready for move-in.',
+    description: 'Comprehensive vacant flat wash, washroom scrubbing, and kitchen detailing ready for handover.',
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Freshly cleaned unfurnished apartment room',
     locality: 'Tiruchanur Road',
-    serviceSlug: 'move-in-cleaning'
+    serviceSlug: 'move-in-out-cleaning'
   },
   {
     id: 'bento-11',
-    title: 'Commercial Building Entrance & Lobby',
+    title: 'Hotel & Guest House Room Cleaning',
     category: 'Commercial',
-    image: '/images/services/commercial-cleaning.webp',
-    description: 'Institutional entrance cleaning, marble floor buffering, and glass partition wiping.',
+    image: '/images/services/hotel-guest-house-cleaning.webp',
+    description: 'Spotless hospitality cleaning, sanitized linens, gleaming floors, and washroom detailing.',
     featured: false,
     bentoSpan: 'col-span-1',
-    alt: 'Commercial building entrance lobby with clean floor',
+    alt: 'Clean hotel guest room with neatly prepared bed and polished floors',
     locality: 'Settipalli',
-    serviceSlug: 'commercial-cleaning'
+    serviceSlug: 'hotel-guest-house-cleaning'
   },
   {
     id: 'bento-12',
-    title: 'Rooftop Domestic Water Tank High-Pressure Wash',
+    title: 'Rooftop Water Tank & Sump High-Pressure Wash',
     category: 'Equipment',
     image: '/images/services/water-tank-cleaning.webp',
     description: 'High-pressure jet wash, bottom mud extraction, and algae scrubbing for overhead tanks and sumps.',
@@ -237,11 +237,11 @@ export const BENTO_GALLERY_ITEMS: GalleryItem[] = [
 export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
   {
     id: 'ba-1',
-    serviceSlug: 'floor-deep-cleaning',
-    title: 'Floor Scrubbing & Deep Cleaning',
+    serviceSlug: 'home-cleaning',
+    title: 'Floor Scrubbing & Home Cleaning',
     category: 'Before & After',
     problem: 'Dark dirt in tile lines and dull muddy stains from daily foot traffic.',
-    work: 'Single-disc machine scrubbing and deep dirt extraction.',
+    work: 'Single-disc machine scrubbing and dirt extraction.',
     before: '/images/gallery/floor-before.webp',
     after: '/images/gallery/floor-after.webp',
     altBefore: 'Dull tiled floor with muddy dirt marks before cleaning',
@@ -251,29 +251,29 @@ export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
   },
   {
     id: 'ba-2',
-    serviceSlug: 'kitchen-deep-cleaning',
+    serviceSlug: 'kitchen-cleaning',
     title: 'Kitchen Platform & Wall Degreasing',
     category: 'Before & After',
     problem: 'Sticky cooking oil grease and turmeric stains on kitchen tiles & slab.',
-    work: 'Safe degreasing solution and deep scrub wash for a spotless finish.',
+    work: 'Safe degreasing solution and scrub wash for a spotless finish.',
     before: '/images/gallery/kitchen-before.webp',
     after: '/images/gallery/kitchen-after.webp',
     altBefore: 'Greasy kitchen countertop with oil smudges before cleaning',
-    altAfter: 'Spotless degreased kitchen countertop after deep clean',
+    altAfter: 'Spotless degreased kitchen countertop after cleaning',
     locality: 'MR Palli',
     source: 'real'
   },
   {
     id: 'ba-3',
-    serviceSlug: 'bathroom-deep-cleaning',
-    title: 'Bathroom Wall Tiles & Tap Cleaning',
+    serviceSlug: 'washroom-cleaning',
+    title: 'Washroom Wall Tiles & Tap Cleaning',
     category: 'Before & After',
     problem: 'Hard borewell water white salt stains (uppu karalu) on taps and tiles.',
     work: 'Acid-free safe descaling liquid restoring original shine without damage.',
     before: '/images/gallery/bathroom-before.webp',
     after: '/images/gallery/bathroom-after.webp',
-    altBefore: 'Cloudy bathroom tiles with hard water stains and scale',
-    altAfter: 'Restored bathroom wall tiles and sparkling chrome fixtures',
+    altBefore: 'Cloudy washroom tiles with hard water stains and scale',
+    altAfter: 'Restored washroom wall tiles and sparkling chrome fixtures',
     locality: 'AIR Bypass Road',
     source: 'real'
   },
@@ -282,7 +282,7 @@ export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
     serviceSlug: 'sofa-cleaning',
     title: 'Fabric Sofa Shampooing & Stain Removal',
     category: 'Before & After',
-    problem: 'Deep dust, food marks, and sweat stains on sofa fabric.',
+    problem: 'Dust, food marks, and sweat stains on sofa fabric.',
     work: 'Foam shampooing and high-power vacuum water extraction.',
     before: '/images/gallery/sofa-before.webp',
     after: '/images/gallery/sofa-after.webp',
@@ -315,39 +315,39 @@ export interface ServiceGalleryCard {
 
 export const SERVICES_GALLERY_CARDS: ServiceGalleryCard[] = [
   {
-    slug: 'bhk-deep-cleaning',
-    title: 'Residential Cleaning',
+    slug: 'home-cleaning',
+    title: 'Home Cleaning',
     category: 'Apartments & Houses',
-    image: '/images/services/bhk-deep-cleaning.webp',
-    description: 'Complete multi-room cleaning covering floors, ceilings, fans, switchboards, and balconies.'
+    image: '/images/services/home-cleaning.webp',
+    description: 'Complete multi-room cleaning covering floors, washrooms, kitchen, fans, switchboards, and balconies.'
   },
   {
-    slug: 'commercial-cleaning',
-    title: 'Commercial Cleaning',
-    category: 'Offices & Facilities',
-    image: '/images/services/commercial-cleaning.webp',
-    description: 'Contract and one-time deep cleaning for clinics, retail outlets, banks, and institutions.'
+    slug: 'villa-cleaning',
+    title: 'Villa Cleaning',
+    category: 'Duplex & Independent Houses',
+    image: '/images/services/villa-cleaning.webp',
+    description: 'Comprehensive cleaning for multi-floor villas, balconies, staircases, and open terrace areas.'
   },
   {
-    slug: 'office-deep-cleaning',
+    slug: 'office-cleaning',
     title: 'Office Cleaning',
     category: 'Corporate Workspaces',
-    image: '/images/services/office-deep-cleaning.webp',
+    image: '/images/services/office-cleaning.webp',
     description: 'Desk wipe-downs, conference room sanitization, and workstation floor scrubbing.'
   },
   {
-    slug: 'full-home-deep-cleaning-package',
-    title: 'Deep Cleaning Packages',
-    category: 'Full Property Turnover',
-    image: '/images/services/full-home-deep-cleaning-package.webp',
-    description: 'All-inclusive intensive cleaning covering every corner from kitchen degreasing to bathroom descaling.'
+    slug: 'move-in-out-cleaning',
+    title: 'Move-In / Move-Out Cleaning',
+    category: 'Vacant Property Handover',
+    image: '/images/services/move-in-cleaning.webp',
+    description: 'Complete cupboard, wardrobe, washroom, and floor cleaning for new tenants or handover.'
   },
   {
-    slug: 'floor-deep-cleaning',
-    title: 'Floor & Carpet Cleaning',
-    category: 'Single-Disc Scrubbing',
-    image: '/images/services/floor-deep-cleaning.webp',
-    description: 'Rotary machine floor scrubbing and high-filtration carpet shampooing for stubborn stains.'
+    slug: 'kitchen-cleaning',
+    title: 'Kitchen Cleaning',
+    category: 'Degreasing & Tile Descaling',
+    image: '/images/services/kitchen-cleaning.webp',
+    description: 'Granite counter degreasing, chimney exterior wiping, tile scrub, and stainless steel sink polish.'
   },
   {
     slug: 'window-cleaning',
@@ -413,7 +413,7 @@ export const EQUIPMENT_ITEMS: EquipmentItem[] = [
     name: 'High-Suction Wet & Dry Vacuum',
     category: 'Slurry & Dust Extraction',
     image: '/images/equipment/sofa-vacuum.webp',
-    description: 'Commercial vacuum extractor for deep sofa fabric cleaning, window tracks, and slurry suction.',
+    description: 'Commercial vacuum extractor for sofa fabric cleaning, window tracks, and slurry suction.',
     alt: 'High-suction vacuum extractor'
   },
   {
@@ -441,7 +441,7 @@ export const PROJECT_PROCESS_STEPS: ProcessStep[] = [
   {
     stepNumber: 1,
     title: 'Site Inspection & Setup',
-    description: 'Our team inspects each room, checks tile stains and bathroom scale, and selects the right tools and cleaning liquids.',
+    description: 'Our team inspects each room, checks tile stains and washroom scale, and selects the right tools and cleaning liquids.',
     image: '/images/process/step-1-inspection.webp',
     highlight: 'Initial Inspection'
   },
@@ -454,8 +454,8 @@ export const PROJECT_PROCESS_STEPS: ProcessStep[] = [
   },
   {
     stepNumber: 3,
-    title: 'Machine Scrub & Deep Clean',
-    description: 'We run heavy-duty rotary floor scrubbers, spray foam shampoo on upholstery, and apply surface-safe descaling liquid.',
+    title: 'Machine Scrub & Thorough Clean',
+    description: 'We run single-disc floor scrubbers, spray foam shampoo on upholstery, and apply surface-safe descaling liquid.',
     image: '/images/process/step-3-machine-scrub.webp',
     highlight: 'Rotary Scrubbing'
   },

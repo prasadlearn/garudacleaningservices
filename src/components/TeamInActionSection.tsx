@@ -11,8 +11,8 @@ interface WorkPhoto {
 const WORK_PHOTOS: WorkPhoto[] = [
   {
     image: '/images/floor-clean.webp',
-    title: 'Floor Cleaning',
-    description: 'We use rotary floor scrubbers for deep tile and marble cleaning.',
+    title: 'Mechanized Floor Scrubbing',
+    description: 'We use rotary floor scrubbers for thorough tile and marble scrubbing.',
     tag: 'Floors'
   },
   {
@@ -23,14 +23,14 @@ const WORK_PHOTOS: WorkPhoto[] = [
   },
   {
     image: '/images/bathroom-clean.webp',
-    title: 'Bathroom Cleaning',
+    title: 'Washroom Cleaning',
     description: 'Acid-free descaling of hard water stains on tiles and taps.',
-    tag: 'Bathroom'
+    tag: 'Washroom'
   },
   {
     image: '/images/sofa-clean.webp',
     title: 'Sofa Cleaning',
-    description: 'Deep fabric vacuuming and gentle foam shampooing.',
+    description: 'High-suction fabric vacuuming and gentle foam shampooing.',
     tag: 'Upholstery'
   },
   {
