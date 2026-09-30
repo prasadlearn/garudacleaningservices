@@ -192,7 +192,7 @@ export const SERVICES_DATA: ServiceItem[] = [
       'Windows, sliding tracks, grilles, ceiling fans, and doors cleaned'
     ],
     enabled: true,
-    price: { kind: 'inspection' },
+    price: { kind: 'from', amount: 3000 },
     image: '/images/services/villa-cleaning.webp',
     imageSource: 'illustrative'
   },

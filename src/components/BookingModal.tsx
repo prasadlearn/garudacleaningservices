@@ -56,7 +56,7 @@ export const BookingModal: React.FC = () => {
 
   // Multi-service selection states (starts empty by default so user chooses freely)
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [homeCleaningBhk, setHomeCleaningBhk] = useState<string>('2 BHK');
+  const [homeCleaningBhk, setHomeCleaningBhk] = useState<string>('');
   const [showServicePicker, setShowServicePicker] = useState<boolean>(false);
   const [serviceSearchQuery, setServiceSearchQuery] = useState<string>('');
   const [serviceCategoryFilter, setServiceCategoryFilter] = useState<'all' | 'residential' | 'specialized' | 'commercial'>('all');
@@ -125,14 +125,14 @@ export const BookingModal: React.FC = () => {
 
       if (matchedService) {
         setSelectedServices([matchedService.title]);
-        if (matchedService.slug === 'home-cleaning' && tierName) {
-          setHomeCleaningBhk(tierName);
-        }
+        setHomeCleaningBhk(matchedService.slug === 'home-cleaning' && tierName ? tierName : '');
       } else if (serviceName) {
         setSelectedServices([serviceName]);
+        setHomeCleaningBhk(tierName || '');
       }
     } else {
       setSelectedServices([]);
+      setHomeCleaningBhk('');
     }
 
     if (isOpen) {
@@ -192,9 +192,14 @@ export const BookingModal: React.FC = () => {
       return;
     }
 
+    if (selectedServices.includes('Home Cleaning') && !homeCleaningBhk) {
+      setServiceError('Please select your Home Cleaning apartment size (1 BHK, 2 BHK, 3 BHK, or 4+ BHK).');
+      return;
+    }
+
     const finalServicesList = selectedServices.map((title) => {
       if (title === 'Home Cleaning') {
-        return `Home Cleaning (${homeCleaningBhk})`;
+        return homeCleaningBhk ? `Home Cleaning (${homeCleaningBhk})` : 'Home Cleaning';
       }
       return title;
     });
@@ -566,31 +571,41 @@ export const BookingModal: React.FC = () => {
 
                 {/* Home Cleaning BHK Size Segment (ONLY IF Home Cleaning is selected) */}
                 {selectedServices.includes('Home Cleaning') && (
-                  <div className="pt-2 border-t border-slate-200/80">
-                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
-                      Home Cleaning Apartment Size:
-                    </span>
-                    <div className="grid grid-cols-4 gap-1">
+                  <div className="pt-2.5 border-t border-slate-200/80 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-slate-600 uppercase tracking-wider block">
+                        Select Apartment Size: {homeCleaningBhk ? <span className="text-[#22AC33] font-black">({homeCleaningBhk})</span> : <span className="text-amber-600 font-semibold">(Choose your size)</span>}
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-4 gap-1.5">
                       {[
                         { label: '1 BHK', rate: '₹2,399' },
                         { label: '2 BHK', rate: '₹3,299' },
                         { label: '3 BHK', rate: '₹4,999' },
                         { label: '4+ BHK', rate: 'Quote' }
-                      ].map((tier) => (
-                        <button
-                          key={tier.label}
-                          type="button"
-                          onClick={() => setHomeCleaningBhk(tier.label)}
-                          className={`py-1.5 px-0.5 rounded-xl text-center transition-all cursor-pointer border ${
-                            homeCleaningBhk === tier.label
-                              ? 'bg-[#22AC33] text-white border-[#22AC33] shadow-xs font-black'
-                              : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 font-semibold'
-                          }`}
-                        >
-                          <div className="text-[10px] font-bold leading-tight truncate">{tier.label}</div>
-                          <div className="text-[9px] opacity-90 leading-tight truncate whitespace-nowrap">{tier.rate}</div>
-                        </button>
-                      ))}
+                      ].map((tier) => {
+                        const isSelected = homeCleaningBhk === tier.label;
+                        return (
+                          <button
+                            key={tier.label}
+                            type="button"
+                            onClick={() => {
+                              setServiceError('');
+                              setHomeCleaningBhk(tier.label);
+                            }}
+                            className={`py-2 px-1 rounded-xl text-center transition-all cursor-pointer border ${
+                              isSelected
+                                ? 'bg-[#22AC33] text-white border-[#22AC33] shadow-xs font-black ring-2 ring-[#22AC33]/30'
+                                : 'bg-white text-slate-700 border-slate-200 hover:border-[#22AC33]/50 hover:bg-slate-50 font-semibold'
+                            }`}
+                          >
+                            <div className="text-[11px] font-bold leading-tight truncate">{tier.label}</div>
+                            <div className={`text-[10px] leading-tight truncate whitespace-nowrap mt-0.5 ${isSelected ? 'text-white/95' : 'text-slate-500'}`}>
+                              {tier.rate}
+                            </div>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
