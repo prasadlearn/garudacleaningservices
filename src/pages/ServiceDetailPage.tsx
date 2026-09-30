@@ -63,7 +63,7 @@ export const ServiceDetailPage: React.FC = () => {
 
   const effectiveUnits = typeof unitCount === 'number' && unitCount > 0 ? unitCount : 1;
 
-  if (isHomeCleaning && activeBhkObj) {
+  if (hasTiers && activeBhkObj) {
     activePriceText = formatAmount(activeBhkObj.amount);
     activeDetailText = selectedBhkTier;
   } else if (isPerUnit && service.price.kind === 'per-unit') {
@@ -342,13 +342,13 @@ export const ServiceDetailPage: React.FC = () => {
             </p>
           </div>
 
-          {/* Dynamic BHK Selector (if Home Cleaning) */}
-          {isHomeCleaning && bhkTiers.length > 0 && (
+          {/* Dynamic Tier / Apartment Size Selector */}
+          {hasTiers && bhkTiers.length > 0 && (
             <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-4">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div>
                   <h2 className="text-xl font-extrabold text-[#041B3B]">
-                    Select Your Apartment / Flat Size
+                    Select Your Property Size / Tier
                   </h2>
                   <p className="text-xs text-slate-500 mt-0.5">
                     Click a tier to view the rate:
@@ -358,13 +358,13 @@ export const ServiceDetailPage: React.FC = () => {
                   type="button"
                   onClick={() =>
                     openModal({
-                      serviceTitle: 'Custom Quote for 4+ BHK / Villa',
+                      serviceTitle: `Custom Quote for ${service.title}`,
                       sourcePage: `/services/${service.slug}`
                     })
                   }
                   className="text-xs text-[#22AC33] font-bold hover:underline cursor-pointer"
                 >
-                  Larger home or villa? Request a quote →
+                  Custom or large requirement? Request a quote →
                 </button>
               </div>
 

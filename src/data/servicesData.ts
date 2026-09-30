@@ -412,7 +412,7 @@ export const SERVICES_DATA: ServiceItem[] = [
     price: {
       kind: 'tiers',
       tiers: [
-        { label: '1 BHK', amount: null },
+        { label: '1 BHK', amount: 1000 },
         { label: '2 BHK', amount: 1200 },
         { label: '3 BHK', amount: 1400 },
         { label: 'Villa', amount: 3000 }
