@@ -159,10 +159,8 @@ export const PricingPage: React.FC = () => {
                   const basisLabel =
                     srv.price.kind === 'fixed'
                       ? 'Fixed rate'
-                      : srv.price.kind === 'from'
-                      ? 'Starting rate'
                       : srv.price.kind === 'per-unit'
-                      ? `Per ${srv.price.unit}`
+                      ? (srv.price.unit === 'sq.ft' ? 'Starting rate / sq.ft' : `Per ${srv.price.unit}`)
                       : srv.price.kind === 'tiers'
                       ? 'Tiered Pricing'
                       : srv.price.kind === 'quote'
@@ -270,10 +268,8 @@ export const PricingPage: React.FC = () => {
                       const basisLabel =
                         srv.price.kind === 'fixed'
                           ? 'Fixed rate'
-                          : srv.price.kind === 'from'
-                          ? 'Starting rate'
                           : srv.price.kind === 'per-unit'
-                          ? `Per ${srv.price.unit}`
+                          ? (srv.price.unit === 'sq.ft' ? 'Starting rate / sq.ft' : `Per ${srv.price.unit}`)
                           : srv.price.kind === 'tiers'
                           ? 'Tiered Pricing'
                           : srv.price.kind === 'quote'

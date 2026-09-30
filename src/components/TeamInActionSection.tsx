@@ -10,9 +10,9 @@ interface WorkPhoto {
 
 const WORK_PHOTOS: WorkPhoto[] = [
   {
-    image: '/images/floor-clean.webp',
-    title: 'Mechanized Floor Scrubbing',
-    description: 'We use rotary floor scrubbers for thorough tile and marble scrubbing.',
+    image: '/images/equipment/hard-surface-clean.webp',
+    title: 'Hard-Surface Cleaning',
+    description: 'Specialized deep cleaning and dirt lifting for vitrified tile, marble, and stone floors.',
     tag: 'Floors'
   },
   {

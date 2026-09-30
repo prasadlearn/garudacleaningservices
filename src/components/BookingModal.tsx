@@ -18,7 +18,8 @@ import {
   Info,
   ShieldCheck,
   User,
-  Smartphone
+  Smartphone,
+  Trash2
 } from 'lucide-react';
 import { useQuoteModal } from '../context/QuoteModalContext';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
@@ -62,6 +63,14 @@ export const BookingModal: React.FC = () => {
   const [serviceCategoryFilter, setServiceCategoryFilter] = useState<'all' | 'residential' | 'specialized' | 'commercial'>('all');
   const [serviceError, setServiceError] = useState<string>('');
 
+  const TIME_SLOTS = [
+    'Preferred Time: 08:00 AM - 11:00 AM (Early Morning)',
+    'Preferred Time: 10:00 AM - 01:00 PM (Morning Slot)',
+    'Preferred Time: 01:00 PM - 04:00 PM (Afternoon Slot)',
+    'Preferred Time: 04:00 PM - 07:00 PM (Evening Slot)',
+    'Urgent Booking (Today / ASAP)',
+  ];
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -71,17 +80,9 @@ export const BookingModal: React.FC = () => {
     gpsLocation: '-',
     totalAmount: 'To be confirmed after inspection',
     subscriptionClient: 'No',
-    priorityTime: '10:00 AM - 01:00 PM (Morning Slot)',
+    priorityTime: 'Preferred Time: 10:00 AM - 01:00 PM (Morning Slot)',
     remarks: '',
   });
-
-  const TIME_SLOTS = [
-    '08:00 AM - 11:00 AM (Early Morning)',
-    '10:00 AM - 01:00 PM (Morning Slot)',
-    '01:00 PM - 04:00 PM (Afternoon Slot)',
-    '04:00 PM - 07:00 PM (Evening Slot)',
-    'Urgent / Preferred Time Today',
-  ];
 
   // Prevent background scrolling and handle Escape key while modal is open
   useEffect(() => {
@@ -157,6 +158,12 @@ export const BookingModal: React.FC = () => {
   const removeService = (serviceTitle: string) => {
     setServiceError('');
     setSelectedServices(selectedServices.filter((s) => s !== serviceTitle));
+  };
+
+  const clearAllServices = () => {
+    setServiceError('');
+    setSelectedServices([]);
+    setHomeCleaningBhk('');
   };
 
   const handleDetectLocation = () => {
@@ -250,9 +257,7 @@ export const BookingModal: React.FC = () => {
         ref={modalContentRef}
         className="relative w-full sm:max-w-lg bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col h-[94vh] sm:h-auto sm:max-h-[90vh] animate-in slide-in-from-bottom-5 sm:zoom-in-95 duration-200"
       >
-        {/* ============================================================
-         * HEADER (Always Visible & Crisp)
-         * ============================================================ */}
+        {/* HEADER */}
         <div className="bg-[#041B3B] text-white px-4 py-3 sm:px-6 sm:py-4 relative shrink-0 border-b border-white/10 shadow-sm">
           <button
             ref={closeBtnRef}
@@ -274,17 +279,13 @@ export const BookingModal: React.FC = () => {
             Schedule Cleaning Appointment
           </h2>
           <p className="text-[11px] sm:text-xs text-slate-300 font-medium">
-            Multi-service booking • Instant WhatsApp confirmation
+            Multi-service booking • Direct WhatsApp confirmation
           </p>
         </div>
 
-        {/* ============================================================
-         * BODY CONTENT (Scrollable & Responsive)
-         * ============================================================ */}
+        {/* BODY CONTENT */}
         <div className="flex-1 overflow-y-auto overscroll-contain p-3.5 sm:p-5 relative bg-white">
-          {/* ------------------------------------------------------------
-           * SUB-VIEW: FULL-PAGE CLEAN SERVICE PICKER
-           * ------------------------------------------------------------ */}
+          {/* SUB-VIEW: FULL-PAGE SERVICE PICKER */}
           {showServicePicker ? (
             <div className="space-y-3 pb-2">
               <div className="flex items-center justify-between pb-2 border-b border-slate-100">
@@ -294,13 +295,24 @@ export const BookingModal: React.FC = () => {
                     {selectedServices.length} {selectedServices.length === 1 ? 'service' : 'services'} selected
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => setShowServicePicker(false)}
-                  className="bg-[#22AC33] hover:bg-[#1A8C28] text-white py-1.5 px-3.5 text-xs font-bold rounded-xl cursor-pointer transition-colors shadow-2xs"
-                >
-                  Done
-                </button>
+                <div className="flex items-center gap-2">
+                  {selectedServices.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={clearAllServices}
+                      className="text-slate-500 hover:text-red-600 text-xs font-bold px-2 py-1 cursor-pointer"
+                    >
+                      Clear all
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setShowServicePicker(false)}
+                    className="bg-[#22AC33] hover:bg-[#1A8C28] text-white py-1.5 px-3.5 text-xs font-bold rounded-xl cursor-pointer transition-colors shadow-2xs"
+                  >
+                    Done
+                  </button>
+                </div>
               </div>
 
               {/* Search Bar */}
@@ -386,9 +398,7 @@ export const BookingModal: React.FC = () => {
               </div>
             </div>
           ) : submitted ? (
-            /* ------------------------------------------------------------
-             * SUCCESS VIEW
-             * ------------------------------------------------------------ */
+            /* SUCCESS VIEW */
             <div className="text-center py-8 space-y-3">
               <div className="w-14 h-14 bg-emerald-100 text-[#22AC33] rounded-full flex items-center justify-center mx-auto shadow-inner">
                 <CheckCircle className="w-9 h-9" />
@@ -410,9 +420,7 @@ export const BookingModal: React.FC = () => {
               </div>
             </div>
           ) : (
-            /* ------------------------------------------------------------
-             * MAIN FORM VIEW (Ultra Clean & Ergonomic on Mobile)
-             * ------------------------------------------------------------ */
+            /* MAIN FORM VIEW */
             <form id="booking-form-modal" onSubmit={handleSubmit} className="space-y-3 sm:space-y-3.5">
               {/* Customer Name & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -487,16 +495,14 @@ export const BookingModal: React.FC = () => {
                   >
                     {TIME_SLOTS.map((slot) => (
                       <option key={slot} value={slot}>
-                        {slot.split('(')[0].trim()}
+                        {slot}
                       </option>
                     ))}
                   </select>
                 </div>
               </div>
 
-              {/* ============================================================
-               * COMPACT & BEAUTIFUL MULTI-SERVICE SELECTION CARD
-               * ============================================================ */}
+              {/* MULTI-SERVICE SELECTION CARD */}
               <div className="p-3 bg-slate-50/90 rounded-2xl border border-slate-200 space-y-2">
                 <div className="flex items-center justify-between gap-1">
                   <div className="flex items-center gap-1.5">
@@ -507,16 +513,25 @@ export const BookingModal: React.FC = () => {
                         : 'Services Required *'}
                     </span>
                   </div>
-                  {selectedServices.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    {selectedServices.length > 0 && (
+                      <button
+                        type="button"
+                        onClick={clearAllServices}
+                        className="text-[10px] font-bold text-slate-400 hover:text-red-500 transition-colors cursor-pointer"
+                      >
+                        Clear
+                      </button>
+                    )}
                     <button
                       type="button"
                       onClick={() => setShowServicePicker(true)}
                       className="text-[11px] font-bold text-[#22AC33] hover:text-[#1c8f2b] flex items-center gap-1 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs hover:border-[#22AC33]/40 active:scale-95 transition-all"
                     >
-                      <span>+ Add / Change</span>
+                      <span>{selectedServices.length > 0 ? '+ Add / Change' : 'Select Services'}</span>
                       <ChevronRight className="w-3 h-3" />
                     </button>
-                  )}
+                  </div>
                 </div>
 
                 {serviceError && (
@@ -525,7 +540,7 @@ export const BookingModal: React.FC = () => {
                   </p>
                 )}
 
-                {/* Empty State: Prompt User to Select */}
+                {/* Empty State */}
                 {selectedServices.length === 0 ? (
                   <button
                     type="button"
@@ -688,7 +703,7 @@ export const BookingModal: React.FC = () => {
                 <input
                   id="modal-remarks"
                   type="text"
-                  placeholder="e.g. Focus on kitchen grease, sofa fabric stains..."
+                  placeholder="e.g. Focus on kitchen grease, bathroom scale..."
                   value={formData.remarks}
                   onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
                   className="w-full h-9 px-3 rounded-xl border border-slate-200 text-xs focus:border-[#22AC33] outline-none font-medium text-slate-900 bg-slate-50/60"
@@ -698,9 +713,7 @@ export const BookingModal: React.FC = () => {
           )}
         </div>
 
-        {/* ============================================================
-         * STICKY BOTTOM ACTION BAR (Never obscured on mobile)
-         * ============================================================ */}
+        {/* STICKY BOTTOM ACTION BAR */}
         {!showServicePicker && !submitted && (
           <div className="p-3 sm:p-4 bg-slate-50 border-t border-slate-200/90 shrink-0 flex flex-col gap-1.5 shadow-md">
             <button

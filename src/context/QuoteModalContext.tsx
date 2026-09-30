@@ -42,12 +42,20 @@ export const QuoteModalProvider: React.FC<{ children: ReactNode }> = ({ children
     setInitialService('');
   }, []);
 
-  // Automatic booking form opening after 10 seconds of opening website
+  // Automatic booking form opening once per browser session after initial page load
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsOpen(true);
-    }, 10000);
-    return () => clearTimeout(timer);
+    try {
+      const alreadyOpened = sessionStorage.getItem(AUTO_OPEN_STORAGE_KEY);
+      if (!alreadyOpened) {
+        const timer = window.setTimeout(() => {
+          sessionStorage.setItem(AUTO_OPEN_STORAGE_KEY, 'true');
+          setIsOpen(true);
+        }, 2500);
+        return () => window.clearTimeout(timer);
+      }
+    } catch {
+      // In case sessionStorage is blocked in strict privacy modes
+    }
   }, []);
 
   return (

@@ -49,7 +49,7 @@ export interface BeforeAfterItem {
   altBefore: string;
   altAfter: string;
   locality?: string;
-  source: 'real';
+  source: 'illustrative' | 'real';
 }
 
 // Backward compatibility alias for ImageCompareSlider & GalleryModal
@@ -82,19 +82,18 @@ export interface ProcessStep {
 }
 
 /* ==========================================
- * 1. BENTO GALLERY ITEMS (Static Data)
+ * 1. BENTO GALLERY ITEMS (Illustrative Examples)
  * ========================================== */
 export const BENTO_GALLERY_ITEMS: GalleryItem[] = [
   {
     id: 'bento-1',
-    title: 'Apartment Living Room Home Cleaning',
+    title: 'Apartment Living Room Cleaning',
     category: 'Residential',
     image: '/images/services/home-cleaning.webp',
-    description: 'Vitrified tile scrubbing, corner dusting, and furniture care for a multi-room apartment.',
+    description: 'Vitrified tile cleaning, corner dusting, and furniture care for a multi-room apartment.',
     featured: true,
     bentoSpan: 'col-span-1 md:col-span-2',
     alt: 'Clean living room with polished vitrified floor tiles',
-    locality: 'Balaji Colony',
     serviceSlug: 'home-cleaning'
   },
   {
@@ -102,11 +101,10 @@ export const BENTO_GALLERY_ITEMS: GalleryItem[] = [
     title: 'Corporate Office Workstations',
     category: 'Office Cleaning',
     image: '/images/services/office-cleaning.webp',
-    description: 'Desk wipe-downs, sanitization, and circulation floor machine scrubbing.',
+    description: 'Desk wipe-downs, sanitization, and circulation floor mopping.',
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Modern corporate office workstation desks and walkways',
-    locality: 'AIR Bypass Road',
     serviceSlug: 'office-cleaning'
   },
   {
@@ -118,43 +116,39 @@ export const BENTO_GALLERY_ITEMS: GalleryItem[] = [
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Spotless clean kitchen countertop and sink',
-    locality: 'MR Palli',
     serviceSlug: 'kitchen-cleaning'
   },
   {
     id: 'bento-4',
-    title: 'Luxury Villa Living & Dining Hall',
+    title: 'Duplex Villa Living & Dining Hall',
     category: 'Residential',
     image: '/images/services/villa-cleaning.webp',
-    description: 'Full duplex floor scrubbing, wooden handrail dusting, and large window wiping.',
+    description: 'Full duplex floor cleaning, wooden handrail dusting, and large window wiping.',
     featured: true,
     bentoSpan: 'col-span-1 md:col-span-2',
     alt: 'Spacious duplex villa living area with staircase and clean floors',
-    locality: 'Renigunta Road',
     serviceSlug: 'villa-cleaning'
   },
   {
     id: 'bento-5',
-    title: 'Washroom Descaling & Chrome Restoration',
+    title: 'Washroom Descaling & Chrome Detailing',
     category: 'Specialized Cleaning',
     image: '/images/services/washroom-cleaning.webp',
     description: 'Wall tile hard-water scale removal, chrome tap polishing, and sanitaryware disinfection.',
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Clean washroom with descaled ceramic tiles and mirror',
-    locality: 'Bhavani Nagar',
     serviceSlug: 'washroom-cleaning'
   },
   {
     id: 'bento-6',
-    title: 'Post-Construction Floor Scrubbing',
+    title: 'Post-Construction Hard-Surface Cleaning',
     category: 'Floor & Carpet',
     image: '/images/services/post-construction-cleaning.webp',
-    description: 'Single-disc rotary scrubbing removing paint and cement dust, restoring floor shine.',
+    description: 'Paint scraping, fine cement dust extraction, and floor tile wash.',
     featured: false,
     bentoSpan: 'col-span-1',
-    alt: 'Gleaming polished floor tiles after machine cleaning',
-    locality: 'Chandragiri Road',
+    alt: 'Gleaming polished floor tiles after thorough cleaning',
     serviceSlug: 'post-construction-cleaning'
   },
   {
@@ -166,7 +160,6 @@ export const BENTO_GALLERY_ITEMS: GalleryItem[] = [
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Clear sliding glass window with aluminum frame',
-    locality: 'Korlagunta',
     serviceSlug: 'window-cleaning'
   },
   {
@@ -174,35 +167,32 @@ export const BENTO_GALLERY_ITEMS: GalleryItem[] = [
     title: 'Retail Shop & Showroom Floor Detailing',
     category: 'Commercial',
     image: '/images/services/shop-cleaning.webp',
-    description: 'Complete showroom aisle scrubbing, glass facade wash, and display ledge dusting.',
+    description: 'Complete showroom aisle cleaning, glass facade wash, and display shelf dusting.',
     featured: false,
     bentoSpan: 'col-span-1',
-    alt: 'Clean retail shop interior and shelving',
-    locality: 'Gandhi Road',
+    alt: 'Clean retail supermarket shop interior and shelving',
     serviceSlug: 'shop-cleaning'
   },
   {
     id: 'bento-9',
-    title: 'Sectional Fabric Sofa Foam Shampooing',
+    title: 'Living Room Fabric Sofa Cleaning',
     category: 'Floor & Carpet',
     image: '/images/services/sofa-cleaning.webp',
     description: 'Dry vacuuming, foam shampoo application, and dirt extraction on living room sofa.',
     featured: false,
     bentoSpan: 'col-span-1',
-    alt: 'Clean grey fabric sectional sofa',
-    locality: 'Leela Mahal Area',
+    alt: 'Clean fabric upholstered sofa in residential living room',
     serviceSlug: 'sofa-cleaning'
   },
   {
     id: 'bento-10',
     title: 'Move-In / Move-Out Flat Handover Cleaning',
     category: 'Residential',
-    image: '/images/services/move-in-cleaning.webp',
-    description: 'Comprehensive vacant flat wash, washroom scrubbing, and kitchen detailing ready for handover.',
+    image: '/images/services/move-in-out-cleaning.webp',
+    description: 'Comprehensive vacant flat wash, washroom cleaning, and kitchen detailing ready for handover.',
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Freshly cleaned unfurnished apartment room',
-    locality: 'Tiruchanur Road',
     serviceSlug: 'move-in-out-cleaning'
   },
   {
@@ -214,45 +204,44 @@ export const BENTO_GALLERY_ITEMS: GalleryItem[] = [
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Clean hotel guest room with neatly prepared bed and polished floors',
-    locality: 'Settipalli',
     serviceSlug: 'hotel-guest-house-cleaning'
   },
   {
     id: 'bento-12',
-    title: 'Rooftop Water Tank & Sump High-Pressure Wash',
+    title: 'Rooftop Water Tank & Sump Jet Wash',
     category: 'Equipment',
     image: '/images/services/water-tank-cleaning.webp',
     description: 'High-pressure jet wash, bottom mud extraction, and algae scrubbing for overhead tanks and sumps.',
     featured: false,
     bentoSpan: 'col-span-1',
     alt: 'Rooftop domestic water tank on residential terrace',
-    locality: 'Daminedu',
     serviceSlug: 'water-tank-cleaning'
   }
 ];
 
 /* ==========================================
- * 2. BEFORE & AFTER DATA (Static Comparisons)
+ * 2. BEFORE & AFTER DATA (Sample Before & After)
  * ========================================== */
 export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
   {
     id: 'ba-1',
     serviceSlug: 'home-cleaning',
-    title: 'Floor Scrubbing & Home Cleaning',
+    title: 'Hard-Surface Floor & Home Cleaning',
+    tag: 'Sample Before & After',
     category: 'Before & After',
     problem: 'Dark dirt in tile lines and dull muddy stains from daily foot traffic.',
-    work: 'Single-disc machine scrubbing and dirt extraction.',
+    work: 'Thorough floor cleaning, tile scrubbing, and dirt extraction.',
     before: '/images/gallery/floor-before.webp',
     after: '/images/gallery/floor-after.webp',
     altBefore: 'Dull tiled floor with muddy dirt marks before cleaning',
-    altAfter: 'Gleaming polished floor after rotary scrubbing',
-    locality: 'Balaji Colony',
-    source: 'real'
+    altAfter: 'Gleaming polished floor after thorough cleaning',
+    source: 'illustrative'
   },
   {
     id: 'ba-2',
     serviceSlug: 'kitchen-cleaning',
     title: 'Kitchen Platform & Wall Degreasing',
+    tag: 'Sample Before & After',
     category: 'Before & After',
     problem: 'Sticky cooking oil grease and turmeric stains on kitchen tiles & slab.',
     work: 'Safe degreasing solution and scrub wash for a spotless finish.',
@@ -260,13 +249,13 @@ export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
     after: '/images/gallery/kitchen-after.webp',
     altBefore: 'Greasy kitchen countertop with oil smudges before cleaning',
     altAfter: 'Spotless degreased kitchen countertop after cleaning',
-    locality: 'MR Palli',
-    source: 'real'
+    source: 'illustrative'
   },
   {
     id: 'ba-3',
     serviceSlug: 'washroom-cleaning',
     title: 'Washroom Wall Tiles & Tap Cleaning',
+    tag: 'Sample Before & After',
     category: 'Before & After',
     problem: 'Hard borewell water white salt stains (uppu karalu) on taps and tiles.',
     work: 'Acid-free safe descaling liquid restoring original shine without damage.',
@@ -274,13 +263,13 @@ export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
     after: '/images/gallery/bathroom-after.webp',
     altBefore: 'Cloudy washroom tiles with hard water stains and scale',
     altAfter: 'Restored washroom wall tiles and sparkling chrome fixtures',
-    locality: 'AIR Bypass Road',
-    source: 'real'
+    source: 'illustrative'
   },
   {
     id: 'ba-4',
     serviceSlug: 'sofa-cleaning',
     title: 'Fabric Sofa Shampooing & Stain Removal',
+    tag: 'Sample Before & After',
     category: 'Before & After',
     problem: 'Dust, food marks, and sweat stains on sofa fabric.',
     work: 'Foam shampooing and high-power vacuum water extraction.',
@@ -288,8 +277,7 @@ export const BEFORE_AFTER_ITEMS: BeforeAfterItem[] = [
     after: '/images/gallery/sofa-after.webp',
     altBefore: 'Fabric sofa with visible dirt and beverage stains before cleaning',
     altAfter: 'Freshly shampooed clean fabric sofa',
-    locality: 'Bhavani Nagar',
-    source: 'real'
+    source: 'illustrative'
   }
 ];
 
@@ -333,13 +321,13 @@ export const SERVICES_GALLERY_CARDS: ServiceGalleryCard[] = [
     title: 'Office Cleaning',
     category: 'Corporate Workspaces',
     image: '/images/services/office-cleaning.webp',
-    description: 'Desk wipe-downs, conference room sanitization, and workstation floor scrubbing.'
+    description: 'Desk wipe-downs, conference room sanitization, and workstation floor cleaning.'
   },
   {
     slug: 'move-in-out-cleaning',
     title: 'Move-In / Move-Out Cleaning',
     category: 'Vacant Property Handover',
-    image: '/images/services/move-in-cleaning.webp',
+    image: '/images/services/move-in-out-cleaning.webp',
     description: 'Complete cupboard, wardrobe, washroom, and floor cleaning for new tenants or handover.'
   },
   {
@@ -364,19 +352,19 @@ export const SERVICES_GALLERY_CARDS: ServiceGalleryCard[] = [
 export const TEAM_GALLERY_ITEMS: TeamGalleryItem[] = [
   {
     id: 'team-1',
-    title: 'Uniformed & Trained Cleaners',
+    title: 'Trained & Equipped Cleaners',
     role: 'On-Site Team',
     image: '/images/team/team-equipment-kit.webp',
-    description: 'Our cleaners arrive in neat uniforms with professional floor scrubbers and vacuum kits.',
-    alt: 'Professional cleaning uniforms, single-disc scrubber, vacuum, and safety kit'
+    description: 'Our cleaners arrive equipped with surface-safe cleaners, microfiber cloths, and vacuum kits.',
+    alt: 'Cleaning uniforms, vacuums, and equipment kit'
   },
   {
     id: 'team-2',
-    title: 'Supervised Project Execution',
+    title: 'Structured Checklist Execution',
     role: 'Quality Lead',
     image: '/images/team/supervisor-checklist-audit.webp',
-    description: 'Every job is coordinated by an experienced lead who oversees checklist completion.',
-    alt: 'Supervisor quality inspection audit checklist and measurement tool'
+    description: 'Every project follows a room-by-room cleaning checklist to ensure complete coverage.',
+    alt: 'Quality inspection audit checklist and measurement tool'
   },
   {
     id: 'team-3',
@@ -391,7 +379,7 @@ export const TEAM_GALLERY_ITEMS: TeamGalleryItem[] = [
     title: 'Final Walkthrough With Customer',
     role: 'Customer Inspection',
     image: '/images/team/final-handover-audit.webp',
-    description: 'We walk through each room together with you before packing up to ensure 100% satisfaction.',
+    description: 'We walk through each room together with you before packing up to confirm your satisfaction.',
     alt: 'Final walkthrough sign-off sheet and keys ready in gleaming spotless living room'
   }
 ];
@@ -402,11 +390,11 @@ export const TEAM_GALLERY_ITEMS: TeamGalleryItem[] = [
 export const EQUIPMENT_ITEMS: EquipmentItem[] = [
   {
     id: 'eq-1',
-    name: 'Rotary Single-Disc Floor Scrubber',
-    category: 'Floor Restoration',
-    image: '/images/equipment/floor-machine.webp',
-    description: 'Heavy-duty rotating brushes that lift embedded dirt from tile, marble, and granite pores.',
-    alt: 'Rotary floor scrubber machine'
+    name: 'Hard-Surface Floor Scrubbing Gear',
+    category: 'Floor Care',
+    image: '/images/equipment/hard-surface-clean.webp',
+    description: 'Specialized floor scrubbing tools and pads that lift embedded dirt from tile, marble, and granite pores.',
+    alt: 'Clean vitrified tile floor after hard-surface scrubbing'
   },
   {
     id: 'eq-2',
@@ -454,22 +442,22 @@ export const PROJECT_PROCESS_STEPS: ProcessStep[] = [
   },
   {
     stepNumber: 3,
-    title: 'Machine Scrub & Thorough Clean',
-    description: 'We run single-disc floor scrubbers, spray foam shampoo on upholstery, and apply surface-safe descaling liquid.',
+    title: 'Thorough Cleaning & Descaling',
+    description: 'We wash room floors, spray foam shampoo on upholstery, and apply surface-safe descaling liquid to bathroom scale.',
     image: '/images/process/step-3-machine-scrub.webp',
-    highlight: 'Rotary Scrubbing'
+    highlight: 'Deep Cleaning'
   },
   {
     stepNumber: 4,
     title: 'Fine Detailing & Wiping Dry',
-    description: 'Window sliding tracks, fan blades, switch plates, and tile edges are detailed by hand and vacuumed completely dry.',
+    description: 'Window sliding tracks, fan blades, switch plates, and tile edges are detailed by hand and wiped completely dry.',
     image: '/images/process/step-4-fine-detailing.webp',
     highlight: 'Edge & Window Detailing'
   },
   {
     stepNumber: 5,
-    title: 'Quality Audit & Handover',
-    description: 'We conduct a room-by-room walkthrough together with you to verify every corner is clean before supervisor sign-off.',
+    title: 'Quality Check & Handover',
+    description: 'We conduct a room-by-room walkthrough together with you to verify every corner is clean before handover.',
     image: '/images/process/step-5-handover.webp',
     highlight: 'Joint Walkthrough'
   }

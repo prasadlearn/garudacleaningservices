@@ -92,7 +92,7 @@ export const FooterSection: React.FC = () => {
               <li><Link to="/about" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">About Us</Link></li>
               <li><Link to="/services" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">All Services</Link></li>
               <li><Link to="/pricing" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Rate Card & Pricing</Link></li>
-              <li><Link to="/products" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Garuda Liquids (Wholesale)</Link></li>
+              <li><Link to="/cleaning-liquids" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Cleaning Liquids</Link></li>
               <li><Link to="/gallery" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Before & After Gallery</Link></li>
               <li><Link to="/service-areas" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Tirupati Surroundings</Link></li>
               <li><Link to="/faq" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">FAQ & Guide</Link></li>
@@ -166,33 +166,37 @@ export const FooterSection: React.FC = () => {
                   </div>
                   <button
                     type="submit"
-                    className="btn-homecare-green w-full min-h-[48px] text-xs py-3 justify-center font-bold cursor-pointer"
+                    className="btn-homecare-green w-full min-h-[48px] text-xs font-bold justify-center flex items-center gap-1.5"
                   >
-                    <Send className="w-4 h-4" />
-                    <span>Request Fast Callback</span>
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Request Callback</span>
                   </button>
                 </form>
               )}
             </div>
 
-            <div className="mt-4 pt-3 border-t border-slate-200/80 flex items-center gap-1.5 text-xs text-slate-600 font-medium">
-              <ShieldCheck className="w-4 h-4 text-[#1A8C28] shrink-0" />
-              <span>Zero spam. Direct local support.</span>
+            <div className="pt-4 mt-4 border-t border-slate-200 text-center">
+              <span className="text-[11px] font-semibold text-slate-500">
+                Direct WhatsApp Response • Tirupati
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600 gap-4">
-          <p>© {new Date().getFullYear()} Garuda Cleaning Services, Tirupati. All rights reserved.</p>
+        {/* Bottom copyright & attribution */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+          <p>© {new Date().getFullYear()} {BUSINESS_CONFIG.brandName}. All rights reserved.</p>
           <div className="flex items-center gap-4">
-            <Link to="/about" className="hover:text-slate-900 transition-colors py-2">Privacy Policy</Link>
+            <Link to="/faq" className="hover:text-[#1A8C28] transition-colors py-2 min-h-[44px] flex items-center">FAQs</Link>
             <span>•</span>
-            <Link to="/contact" className="hover:text-slate-900 transition-colors py-2">Terms of Service</Link>
+            <Link to="/contact" className="hover:text-[#1A8C28] transition-colors py-2 min-h-[44px] flex items-center">Contact</Link>
             <span>•</span>
-            <Link to="/service-areas" className="hover:text-slate-900 transition-colors py-2">Locality Sitemap</Link>
+            <Link to="/cleaning-liquids" className="hover:text-[#1A8C28] transition-colors py-2 min-h-[44px] flex items-center">Cleaning Liquids</Link>
           </div>
         </div>
       </div>
     </footer>
   );
 };
+
+export default FooterSection;

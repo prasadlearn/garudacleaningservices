@@ -25,12 +25,8 @@ export const ServicesPage: React.FC = () => {
   // Per-unit custom estimator states keyed by service slug
   const [unitValues, setUnitValues] = useState<Record<string, number | ''>>({
     'post-construction-cleaning': 1000,
-    'window-cleaning': 6,
-    'glass-cleaning': 4,
-    'fan-cleaning': 5,
     'office-cleaning': 1200,
-    'shop-cleaning': 500,
-    'school-classroom-cleaning': 1500
+    'sofa-cleaning': 5
   });
 
   // BHK tier state for home-cleaning
@@ -415,7 +411,7 @@ export const ServicesPage: React.FC = () => {
             </p>
           </div>
           <Link
-            to="/products"
+            to="/cleaning-liquids"
             className="btn-homecare-green text-xs sm:text-sm font-bold min-h-[44px] px-5 py-2.5 rounded-xl inline-flex items-center gap-2 whitespace-nowrap shrink-0 shadow-xs"
           >
             <span>Explore Wholesale Liquids</span>

@@ -180,13 +180,13 @@ export const AboutPage: React.FC = () => {
                 icon: ShieldCheck,
               },
               {
-                title: 'Trained & Verified Staff',
+                title: 'Trained In-House Staff',
                 desc: 'Our staff comes in proper uniform with masks and gloves. They handle your home, wooden work, and glass items with utmost care.',
                 icon: Award,
               },
               {
-                title: 'Pay Only After Inspection',
-                desc: 'No advance payment needed. Check each room with our supervisor after the work is done, and pay only when you are 100% satisfied.',
+                title: 'Pay After Inspection',
+                desc: 'No advance payment needed. Check each room with our team after the work is done, and pay once you are satisfied with the results.',
                 icon: HeartHandshake,
               },
             ].map((pillar, idx) => {

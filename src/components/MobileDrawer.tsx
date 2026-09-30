@@ -132,7 +132,7 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, tri
     // Services handled with accordion
     { label: 'Gallery', path: '/gallery' },
     { label: 'Pricing', path: '/pricing' },
-    { label: 'Products', path: '/products' },
+    { label: 'Cleaning Liquids', path: '/cleaning-liquids' },
     { label: 'Service Areas', path: '/service-areas' },
     { label: 'Contact Us', path: '/contact' },
   ];
@@ -158,220 +158,190 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, tri
             id="mobile-drawer"
             role="dialog"
             aria-modal="true"
-            aria-label="Main menu"
+            aria-label="Navigation Menu"
             initial={{ x: '100%' }}
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
-            transition={{ type: 'spring', damping: 28, stiffness: 280 }}
-            className="relative z-[var(--z-drawer)] w-full max-w-[420px] bg-white text-slate-900 shadow-2xl flex flex-col justify-between overflow-hidden"
-            style={{
-              height: '100dvh',
-              maxHeight: '100dvh',
-              overscrollBehavior: 'contain'
-            }}
+            transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+            className="relative w-[300px] sm:w-[360px] max-w-[85vw] h-full bg-white shadow-2xl flex flex-col z-[var(--z-drawer)] border-l border-slate-100"
           >
-            {/* Drawer Header */}
-            <div className="h-16 px-4 border-b border-slate-100 flex items-center justify-between shrink-0 bg-slate-50/80">
-              <div className="flex items-center gap-2 min-w-0">
-                <span className="font-black text-base text-[#041B3B] truncate">
-                  Garuda <span className="text-[#22AC33]">Cleaning Services</span>
-                </span>
+            {/* Header Lockup */}
+            <div className="p-4 sm:p-5 border-b border-slate-100 flex items-center justify-between bg-[#041B3B] text-white">
+              <div className="flex flex-col leading-tight">
+                <span className="font-black text-sm tracking-tight">Garuda Cleaning Services</span>
+                <span className="text-[10px] text-[#22AC33] font-bold">Tirupati & Surroundings</span>
               </div>
               <button
                 ref={closeButtonRef}
                 type="button"
                 onClick={onClose}
-                aria-label="Close navigation menu"
-                className="w-11 h-11 rounded-xl bg-white border border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-100 flex items-center justify-center cursor-pointer transition-colors shrink-0"
+                aria-label="Close menu"
+                className="w-11 h-11 rounded-xl bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer transition-colors"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
-            {/* Scrollable Navigation Body */}
-            <div className="flex-1 overflow-y-auto px-4 py-3 divide-y divide-slate-100 overscroll-contain">
+            {/* Scrollable Nav Area */}
+            <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-1">
               {/* Home */}
               <Link
                 to="/"
                 onClick={onClose}
-                aria-current={isExactActive('/') ? 'page' : undefined}
-                className={`min-h-[52px] flex items-center justify-between px-3 rounded-xl text-base font-bold transition-colors ${
-                  isExactActive('/') ? 'bg-[#E8F8EC] text-[#22AC33]' : 'text-[#041B3B] hover:bg-slate-50'
+                className={`min-h-[44px] flex items-center px-4 rounded-xl font-bold text-sm transition-colors ${
+                  isExactActive('/')
+                    ? 'bg-[#E8F8EC] text-[#22AC33]'
+                    : 'text-slate-800 hover:bg-slate-100'
                 }`}
               >
-                <span>Home</span>
+                Home
               </Link>
 
               {/* About */}
               <Link
                 to="/about"
                 onClick={onClose}
-                aria-current={isExactActive('/about') ? 'page' : undefined}
-                className={`min-h-[52px] flex items-center justify-between px-3 rounded-xl text-base font-bold transition-colors ${
-                  isExactActive('/about') ? 'bg-[#E8F8EC] text-[#22AC33]' : 'text-[#041B3B] hover:bg-slate-50'
+                className={`min-h-[44px] flex items-center px-4 rounded-xl font-bold text-sm transition-colors ${
+                  isExactActive('/about')
+                    ? 'bg-[#E8F8EC] text-[#22AC33]'
+                    : 'text-slate-800 hover:bg-slate-100'
                 }`}
               >
-                <span>About</span>
+                About
               </Link>
 
-              {/* Services Accordion / Direct Link */}
-              <div className="py-1">
-                <div className={`min-h-[52px] flex items-center justify-between px-3 rounded-xl transition-colors ${
-                  isExactActive('/services') ? 'bg-[#E8F8EC] text-[#22AC33]' : 'hover:bg-slate-50 text-[#041B3B]'
-                }`}>
+              {/* Services Accordion */}
+              <div className="rounded-xl overflow-hidden border border-slate-100">
+                <div className="flex items-center justify-between min-h-[44px] bg-slate-50 px-4">
                   <Link
                     to="/services"
                     onClick={onClose}
-                    className="flex-1 flex items-center py-3 text-base font-bold select-none cursor-pointer"
+                    className={`font-bold text-sm flex-1 py-2.5 transition-colors ${
+                      isExactActive('/services')
+                        ? 'text-[#22AC33]'
+                        : 'text-slate-800 hover:text-[#22AC33]'
+                    }`}
                   >
-                    <span>Services ({residentialServices.length + specializedServices.length + commercialServices.length})</span>
+                    Services ({residentialServices.length + specializedServices.length + commercialServices.length})
                   </Link>
                   <button
                     type="button"
-                    data-drawer-accordion="true"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setServicesExpanded(!servicesExpanded);
-                    }}
+                    onClick={() => setServicesExpanded(!servicesExpanded)}
                     aria-expanded={servicesExpanded}
-                    aria-label="Toggle services list"
-                    className="p-2 -mr-1 text-slate-500 hover:text-[#22AC33] rounded-lg transition-colors cursor-pointer"
+                    aria-label="Toggle all services list"
+                    className="w-11 h-11 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-200 cursor-pointer"
                   >
                     <ChevronDown
-                      className={`w-5 h-5 transition-transform duration-200 ${
+                      className={`w-4 h-4 transition-transform duration-200 ${
                         servicesExpanded ? 'rotate-180 text-[#22AC33]' : ''
                       }`}
                     />
                   </button>
                 </div>
 
-                {servicesExpanded && (
-                  <div className="pl-3 pr-1 pb-3 space-y-4 pt-1">
-                    {/* View All Services Link */}
-                    <Link
-                      to="/services"
-                      onClick={onClose}
-                      className="min-h-[44px] flex items-center gap-2 text-sm font-black text-[#22AC33] bg-[#E8F8EC] px-3.5 rounded-xl hover:bg-[#d6f2dc] transition-colors"
+                <AnimatePresence>
+                  {servicesExpanded && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="overflow-hidden bg-white px-3 py-2 space-y-3 divide-y divide-slate-100 text-xs"
                     >
-                      <span>View all {residentialServices.length + specializedServices.length + commercialServices.length} services</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Link>
-
-                    {/* Residential */}
-                    <div>
-                      <h4 className="text-xs font-black uppercase tracking-wider text-slate-600 px-3 pb-1 border-b border-slate-100">
-                        Residential ({residentialServices.length})
-                      </h4>
-                      <ul className="mt-1 space-y-1">
+                      {/* Residential Group */}
+                      <div className="space-y-1 pt-1 first:pt-0">
+                        <span className="text-[10px] font-black uppercase text-[#22AC33] tracking-wider px-2 block">
+                          Residential ({residentialServices.length})
+                        </span>
                         {residentialServices.map((s) => (
-                          <li key={s.slug}>
-                            <Link
-                              to={`/services/${s.slug}`}
-                              onClick={onClose}
-                              className="min-h-[44px] flex items-center px-3 rounded-lg text-xs font-semibold text-slate-700 hover:text-[#22AC33] hover:bg-slate-50"
-                            >
-                              {s.title}
-                            </Link>
-                          </li>
+                          <Link
+                            key={s.slug}
+                            to={`/services/${s.slug}`}
+                            onClick={onClose}
+                            className="min-h-[40px] flex items-center px-3 py-1.5 rounded-lg text-slate-700 hover:bg-slate-50 hover:text-[#22AC33] font-medium"
+                          >
+                            {s.title}
+                          </Link>
                         ))}
-                      </ul>
-                    </div>
+                      </div>
 
-                    {/* Specialized */}
-                    <div>
-                      <h4 className="text-xs font-black uppercase tracking-wider text-slate-600 px-3 pb-1 border-b border-slate-100">
-                        Specialized ({specializedServices.length})
-                      </h4>
-                      <ul className="mt-1 space-y-1">
+                      {/* Specialized Group */}
+                      <div className="space-y-1 pt-2">
+                        <span className="text-[10px] font-black uppercase text-[#22AC33] tracking-wider px-2 block">
+                          Specialized ({specializedServices.length})
+                        </span>
                         {specializedServices.map((s) => (
-                          <li key={s.slug}>
-                            <Link
-                              to={`/services/${s.slug}`}
-                              onClick={onClose}
-                              className="min-h-[44px] flex items-center px-3 rounded-lg text-xs font-semibold text-slate-700 hover:text-[#22AC33] hover:bg-slate-50"
-                            >
-                              {s.title}
-                            </Link>
-                          </li>
+                          <Link
+                            key={s.slug}
+                            to={`/services/${s.slug}`}
+                            onClick={onClose}
+                            className="min-h-[40px] flex items-center px-3 py-1.5 rounded-lg text-slate-700 hover:bg-slate-50 hover:text-[#22AC33] font-medium"
+                          >
+                            {s.title}
+                          </Link>
                         ))}
-                      </ul>
-                    </div>
+                      </div>
 
-                    {/* Commercial */}
-                    <div>
-                      <h4 className="text-xs font-black uppercase tracking-wider text-slate-600 px-3 pb-1 border-b border-slate-100">
-                        Commercial ({commercialServices.length})
-                      </h4>
-                      <ul className="mt-1 space-y-1">
+                      {/* Commercial Group */}
+                      <div className="space-y-1 pt-2">
+                        <span className="text-[10px] font-black uppercase text-[#22AC33] tracking-wider px-2 block">
+                          Commercial ({commercialServices.length})
+                        </span>
                         {commercialServices.map((s) => (
-                          <li key={s.slug}>
-                            <Link
-                              to={`/services/${s.slug}`}
-                              onClick={onClose}
-                              className="min-h-[44px] flex items-center px-3 rounded-lg text-xs font-semibold text-slate-700 hover:text-[#22AC33] hover:bg-slate-50"
-                            >
-                              {s.title}
-                            </Link>
-                          </li>
+                          <Link
+                            key={s.slug}
+                            to={`/services/${s.slug}`}
+                            onClick={onClose}
+                            className="min-h-[40px] flex items-center px-3 py-1.5 rounded-lg text-slate-700 hover:bg-slate-50 hover:text-[#22AC33] font-medium"
+                          >
+                            {s.title}
+                          </Link>
                         ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
 
-              {/* Remaining Nav Links */}
+              {/* Other Links */}
               {navLinks.slice(2).map((link) => (
                 <Link
                   key={link.path}
                   to={link.path}
                   onClick={onClose}
-                  aria-current={isExactActive(link.path) ? 'page' : undefined}
-                  className={`min-h-[52px] flex items-center justify-between px-3 rounded-xl text-base font-bold transition-colors ${
-                    isExactActive(link.path) ? 'bg-[#E8F8EC] text-[#22AC33]' : 'text-[#041B3B] hover:bg-slate-50'
+                  className={`min-h-[44px] flex items-center px-4 rounded-xl font-bold text-sm transition-colors ${
+                    isExactActive(link.path)
+                      ? 'bg-[#E8F8EC] text-[#22AC33]'
+                      : 'text-slate-800 hover:bg-slate-100'
                   }`}
                 >
-                  <span>{link.label}</span>
+                  {link.label}
                 </Link>
               ))}
             </div>
 
-            {/* Bottom Action Area with safe-area padding */}
-            <div
-              className="p-4 bg-slate-50 border-t border-slate-100 flex flex-col gap-2 shrink-0"
-              style={{ paddingBottom: 'max(1rem, env(safe-area-inset-bottom))' }}
-            >
-              <div className="grid grid-cols-2 gap-2">
-                <a
-                  href={BUSINESS_CONFIG.contact.phoneTel}
-                  onClick={() => trackEvent('call_click', { sourcePage: 'mobile_drawer' })}
-                  className="min-h-[48px] px-3 py-2.5 rounded-xl bg-[#041B3B] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs"
-                >
-                  <Phone className="w-4 h-4 text-[#22AC33]" />
-                  <span>Call Us</span>
-                </a>
-                <a
-                  href={BUSINESS_CONFIG.buildWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => trackEvent('whatsapp_click', { sourcePage: 'mobile_drawer' })}
-                  className="min-h-[48px] px-3 py-2.5 rounded-xl bg-[#22AC33] text-white text-xs font-bold flex items-center justify-center gap-1.5 shadow-xs"
-                >
-                  <MessageCircle className="w-4 h-4" />
-                  <span>WhatsApp</span>
-                </a>
-              </div>
+            {/* Drawer Bottom CTAs */}
+            <div className="p-4 border-t border-slate-100 bg-slate-50 space-y-2">
               <button
                 type="button"
                 onClick={() => {
                   onClose();
                   openModal();
                 }}
-                className="w-full min-h-[48px] px-4 py-3 rounded-xl bg-[#22AC33] text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow-md cursor-pointer hover:bg-[#1A8C28] transition-colors"
+                className="btn-homecare-green w-full min-h-[44px] text-xs font-bold justify-center flex items-center gap-2 cursor-pointer shadow-md"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Get Free Quote</span>
+                <span>Get Free Price Quote</span>
               </button>
+
+              <a
+                href={BUSINESS_CONFIG.contact.phoneTel}
+                onClick={() => trackEvent('call_click', { sourcePage: 'mobile_drawer' })}
+                className="w-full min-h-[44px] flex items-center justify-center gap-2 bg-white hover:bg-slate-100 text-[#041B3B] border border-slate-200 rounded-xl text-xs font-bold transition-colors"
+              >
+                <Phone className="w-3.5 h-3.5 text-[#22AC33]" />
+                <span>{BUSINESS_CONFIG.contact.phoneDisplay}</span>
+              </a>
             </div>
           </motion.div>
         </div>
@@ -379,3 +349,5 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, tri
     </AnimatePresence>
   );
 };
+
+export default MobileDrawer;

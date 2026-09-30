@@ -12,7 +12,7 @@ export const Hero: React.FC = () => {
 
   const verifiedBadges = [
     { label: 'Clear Upfront Prices', icon: Sparkles },
-    { label: 'Open 7 Days a Week', icon: Clock },
+    { label: 'Monday to Sunday (8 AM - 8 PM)', icon: Clock },
     { label: 'Fast WhatsApp Estimates', icon: CheckCircle },
   ];
 

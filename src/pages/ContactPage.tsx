@@ -11,35 +11,99 @@ import {
   ExternalLink,
   AlertCircle,
   Loader2,
-  Navigation
+  Navigation,
+  Calendar,
+  Layers,
+  Plus,
+  X,
+  ChevronRight,
+  Search,
+  Check,
+  User,
+  Smartphone
 } from 'lucide-react';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
 import { TRUST_CONFIG } from '../config/trustConfig';
-import { SERVICES_DATA, getServiceBySlug, formatPrice } from '../data/servicesData';
+import { SERVICES_DATA, getServiceBySlug, formatPrice, type ServiceCategory } from '../data/servicesData';
+import { ServiceIcon } from '../components/ServiceIcon';
 import { buildGarudaServiceRequestWhatsAppUrl } from '../utils/whatsappFormatter';
 import { trackEvent } from '../utils/analytics';
+
+const TIME_SLOTS = [
+  'Morning (8:00 AM – 12:00 PM)',
+  'Afternoon (12:00 PM – 4:00 PM)',
+  'Evening (4:00 PM – 8:00 PM)',
+  'Flexible / Any time today'
+];
+
+const getTodayIso = () => {
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  return `${yyyy}-${mm}-${dd}`;
+};
 
 export const ContactPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const preselectedSlug = searchParams.get('service') || '';
 
-  // Form states
+  // Form states - empty by default (no preselected service or BHK)
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [selectedServiceSlug, setSelectedServiceSlug] = useState('home-cleaning');
-  const [bhkTier, setBhkTier] = useState('2 BHK');
-  const [unitQuantity, setUnitQuantity] = useState<number | ''>(500);
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [homeCleaningBhk, setHomeCleaningBhk] = useState('');
+  const [showServicePicker, setShowServicePicker] = useState(false);
+  const [serviceSearchQuery, setServiceSearchQuery] = useState('');
+  const [serviceCategoryFilter, setServiceCategoryFilter] = useState<'all' | ServiceCategory>('all');
+  const [serviceError, setServiceError] = useState('');
+
   const [locality, setLocality] = useState('');
   const [gpsLocation, setGpsLocation] = useState('');
   const [locating, setLocating] = useState(false);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [preferredDate, setPreferredDate] = useState('');
-  const [preferredTime, setPreferredTime] = useState('Morning (8 AM - 12 PM)');
+  const [preferredDate, setPreferredDate] = useState(getTodayIso());
+  const [preferredTime, setPreferredTime] = useState(TIME_SLOTS[0]);
   const [notes, setNotes] = useState('');
   const [honeypot, setHoneypot] = useState('');
 
   const [phoneError, setPhoneError] = useState('');
   const [submitted, setSubmitted] = useState(false);
+
+  // Sync service preselection from URL ONLY if valid query parameter is provided
+  useEffect(() => {
+    if (preselectedSlug) {
+      const found = getServiceBySlug(preselectedSlug);
+      if (found) {
+        setSelectedServices([found.title]);
+        // Do not force any BHK tier by default
+        setHomeCleaningBhk('');
+      }
+    } else {
+      setSelectedServices([]);
+      setHomeCleaningBhk('');
+    }
+  }, [preselectedSlug]);
+
+  const toggleService = (serviceTitle: string) => {
+    setServiceError('');
+    if (selectedServices.includes(serviceTitle)) {
+      setSelectedServices(selectedServices.filter((s) => s !== serviceTitle));
+    } else {
+      setSelectedServices([...selectedServices, serviceTitle]);
+    }
+  };
+
+  const removeService = (serviceTitle: string) => {
+    setServiceError('');
+    setSelectedServices(selectedServices.filter((s) => s !== serviceTitle));
+  };
+
+  const clearAllServices = () => {
+    setServiceError('');
+    setSelectedServices([]);
+    setHomeCleaningBhk('');
+  };
 
   const handleDetectLocation = () => {
     if (!navigator.geolocation) {
@@ -65,22 +129,7 @@ export const ContactPage: React.FC = () => {
     );
   };
 
-  // Sync service preselection from URL if valid
-  useEffect(() => {
-    if (preselectedSlug) {
-      const found = getServiceBySlug(preselectedSlug);
-      if (found) {
-        setSelectedServiceSlug(found.slug);
-      }
-    }
-  }, [preselectedSlug]);
-
-  const currentService = getServiceBySlug(selectedServiceSlug) || SERVICES_DATA[0];
-  const isBhkService = currentService.slug === 'home-cleaning';
-  const isPerUnit = currentService.price.kind === 'per-unit';
-
   const validateIndianPhone = (val: string) => {
-    // Strips spaces, dashes, +91, 0 prefix
     const cleaned = val.replace(/[\s\-+]/g, '').replace(/^91/, '').replace(/^0/, '');
     const valid = /^[6-9]\d{9}$/.test(cleaned);
     return { valid, cleaned };
@@ -109,27 +158,31 @@ export const ContactPage: React.FC = () => {
       return;
     }
 
+    if (selectedServices.length === 0) {
+      setServiceError('Please select at least one service to proceed.');
+      setShowServicePicker(true);
+      return;
+    }
+
     const { valid, cleaned } = validateIndianPhone(phone);
     if (!valid) {
       setPhoneError('Please enter a valid 10-digit Indian mobile number.');
       return;
     }
 
-    setSubmitted(true);
-    trackEvent('book_click', {
-      serviceSlug: selectedServiceSlug,
-      sourcePage: '/contact',
-      tier: isBhkService ? bhkTier : undefined,
-      quantity: isPerUnit ? `${unitQuantity} ${currentService.unitLabel}` : undefined
+    const finalServicesList = selectedServices.map((title) => {
+      if (title === 'Home Cleaning' && homeCleaningBhk) {
+        return `Home Cleaning (${homeCleaningBhk})`;
+      }
+      return title;
     });
 
-    // Format service description line
-    let serviceLabel = currentService.title;
-    if (isBhkService) {
-      serviceLabel += ` (${bhkTier})`;
-    } else if (isPerUnit) {
-      serviceLabel += ` (${unitQuantity} ${currentService.unitLabel})`;
-    }
+    setSubmitted(true);
+    trackEvent('book_click', {
+      services: finalServicesList,
+      serviceCount: finalServicesList.length,
+      sourcePage: '/contact'
+    });
 
     // Build prefilled WhatsApp message
     const waUrl = buildGarudaServiceRequestWhatsAppUrl({
@@ -138,7 +191,7 @@ export const ContactPage: React.FC = () => {
       phone: cleaned,
       address: locality.trim() || 'Tirupati',
       gpsLocation: gpsLocation && gpsLocation !== '-' ? gpsLocation : undefined,
-      serviceRequired: serviceLabel,
+      serviceRequired: finalServicesList,
       priorityTime: preferredTime,
       remarks: notes.trim() || '-'
     });
@@ -146,6 +199,12 @@ export const ContactPage: React.FC = () => {
     // Open WhatsApp confirmation in new tab
     window.open(waUrl, '_blank');
   };
+
+  const filteredServices = SERVICES_DATA.filter((s) => {
+    const matchesCategory = serviceCategoryFilter === 'all' || s.category === serviceCategoryFilter;
+    const matchesSearch = !serviceSearchQuery.trim() || s.title.toLowerCase().includes(serviceSearchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   const contactSchema = {
     '@context': 'https://schema.org',
@@ -200,25 +259,25 @@ export const ContactPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 sm:space-y-12 pb-24 sm:pb-12">
         {/* Top Big Action Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-3xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-3xl mx-auto">
           <a
             href={BUSINESS_CONFIG.contact.phoneTel}
             onClick={() => trackEvent('call_click', { sourcePage: '/contact' })}
-            className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#22AC33] hover:shadow-md transition-all flex items-center gap-4 group"
+            className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#22AC33] hover:shadow-md transition-all flex items-center gap-3.5 sm:gap-4 group"
           >
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-[#22AC33] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <Phone className="w-6 h-6" />
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-emerald-50 text-[#22AC33] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="min-w-0">
+              <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
                 Direct Telephone
               </span>
-              <span className="text-base sm:text-lg font-black text-[#041B3B] block">
+              <span className="text-base sm:text-lg font-black text-[#041B3B] block truncate">
                 {BUSINESS_CONFIG.contact.phoneDisplay}
               </span>
-              <span className="text-xs text-[#22AC33] font-semibold">Tap to call our customer support team</span>
+              <span className="text-[11px] sm:text-xs text-[#22AC33] font-semibold block truncate">Tap to call our customer support team</span>
             </div>
           </a>
 
@@ -227,29 +286,29 @@ export const ContactPage: React.FC = () => {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackEvent('whatsapp_click', { sourcePage: '/contact' })}
-            className="p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#22AC33] hover:shadow-md transition-all flex items-center gap-4 group"
+            className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#22AC33] hover:shadow-md transition-all flex items-center gap-3.5 sm:gap-4 group"
           >
-            <div className="w-12 h-12 rounded-xl bg-emerald-50 text-[#22AC33] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <MessageCircle className="w-6 h-6" />
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-emerald-50 text-[#22AC33] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <div>
-              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
+            <div className="min-w-0">
+              <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
                 Instant WhatsApp Quote
               </span>
-              <span className="text-base sm:text-lg font-black text-[#041B3B] block">
+              <span className="text-base sm:text-lg font-black text-[#041B3B] block truncate">
                 {BUSINESS_CONFIG.contact.whatsappDisplay}
               </span>
-              <span className="text-xs text-[#22AC33] font-semibold">Chat with photos & get quotes</span>
+              <span className="text-[11px] sm:text-xs text-[#22AC33] font-semibold block truncate">Chat with photos & get quotes</span>
             </div>
           </a>
         </div>
 
         {/* 2-Column Grid: Contact Info & Booking Form */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
           {/* Left Info Column */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
-              <h2 className="text-xl font-black text-[#041B3B]">Service Information</h2>
+            <div className="bg-white p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs space-y-5 sm:space-y-6">
+              <h2 className="text-lg sm:text-xl font-black text-[#041B3B]">Service Information</h2>
 
               <div className="space-y-4 text-xs sm:text-sm text-slate-600">
                 <div className="flex items-start gap-3">
@@ -275,7 +334,7 @@ export const ContactPage: React.FC = () => {
                     <span className="font-bold text-[#041B3B] block">Email Inquiries</span>
                     <a
                       href={`mailto:${BUSINESS_CONFIG.contact.email}`}
-                      className="text-[#22AC33] hover:underline"
+                      className="text-[#22AC33] hover:underline break-all"
                     >
                       {BUSINESS_CONFIG.contact.email}
                     </a>
@@ -303,7 +362,7 @@ export const ContactPage: React.FC = () => {
 
             {/* Google Review Box (rendered ONLY when googleReviewUrl exists) */}
             {TRUST_CONFIG.googleReviewUrl && (
-              <div className="bg-white p-6 rounded-3xl border border-emerald-200 shadow-xs space-y-3">
+              <div className="bg-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-emerald-200 shadow-xs space-y-3">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-full bg-red-500 text-white flex items-center justify-center font-bold text-xs">
                     G
@@ -326,7 +385,7 @@ export const ContactPage: React.FC = () => {
             )}
 
             {/* Tirupati City Coverage Map */}
-            <div className="bg-white p-4 sm:p-5 rounded-3xl border border-slate-200 shadow-xs space-y-3">
+            <div className="bg-white p-4 sm:p-5 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs space-y-3">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="font-extrabold text-sm text-[#041B3B]">Tirupati City Service Coverage</h3>
@@ -403,26 +462,32 @@ export const ContactPage: React.FC = () => {
 
           {/* Right Form Column */}
           <div className="lg:col-span-7">
-            <div className="bg-white p-6 sm:p-10 rounded-3xl border border-slate-200 shadow-xs">
-              <div className="mb-6">
-                <h2 className="text-xl sm:text-2xl font-black text-[#041B3B]">
+            <div className="bg-white p-4 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs">
+              <div className="mb-5 sm:mb-6">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="w-2 h-2 rounded-full bg-[#22AC33] animate-pulse" />
+                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#22AC33]">
+                    Instant Online Booking
+                  </span>
+                </div>
+                <h2 className="text-lg sm:text-2xl font-black text-[#041B3B]">
                   Book a Cleaning or Request a Free Estimate
                 </h2>
                 <p className="text-xs sm:text-sm text-slate-500 mt-1">
-                  Fill in your details below. We verify every request and confirm timing before service.
+                  Select one or multiple services. We confirm your appointment and slot directly via WhatsApp.
                 </p>
               </div>
 
               {submitted ? (
-                <div className="p-8 text-center bg-emerald-50 rounded-2xl border border-emerald-200 space-y-4">
-                  <div className="w-14 h-14 bg-[#22AC33] text-white rounded-2xl flex items-center justify-center mx-auto shadow-md">
-                    <CheckCircle2 className="w-8 h-8" />
+                <div className="p-6 sm:p-8 text-center bg-emerald-50 rounded-2xl border border-emerald-200 space-y-4">
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 bg-[#22AC33] text-white rounded-2xl flex items-center justify-center mx-auto shadow-md">
+                    <CheckCircle2 className="w-7 h-7 sm:w-8 sm:h-8" />
                   </div>
                   <h3 className="text-lg sm:text-xl font-black text-[#041B3B]">
                     Booking Request Sent!
                   </h3>
                   <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
-                    Thank you, {name}! Your request for <strong>{currentService.title}</strong> has been created. A WhatsApp chat was opened with your booking details. Our Tirupati coordinator will confirm your slot shortly.
+                    Thank you, {name}! Your request for <strong>{selectedServices.join(', ')}</strong> has been received. A WhatsApp chat was opened with your booking details. Our Tirupati coordinator will confirm your slot shortly.
                   </p>
                   <div className="pt-2">
                     <button
@@ -434,7 +499,120 @@ export const ContactPage: React.FC = () => {
                     </button>
                   </div>
                 </div>
+              ) : showServicePicker ? (
+                /* INLINE SERVICE PICKER VIEW */
+                <div className="space-y-3 sm:space-y-4 pb-2 animate-in fade-in duration-200">
+                  <div className="flex items-center justify-between pb-2.5 border-b border-slate-100 gap-2">
+                    <div>
+                      <h3 className="text-sm sm:text-base font-black text-[#041B3B]">Select Services</h3>
+                      <p className="text-[11px] sm:text-xs text-slate-500 font-medium">
+                        {selectedServices.length} {selectedServices.length === 1 ? 'service' : 'services'} selected
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {selectedServices.length > 0 && (
+                        <button
+                          type="button"
+                          onClick={clearAllServices}
+                          className="text-slate-500 hover:text-red-600 text-[11px] sm:text-xs font-bold px-1.5 py-1 cursor-pointer"
+                        >
+                          Clear all
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => setShowServicePicker(false)}
+                        className="bg-[#22AC33] hover:bg-[#1A8C28] text-white py-1.5 px-3.5 sm:py-2 sm:px-4 text-xs font-bold rounded-xl cursor-pointer transition-colors shadow-2xs"
+                      >
+                        Done
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Search Bar */}
+                  <div className="relative">
+                    <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="text"
+                      placeholder="Search services (e.g. Sofa, Tank, Bathroom)..."
+                      value={serviceSearchQuery}
+                      onChange={(e) => setServiceSearchQuery(e.target.value)}
+                      className="w-full h-10 sm:h-11 pl-9 pr-3 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-[#22AC33] outline-none bg-slate-50 text-slate-900 font-medium"
+                    />
+                  </div>
+
+                  {/* Category Filter Pills */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none">
+                    {[
+                      { id: 'all', label: 'All (19)' },
+                      { id: 'residential', label: 'Residential (10)' },
+                      { id: 'specialized', label: 'Specialized (5)' },
+                      { id: 'commercial', label: 'Commercial (4)' }
+                    ].map((cat) => (
+                      <button
+                        key={cat.id}
+                        type="button"
+                        onClick={() => setServiceCategoryFilter(cat.id as any)}
+                        className={`px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg font-bold shrink-0 transition-colors cursor-pointer text-xs ${
+                          serviceCategoryFilter === cat.id
+                            ? 'bg-[#041B3B] text-white shadow-xs'
+                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                      >
+                        {cat.label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Service Selection Cards */}
+                  <div className="space-y-1.5 max-h-[320px] sm:max-h-[380px] overflow-y-auto pr-1">
+                    {filteredServices.map((srv) => {
+                      const isSelected = selectedServices.includes(srv.title);
+                      return (
+                        <button
+                          key={srv.slug}
+                          type="button"
+                          onClick={() => toggleService(srv.title)}
+                          className={`w-full p-2.5 sm:p-3 rounded-xl text-left transition-all flex items-center justify-between gap-2.5 cursor-pointer border ${
+                            isSelected
+                              ? 'bg-[#E8F8EC] border-[#22AC33] text-[#041B3B] shadow-2xs ring-1 ring-[#22AC33]/30'
+                              : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50'
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                            <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg flex items-center justify-center shrink-0 ${isSelected ? 'bg-[#22AC33] text-white' : 'bg-slate-100 text-slate-600'}`}>
+                              <ServiceIcon slug={srv.slug} name={srv.icon} className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                            </div>
+                            <div className="min-w-0 flex-1">
+                              <span className="text-xs sm:text-sm font-bold block truncate text-[#041B3B]">{srv.title}</span>
+                              <span className="text-[10px] sm:text-[11px] text-slate-500 block font-semibold">{formatPrice(srv.price)}</span>
+                            </div>
+                          </div>
+                          <div
+                            className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition-colors ${
+                              isSelected ? 'bg-[#22AC33] border-[#22AC33] text-white' : 'border-slate-300 bg-white'
+                            }`}
+                          >
+                            {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowServicePicker(false)}
+                      className="btn-homecare-green w-full h-10 sm:h-11 text-xs sm:text-sm font-bold justify-center flex items-center gap-2 cursor-pointer shadow-md"
+                    >
+                      <Check className="w-4 h-4" />
+                      <span>Confirm Selected Services ({selectedServices.length})</span>
+                    </button>
+                  </div>
+                </div>
               ) : (
+                /* MAIN FORM VIEW */
                 <form onSubmit={handleSubmit} className="space-y-4">
                   {/* Honeypot field (hidden from humans) */}
                   <div className="hidden" aria-hidden="true">
@@ -451,35 +629,41 @@ export const ContactPage: React.FC = () => {
                   </div>
 
                   {/* Name and Phone */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      <label className="block text-[11px] sm:text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                         Your Name *
                       </label>
-                      <input
-                        type="text"
-                        required
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="e.g. Ramesh Kumar"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50"
-                      />
+                      <div className="relative">
+                        <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        <input
+                          type="text"
+                          required
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="e.g. Ramesh Kumar"
+                          className="w-full h-10 sm:h-11 pl-10 pr-3.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50"
+                        />
+                      </div>
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      <label className="block text-[11px] sm:text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                         10-Digit Mobile Number *
                       </label>
-                      <input
-                        type="tel"
-                        required
-                        value={phone}
-                        onChange={handlePhoneChange}
-                        placeholder="e.g. 9876543210"
-                        className={`w-full px-3.5 py-2.5 rounded-xl border text-xs sm:text-sm focus:outline-none bg-slate-50/50 ${
-                          phoneError ? 'border-red-400 focus:border-red-500' : 'border-slate-300 focus:border-[#22AC33]'
-                        }`}
-                      />
+                      <div className="relative">
+                        <Smartphone className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                        <input
+                          type="tel"
+                          required
+                          value={phone}
+                          onChange={handlePhoneChange}
+                          placeholder="e.g. 9876543210"
+                          className={`w-full h-10 sm:h-11 pl-10 pr-3.5 rounded-xl border text-xs sm:text-sm focus:outline-none bg-slate-50/50 ${
+                            phoneError ? 'border-red-400 focus:border-red-500' : 'border-slate-300 focus:border-[#22AC33]'
+                          }`}
+                        />
+                      </div>
                       {phoneError && (
                         <p className="text-[11px] text-red-600 mt-1 flex items-center gap-1">
                           <AlertCircle className="w-3 h-3 shrink-0" />
@@ -489,38 +673,108 @@ export const ContactPage: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Service Dropdown */}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                      Service Required *
-                    </label>
-                    <select
-                      value={selectedServiceSlug}
-                      onChange={(e) => setSelectedServiceSlug(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-white font-medium text-slate-800"
-                    >
-                      {SERVICES_DATA.map((srv) => (
-                        <option key={srv.slug} value={srv.slug}>
-                          {srv.title} ({srv.category})
-                        </option>
-                      ))}
-                    </select>
+                  {/* MULTI-SERVICE SELECTION CARD */}
+                  <div className="p-3.5 sm:p-4 bg-slate-50/90 rounded-2xl border border-slate-200 space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <Layers className="w-4 h-4 text-[#22AC33] shrink-0" />
+                        <span className="text-[11px] sm:text-xs font-black text-[#041B3B] uppercase tracking-wider truncate">
+                          {selectedServices.length > 0
+                            ? `Selected Services (${selectedServices.length})`
+                            : 'Services Required *'}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 shrink-0">
+                        {selectedServices.length > 0 && (
+                          <button
+                            type="button"
+                            onClick={clearAllServices}
+                            className="text-[11px] sm:text-xs font-bold text-slate-400 hover:text-red-500 transition-colors cursor-pointer px-1.5 py-1"
+                          >
+                            Clear
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          onClick={() => setShowServicePicker(true)}
+                          className="text-[11px] sm:text-xs font-bold text-[#22AC33] hover:text-[#1c8f2b] flex items-center gap-0.5 cursor-pointer bg-white px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg border border-slate-200 shadow-2xs hover:border-[#22AC33]/40 active:scale-95 transition-all shrink-0"
+                        >
+                          <span>{selectedServices.length > 0 ? '+ Add / Change' : 'Select Services'}</span>
+                          <ChevronRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </div>
+
+                    {serviceError && (
+                      <p className="text-[11px] text-red-600 font-bold bg-red-50 p-2 rounded-lg border border-red-200">
+                        {serviceError}
+                      </p>
+                    )}
+
+                    {/* Empty State */}
+                    {selectedServices.length === 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => setShowServicePicker(true)}
+                        className="w-full p-3.5 sm:p-4 rounded-xl bg-white hover:bg-[#E8F8EC] border-2 border-dashed border-[#22AC33]/50 text-[#041B3B] flex items-center justify-between gap-3 transition-all cursor-pointer shadow-2xs group text-left"
+                      >
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-8 h-8 rounded-lg bg-[#22AC33] text-white flex items-center justify-center shrink-0 shadow-2xs">
+                            <Plus className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <span className="text-xs sm:text-sm font-black block text-[#041B3B]">Select Services</span>
+                            <span className="text-[11px] text-slate-500 font-medium block truncate">Tap to choose 1 or more services from 19 options</span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-0.5 text-xs font-bold text-[#22AC33] shrink-0">
+                          <span>Browse</span>
+                          <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                        </div>
+                      </button>
+                    ) : (
+                      /* Selected Service Chips */
+                      <div className="flex flex-wrap gap-1.5 pt-0.5">
+                        {selectedServices.map((srvTitle) => (
+                          <span
+                            key={srvTitle}
+                            className="inline-flex items-center gap-1.5 text-xs font-bold bg-[#E8F8EC] text-[#041B3B] border border-[#22AC33]/40 px-2.5 py-1.5 rounded-lg shadow-2xs"
+                          >
+                            <span className="truncate max-w-[170px] sm:max-w-none">{srvTitle}</span>
+                            <button
+                              type="button"
+                              onClick={() => removeService(srvTitle)}
+                              className="w-4 h-4 rounded-full hover:bg-red-500 hover:text-white flex items-center justify-center transition-colors cursor-pointer text-slate-400"
+                              title={`Remove ${srvTitle}`}
+                              aria-label={`Remove ${srvTitle}`}
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
-                  {/* Conditional: BHK Tier (when BHK Deep Cleaning is chosen) */}
-                  {isBhkService && (
-                    <div className="p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200">
-                      <label className="block text-xs font-bold text-[#041B3B] uppercase tracking-wider mb-1.5">
-                        Select Apartment Size:
-                      </label>
-                      <div className="grid grid-cols-4 gap-2">
+                  {/* Contextual Options: If Home Cleaning is selected */}
+                  {selectedServices.includes('Home Cleaning') && (
+                    <div className="p-3 sm:p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200 space-y-2">
+                      <div className="flex items-center justify-between gap-1">
+                        <label className="block text-[11px] sm:text-xs font-bold text-[#041B3B] uppercase tracking-wider">
+                          Apartment Size (Optional):
+                        </label>
+                        <span className="text-[10px] sm:text-[11px] font-bold text-[#22AC33] bg-white px-2 py-0.5 rounded-md border border-emerald-200 shrink-0">
+                          Starting ₹2,399
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
                         {['1 BHK', '2 BHK', '3 BHK', '4 BHK'].map((tier) => (
                           <button
                             key={tier}
                             type="button"
-                            onClick={() => setBhkTier(tier)}
-                            className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                              bhkTier === tier
+                            onClick={() => setHomeCleaningBhk(homeCleaningBhk === tier ? '' : tier)}
+                            className={`py-2 px-1 text-center rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer truncate ${
+                              homeCleaningBhk === tier
                                 ? 'bg-[#22AC33] text-white shadow-2xs'
                                 : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
                             }`}
@@ -529,46 +783,13 @@ export const ContactPage: React.FC = () => {
                           </button>
                         ))}
                       </div>
-                      <p className="text-[11px] text-slate-500 mt-1.5">
-                        For larger duplexes or villas, please mention in notes below.
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Conditional: Quantity / Area field (for per-unit services) */}
-                  {isPerUnit && (
-                    <div className="p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200 flex items-center justify-between gap-4">
-                      <div>
-                        <label className="block text-xs font-bold text-[#041B3B] uppercase tracking-wider">
-                          Approximate {currentService.unitLabel}:
-                        </label>
-                        <span className="text-[11px] text-slate-500">
-                          Rate: {formatPrice(currentService.price)}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <input
-                          type="number"
-                          min={1}
-                          max={50000}
-                          value={unitQuantity}
-                          onChange={(e) => setUnitQuantity(e.target.value === '' ? '' : Math.max(1, Number(e.target.value)))}
-                          onBlur={() => {
-                            if (unitQuantity === '' || unitQuantity < 1) {
-                              setUnitQuantity(1);
-                            }
-                          }}
-                          className="w-24 px-3 py-1.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm font-bold text-center focus:border-[#22AC33] outline-none"
-                        />
-                        <span className="text-xs font-bold text-slate-600">{currentService.unitLabel}</span>
-                      </div>
                     </div>
                   )}
 
                   {/* Locality and Date */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                      <label className="block text-[11px] sm:text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                         Locality / Area in Tirupati *
                       </label>
                       <input
@@ -577,40 +798,42 @@ export const ContactPage: React.FC = () => {
                         value={locality}
                         onChange={(e) => setLocality(e.target.value)}
                         placeholder="e.g. MR Palli, AIR Bypass, Balaji Colony"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50"
+                        className="w-full h-10 sm:h-11 px-3.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                        Preferred Date
+                      <label className="block text-[11px] sm:text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                        <Calendar className="w-3.5 h-3.5 text-[#22AC33]" />
+                        <span>Preferred Date</span>
                       </label>
                       <input
                         type="date"
+                        min={getTodayIso()}
                         value={preferredDate}
                         onChange={(e) => setPreferredDate(e.target.value)}
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50 text-slate-700"
+                        className="w-full h-10 sm:h-11 px-3.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50 text-slate-700"
                       />
                     </div>
                   </div>
 
                   {/* GPS Location Auto-Pin Field */}
-                  <div className="space-y-1.5 p-3.5 bg-slate-50 rounded-2xl border border-slate-200">
-                    <div className="flex items-center justify-between">
-                      <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <div className="space-y-1.5 p-3 sm:p-3.5 bg-slate-50 rounded-xl sm:rounded-2xl border border-slate-200">
+                    <div className="flex flex-wrap items-center justify-between gap-1.5">
+                      <label className="block text-[11px] sm:text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
                         <MapPin className="w-3.5 h-3.5 text-[#22AC33]" />
-                        <span>GPS Location</span>
+                        <span>GPS Location (Optional)</span>
                       </label>
                       <button
                         type="button"
                         onClick={handleDetectLocation}
                         disabled={locating}
-                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#22AC33] hover:text-[#1c8f2b] cursor-pointer bg-[#E8F8EC] px-3.5 py-1.5 rounded-xl border border-[#22AC33]/25 shadow-2xs transition-all hover:bg-[#d5f3dc]"
+                        className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-bold text-[#22AC33] hover:text-[#1c8f2b] cursor-pointer bg-[#E8F8EC] px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl border border-[#22AC33]/25 shadow-2xs transition-all hover:bg-[#d5f3dc]"
                       >
                         {locating ? (
                           <>
                             <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                            <span>Detecting GPS...</span>
+                            <span>Detecting...</span>
                           </>
                         ) : (
                           <>
@@ -625,30 +848,32 @@ export const ContactPage: React.FC = () => {
                       placeholder="Auto-detected or paste Google Maps link"
                       value={gpsLocation}
                       onChange={(e) => setGpsLocation(e.target.value)}
-                      className="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-white font-mono text-slate-700"
+                      className="w-full px-3 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-white font-mono text-slate-700"
                     />
                   </div>
 
                   {/* Time Slot */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                      Preferred Time Slot
+                    <label className="block text-[11px] sm:text-xs font-bold text-slate-700 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                      <Clock className="w-3.5 h-3.5 text-[#22AC33]" />
+                      <span>Preferred Time Slot</span>
                     </label>
                     <select
                       value={preferredTime}
                       onChange={(e) => setPreferredTime(e.target.value)}
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-white text-slate-800"
+                      className="w-full h-10 sm:h-11 px-3.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-white text-slate-800 font-semibold"
                     >
-                      <option value="Morning (8 AM - 12 PM)">Morning (8:00 AM – 12:00 PM)</option>
-                      <option value="Afternoon (12 PM - 4 PM)">Afternoon (12:00 PM – 4:00 PM)</option>
-                      <option value="Evening (4 PM - 8 PM)">Evening (4:00 PM – 8:00 PM)</option>
-                      <option value="Flexible / Any Time">Flexible / Any Time</option>
+                      {TIME_SLOTS.map((slot) => (
+                        <option key={slot} value={slot}>
+                          {slot}
+                        </option>
+                      ))}
                     </select>
                   </div>
 
                   {/* Notes */}
                   <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                    <label className="block text-[11px] sm:text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                       Special Requirements / Notes (Optional)
                     </label>
                     <textarea
@@ -664,13 +889,17 @@ export const ContactPage: React.FC = () => {
                   <div className="pt-2">
                     <button
                       type="submit"
-                      className="w-full btn-homecare-green py-3.5 px-6 font-bold text-sm justify-center flex items-center gap-2 shadow-xs cursor-pointer"
+                      className="w-full btn-homecare-green py-3 sm:py-3.5 px-6 font-bold text-xs sm:text-sm justify-center flex items-center gap-2 shadow-md cursor-pointer"
                     >
                       <Send className="w-4 h-4" />
-                      <span>Send Booking Request via WhatsApp</span>
+                      <span>
+                        {selectedServices.length > 1
+                          ? `Book ${selectedServices.length} Services via WhatsApp`
+                          : 'Send Booking Request via WhatsApp'}
+                      </span>
                     </button>
                     <p className="text-[11px] text-slate-400 text-center mt-2">
-                      Zero advance payment required. Free re-inspection upon completion.
+                      Zero advance payment required. Instant confirmation on WhatsApp.
                     </p>
                   </div>
                 </form>
@@ -682,3 +911,4 @@ export const ContactPage: React.FC = () => {
     </div>
   );
 };
+

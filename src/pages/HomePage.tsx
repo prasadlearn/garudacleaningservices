@@ -58,26 +58,27 @@ export const HomePage: React.FC = () => {
       { '@type': 'AdministrativeArea', name: 'AIR Bypass Road' },
       { '@type': 'AdministrativeArea', name: 'MR Palli' }
     ],
-    keywords: 'cleaning services near me, house cleaning near me, sofa cleaning near me, washroom cleaning near me, floor scrubbing near me, home cleaning services in Tirupati',
+    keywords: 'cleaning services near me, house cleaning near me, sofa cleaning near me, washroom cleaning near me, hard surface cleaning near me, home cleaning services in Tirupati',
     knowsAbout: [
       'Home Cleaning',
       'Apartment BHK Cleaning',
       'Washroom Acid-Free Descaling',
       'Fabric Sofa Shampooing & Extraction',
-      'Rotary Machine Floor Scrubbing',
+      'Hard-Surface Floor Cleaning',
       'Kitchen Platform Degreasing',
-      'Commercial Office Cleaning',
+      'Office Cleaning',
       'Overhead Water Tank & Sump Cleaning',
       'Pest Control Services',
-      'Fridge Cleaning'
+      'Fridge Cleaning',
+      'Cleaning Liquids & Wholesale Supplies'
     ]
   };
 
   return (
     <div className="w-full">
       {/* React 19 Head Hoisting */}
-      <title>Cleaning Services in Tirupati | Garuda Cleaning Services</title>
-      <meta name="description" content="Garuda Cleaning Services provides professional residential & commercial cleaning in Tirupati. Upfront pricing, modern machinery, and dedicated teams." />
+      <title>Garuda Cleaning Services | Cleaning Services in Tirupati</title>
+      <meta name="description" content="Garuda Cleaning Services provides professional residential & commercial cleaning in Tirupati. Upfront pricing, dedicated teams, and reliable service. Book online or call for a quote." />
       <link rel="canonical" href="https://garudacleaningservices.in/" />
       <script
         type="application/ld+json"

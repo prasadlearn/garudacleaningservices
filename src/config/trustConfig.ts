@@ -65,7 +65,7 @@ export const TRUST_CONFIG: TrustConfig = {
     },
     {
       id: 'all-week-availability',
-      title: 'Open 7 Days a Week',
+      title: 'Monday to Sunday (8 AM - 8 PM)',
       description: 'We work Monday to Sunday, 8:00 AM to 8:00 PM across Tirupati.',
       ownerConfirmed: true, // Backed by businessConfig.contact.operatingHours
     },

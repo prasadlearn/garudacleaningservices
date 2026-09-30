@@ -9,8 +9,8 @@ const BENEFITS = [
   },
   {
     icon: ShieldCheck,
-    title: 'Mechanized Floor Scrubbing',
-    desc: 'We use rotary floor scrubbers to clean tiles, marble, and grout lines far better than regular mopping.'
+    title: 'Hard-Surface Cleaning',
+    desc: 'Specialized deep cleaning and dirt lifting for tiles, marble, and grout lines far better than regular mopping.'
   },
   {
     icon: HeartPulse,

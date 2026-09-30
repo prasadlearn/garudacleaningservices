@@ -1,2 +1,15 @@
+# 301 Permanent Redirects for Old/Renamed Service URLs & Products
+/services/bhk-deep-cleaning                /services/home-cleaning                301
+/services/full-home-deep-cleaning-package  /services/home-cleaning                301
+/services/villa-deep-cleaning             /services/villa-cleaning               301
+/services/kitchen-deep-cleaning           /services/kitchen-cleaning             301
+/services/bathroom-deep-cleaning          /services/washroom-cleaning            301
+/services/move-in-cleaning                /services/move-in-out-cleaning         301
+/services/move-out-cleaning               /services/move-in-out-cleaning         301
+/services/bed-cleaning                    /services/mattress-cleaning            301
+/services/office-deep-cleaning            /services/office-cleaning              301
+/products                                 /cleaning-liquids                      301
+/areas                                    /service-areas                         301
+
 # SPA Single Page App Route Fallback
 /*    /index.html   200

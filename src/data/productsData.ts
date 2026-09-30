@@ -1,22 +1,25 @@
-// Centralized data catalog for Garuda Liquids Wholesale
-// Official products and wholesale supplies in Tirupati
+// Centralized data catalog for Garuda Cleaning Liquids & Wholesale Supplies
+// Official cleaning products and wholesale supplies in Tirupati
+
+export type ProductCategory = 'Surface Care' | 'Washroom Care' | 'Kitchen Care' | 'Disinfectants' | 'Fabric Care';
 
 export interface ProductItem {
   id: string;
   name: string;
-  category: 'Surface Care' | 'Washroom Care' | 'Kitchen Care' | 'Disinfectants' | 'Fabric Care' | 'Air Care';
+  category: ProductCategory;
   categoryLabel: string;
-  tagline: string;
-  description: string;
+  shortDescription: string;
+  use: string;
   suitableFor: string[];
-  packagingNote: string;
   image: string;
-  color: {
-    badgeBg: string;
-    badgeText: string;
-    accent: string;
-    border: string;
-  };
+  packSizes: string[];
+  litreOptions: string[];
+  retailPrice: string | null;
+  wholesalePrice: string | null;
+  offer: { label: string; description: string } | null;
+  availability: 'In Stock' | 'Available for Bulk Orders';
+  orderNote: string;
+  sortOrder: number;
 }
 
 export interface SupplyTarget {
@@ -40,7 +43,6 @@ export const PRODUCT_CATEGORIES = [
   'Kitchen Care',
   'Disinfectants',
   'Fabric Care',
-  'Air Care',
 ] as const;
 
 export type ProductCategoryFilter = (typeof PRODUCT_CATEGORIES)[number];
@@ -51,280 +53,337 @@ export const GARUDA_PRODUCTS: ProductItem[] = [
     name: 'Floor Cleaner',
     category: 'Surface Care',
     categoryLabel: 'Surface Care',
-    tagline: 'Daily floor cleaning with fresh fragrance',
-    description: 'Cleans dirt, stains, and footprints from tiles, marble, and granite floors. Good for regular mopping in homes and offices.',
-    suitableFor: ['Tiles & Marble', 'Granite Floors', 'Daily Mopping', 'Living & Office Areas'],
-    packagingNote: 'Available in 5L Cans & Standard Bottles',
+    shortDescription: 'Daily floor cleaning liquid with pleasant fragrance for tiles, marble, and granite.',
+    use: 'Daily mopping and floor dirt removal in homes, offices, and shops.',
+    suitableFor: ['Vitrified Tiles', 'Marble & Granite', 'Daily Mopping', 'Living & Commercial Floors'],
     image: '/images/products/floor-cleaner.webp',
-    color: {
-      badgeBg: 'bg-blue-50',
-      badgeText: 'text-blue-700',
-      accent: '#2563eb',
-      border: 'border-blue-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Bulk wholesale supply available across Tirupati.',
+    sortOrder: 1,
   },
   {
     id: 'toilet-cleaner',
     name: 'Toilet Cleaner',
     category: 'Washroom Care',
     categoryLabel: 'Washroom Care',
-    tagline: 'Removes yellow stains and hard water scale',
-    description: 'Thick liquid cleaner that clings to toilet bowls and urinals to clean yellow water marks, rust stains, and dirt.',
-    suitableFor: ['Western & Indian Commodes', 'Urinals', 'Hard Water Marks', 'Restroom Hygiene'],
-    packagingNote: 'Available in 5L Wholesale Cans & Angled Bottles',
+    shortDescription: 'Thick descaling liquid that clings to ceramic commodes and urinals to remove stains.',
+    use: 'Cleans yellow water marks, hard water scaling, and restroom grime.',
+    suitableFor: ['Western & Indian Commodes', 'Urinals', 'Ceramic Bowls', 'Restroom Hygiene'],
     image: '/images/products/toilet-cleaner.webp',
-    color: {
-      badgeBg: 'bg-indigo-50',
-      badgeText: 'text-indigo-700',
-      accent: '#4f46e5',
-      border: 'border-indigo-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Wholesale supply available for hotels, lodges, and commercial restrooms.',
+    sortOrder: 2,
   },
   {
     id: 'bathroom-cleaner',
-    name: 'Bathroom Cleaner',
+    name: 'Bathroom & Tile Cleaner',
     category: 'Washroom Care',
     categoryLabel: 'Washroom Care',
-    tagline: 'Cleans soap marks and bathroom tiles',
-    description: 'Removes white soap marks, water spots, and slippery dirt from bathroom walls, floors, and wash basins.',
-    suitableFor: ['Bathroom Wall & Floor Tiles', 'Wash Basins', 'Taps & Fixtures', 'Shower Areas'],
-    packagingNote: 'Available in 5L Wholesale Cans & 1L Bottles',
+    shortDescription: 'Removes white soap scum, water scale, and slippery dirt from bathroom surfaces.',
+    use: 'Descales bathroom wall tiles, floor tiles, washbasins, and taps.',
+    suitableFor: ['Bathroom Wall & Floor Tiles', 'Wash Basins', 'Taps & Fixtures', 'Shower Enclosures'],
     image: '/images/products/bathroom-cleaner.webp',
-    color: {
-      badgeBg: 'bg-pink-50',
-      badgeText: 'text-pink-700',
-      accent: '#db2777',
-      border: 'border-pink-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Surface-safe formulation, ideal for regular upkeep.',
+    sortOrder: 3,
   },
   {
     id: 'glass-cleaner',
     name: 'Glass Cleaner',
     category: 'Surface Care',
     categoryLabel: 'Surface Care',
-    tagline: 'Clean shine without marks or streaks',
-    description: 'Spray and wipe liquid for clear glass, mirrors, window panels, dressing tables, and display counters.',
-    suitableFor: ['Windows & Glass Doors', 'Dressing Mirrors', 'Showroom Glass', 'Car Windshields'],
-    packagingNote: 'Available in 5L Refill Cans & Spray Bottles',
+    shortDescription: 'Fast-drying, streak-free spray and wipe cleaner for glass and mirrors.',
+    use: 'Cleans windows, glass doors, mirrors, showcases, and tabletops.',
+    suitableFor: ['Window Glass', 'Glass Partitions', 'Dressing Mirrors', 'Showroom Displays'],
     image: '/images/products/glass-cleaner.webp',
-    color: {
-      badgeBg: 'bg-sky-50',
-      badgeText: 'text-sky-700',
-      accent: '#0284c7',
-      border: 'border-sky-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Leaves zero streaks and crystal clarity.',
+    sortOrder: 4,
   },
   {
     id: 'phenyl',
     name: 'Phenyl (Floor Wash Liquid)',
-    category: 'Surface Care',
-    categoryLabel: 'Floor Care',
-    tagline: 'Fragrant floor wash liquid for daily mopping',
-    description: 'Floor wash liquid for regular mopping and washing of floors in homes, offices, shops, and commercial buildings.',
-    suitableFor: ['Floor Mopping', 'Corridors & Verandas', 'Commercial Floors', 'Daily Maintenance'],
-    packagingNote: 'Available in 5L Bulk Cans & Standard Packs',
+    category: 'Disinfectants',
+    categoryLabel: 'Disinfectants',
+    shortDescription: 'Fragrant floor wash liquid for daily mopping and freshening of large floor areas.',
+    use: 'Regular washing of residential corridors, building lobbies, and commercial walkways.',
+    suitableFor: ['Corridors & Verandas', 'Staircases', 'Apartment Common Areas', 'Daily Floor Wash'],
     image: '/images/products/phenyl.webp',
-    color: {
-      badgeBg: 'bg-amber-50',
-      badgeText: 'text-amber-800',
-      accent: '#d97706',
-      border: 'border-amber-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'High coverage formula for large facility floor areas.',
+    sortOrder: 5,
   },
   {
     id: 'multipurpose-cleaner',
     name: 'Multipurpose Cleaner',
     category: 'Surface Care',
     categoryLabel: 'Surface Care',
-    tagline: 'All-in-one cleaner for daily surfaces',
-    description: 'General cleaning liquid for office tables, laminate counters, doors, plastic chairs, and washable surfaces.',
-    suitableFor: ['Office Desks & Tables', 'Kitchen Counters', 'Plastic & Wood Laminates', 'General Housekeeping'],
-    packagingNote: 'Available in 5L Cans & Spray Bottles',
+    shortDescription: 'All-surface cleaning liquid for office tables, laminate desks, and washable fixtures.',
+    use: 'Wipes dust, hand marks, and light grease from workstations and furniture.',
+    suitableFor: ['Office Workstations', 'Laminate Counters', 'Plastic Furniture', 'Dining Tables'],
     image: '/images/products/multipurpose-cleaner.webp',
-    color: {
-      badgeBg: 'bg-purple-50',
-      badgeText: 'text-purple-700',
-      accent: '#7e22ce',
-      border: 'border-purple-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Safe on laminates, wood veneers, and painted metal.',
+    sortOrder: 6,
   },
   {
     id: 'dishwash-liquid',
     name: 'Dishwash Liquid',
     category: 'Kitchen Care',
     categoryLabel: 'Kitchen Care',
-    tagline: 'Cuts through tough oil and cooking grease',
-    description: 'Foaming dishwash liquid that easily removes grease, oil, and food stains from utensils, plates, and cookware.',
-    suitableFor: ['Steel & Aluminium Utensils', 'Plates & Glassware', 'Restaurant Kitchens', 'Daily Home Dishes'],
-    packagingNote: 'Available in 5L Wholesale Cans & Dispenser Bottles',
+    shortDescription: 'High-foaming degreasing liquid that quickly dissolves oil and food stains on utensils.',
+    use: 'Washes stainless steel, aluminum, ceramic plates, and kitchen cookware.',
+    suitableFor: ['Steel Utensils', 'Plates & Glassware', 'Restaurant Kitchens', 'Daily Home Dishes'],
     image: '/images/products/dishwash-liquid.webp',
-    color: {
-      badgeBg: 'bg-emerald-50',
-      badgeText: 'text-emerald-700',
-      accent: '#059669',
-      border: 'border-emerald-200',
-    },
-  },
-  {
-    id: 'room-freshener',
-    name: 'Room Freshener',
-    category: 'Air Care',
-    categoryLabel: 'Air Care',
-    tagline: 'Long-lasting pleasant fragrance',
-    description: 'Spray liquid that keeps rooms, office cabins, hotel rooms, and reception areas smelling fresh and pleasant.',
-    suitableFor: ['Living Rooms & Bedrooms', 'Hotel Rooms & Lodges', 'Office Cabins', 'Reception Areas'],
-    packagingNote: 'Available in 5L Refill Cans & Room Spray Packs',
-    image: '/images/products/room-freshener.webp',
-    color: {
-      badgeBg: 'bg-rose-50',
-      badgeText: 'text-rose-700',
-      accent: '#e11d48',
-      border: 'border-rose-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Tough on grease while gentle on hands.',
+    sortOrder: 7,
   },
   {
     id: 'tile-cleaner',
-    name: 'Tile Cleaner',
+    name: 'Tile & Grout Cleaner',
     category: 'Surface Care',
     categoryLabel: 'Surface Care',
-    tagline: 'Removes dirt and dark stains from tiles',
-    description: 'Cleans dirty tile lines, bathroom floor grime, and tough stains on ceramic and vitrified floor tiles.',
-    suitableFor: ['Floor & Wall Tiles', 'Tile Joints & Grout', 'Balconies & Corridors', 'Stained Floor Areas'],
-    packagingNote: 'Available in 5L Bulk Cans & 1L Bottles',
+    shortDescription: 'Concentrated cleaner for deep cleaning stained floor tile joints and porous grout.',
+    use: 'Restores discolored tile lines, balcony floors, and tough floor stains.',
+    suitableFor: ['Tile Joints & Grout', 'Balcony Floors', 'Stained Vitrified Tiles', 'Deep Scrubbing'],
     image: '/images/products/tile-cleaner.webp',
-    color: {
-      badgeBg: 'bg-cyan-50',
-      badgeText: 'text-cyan-700',
-      accent: '#0891b2',
-      border: 'border-cyan-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Acid-safe formula that will not corrode tile enamel.',
+    sortOrder: 8,
   },
   {
     id: 'laundry-liquid',
-    name: 'Laundry Liquid',
+    name: 'Laundry Liquid Detergent',
     category: 'Fabric Care',
     categoryLabel: 'Fabric Care',
-    tagline: 'Gentle liquid detergent for clothes and linen',
-    description: 'Liquid detergent that dissolves quickly in water to wash clothes, bedsheets, uniforms, and towels without white powder marks.',
-    suitableFor: ['Washing Machines (Top & Front Load)', 'Bucket Wash', 'Bedsheets & Linens', 'Daily Clothes & Uniforms'],
-    packagingNote: 'Available in 5L Wholesale Cans & Pouches',
+    shortDescription: 'Liquid detergent that dissolves completely in water without leaving powdery residue.',
+    use: 'Washing bedsheets, towels, uniforms, and daily clothing in machines or bucket wash.',
+    suitableFor: ['Top & Front Load Machines', 'Hotel Linens & Towels', 'Daily Clothes', 'Uniforms'],
     image: '/images/products/laundry-liquid.webp',
-    color: {
-      badgeBg: 'bg-blue-50',
-      badgeText: 'text-blue-800',
-      accent: '#1d4ed8',
-      border: 'border-blue-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Ideal for hotels, lodges, and home machine wash.',
+    sortOrder: 9,
   },
   {
     id: 'laundry-powder',
-    name: 'Laundry Powder',
+    name: 'Laundry Detergent Powder',
     category: 'Fabric Care',
     categoryLabel: 'Fabric Care',
-    tagline: 'Detergent powder for bulk laundry and daily wash',
-    description: 'Washing powder for cleaning clothes, hotel linen, and bulk laundry. Removes daily dirt and keeps clothes fresh.',
-    suitableFor: ['Bulk Hotel Laundry', 'Daily Household Clothes', 'Commercial Washing', 'Heavy Fabric Wash'],
-    packagingNote: 'Available in Wholesale Sacks & Standard Bags',
+    shortDescription: 'Bulk laundry powder formulated for heavy fabric wash and institutional linen care.',
+    use: 'High-efficiency washing for large volume hotel linens, drapes, and staff workwear.',
+    suitableFor: ['Bulk Commercial Laundry', 'Hotel Bed Linens', 'Heavy Fabrics', 'Bucket Wash'],
     image: '/images/products/laundry-powder.webp',
-    color: {
-      badgeBg: 'bg-teal-50',
-      badgeText: 'text-teal-700',
-      accent: '#0f766e',
-      border: 'border-teal-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Wholesale quantities supplied directly to hotels and institutions.',
+    sortOrder: 10,
   },
   {
     id: 'stain-remover',
-    name: 'Stain Remover',
+    name: 'Fabric & Surface Stain Remover',
     category: 'Fabric Care',
-    categoryLabel: 'Fabric & Surface Care',
-    tagline: 'Spot treatment for tough oil and food marks',
-    description: 'Direct spray solution to remove stubborn collar dirt, food spills, grease, and spots on fabrics and surfaces before regular washing.',
-    suitableFor: ['Shirt Collars & Cuffs', 'Food & Tea Stains', 'Oil & Grease Marks', 'Fabric Spot Cleaning'],
-    packagingNote: 'Available in Spray Bottles & Refill Packs',
+    categoryLabel: 'Fabric Care',
+    shortDescription: 'Spot treatment spray that lifts grease, tea, coffee, and collar dirt prior to washing.',
+    use: 'Targeted spot cleaning for stubborn stains on shirts, uniforms, and upholstery.',
+    suitableFor: ['Collar & Cuff Grime', 'Oil & Food Spills', 'Tea & Coffee Marks', 'Spot Detailing'],
     image: '/images/products/stain-remover.webp',
-    color: {
-      badgeBg: 'bg-red-50',
-      badgeText: 'text-red-700',
-      accent: '#b91c1c',
-      border: 'border-red-200',
-    },
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Spot treatment formula for fabrics.',
+    sortOrder: 11,
+  },
+  {
+    id: 'hand-wash',
+    name: 'Liquid Hand Wash',
+    category: 'Washroom Care',
+    categoryLabel: 'Washroom Care',
+    shortDescription: 'Gentle foaming antibacterial hand wash for homes, restaurants, offices, and guest restrooms.',
+    use: 'Daily hand hygiene in commercial restrooms, office washrooms, and households.',
+    suitableFor: ['Office Washrooms', 'Restaurant Restrooms', 'Guest House Sinks', 'Household Use'],
+    image: '/images/products/bathroom-cleaner.webp',
+    packSizes: ['Pack sizes available on request'],
+    litreOptions: [],
+    retailPrice: null,
+    wholesalePrice: null,
+    offer: null,
+    availability: 'Available for Bulk Orders',
+    orderNote: 'Available in bulk quantities for institutional dispensers.',
+    sortOrder: 12,
   },
 ];
 
 export const WHO_WE_SUPPLY_DATA: SupplyTarget[] = [
   {
-    id: 'homes',
-    title: 'Homes & Apartments',
-    description: 'Monthly and regular cleaning liquids for houses, flats, and residential societies in Tirupati.',
-    examples: 'Apartments, Individual Houses, Gated Communities',
+    id: 'apartments',
+    title: 'Apartments & Residential Societies',
+    description: 'Regular and monthly supply of floor cleaners, phenyl, and washroom essentials for gated communities and flats in Tirupati.',
+    examples: 'Apartment Associations, Gated Communities, Residential Flats',
   },
   {
     id: 'hospitality',
-    title: 'Hotels, Lodges & Restaurants',
-    description: 'Bulk supply of dishwash, floor cleaners, room fresheners, and laundry products for daily guest rooms and kitchens.',
-    examples: 'Hotels, Pilgrimage Lodges, Restaurants, Resorts',
+    title: 'Hotels, Lodges & Guest Houses',
+    description: 'Bulk supplies of dishwash, linen detergents, and bathroom descalers for daily guest turnaround in Tirupati.',
+    examples: 'Hotels near Temple, Pilgrim Lodges, Guest Houses, Restaurants',
   },
   {
     id: 'offices',
-    title: 'Offices & Commercial Spaces',
-    description: 'Regular stock of glass cleaners, surface sprays, and washroom cleaners for daily office upkeep.',
-    examples: 'Corporate Offices, Bank Branches, Workspaces',
+    title: 'Offices & Corporate Spaces',
+    description: 'Dependable supply of glass cleaners, surface sprays, and floor cleaners for tidy corporate and commercial workplaces.',
+    examples: 'IT Offices, Bank Branches, Corporate Facilities, Clinics',
   },
   {
-    id: 'commercial',
-    title: 'Shops & Showrooms',
-    description: 'Quality glass and floor cleaners to keep customer areas, counters, and showroom floors clean.',
+    id: 'shops',
+    title: 'Shops & Supermarkets',
+    description: 'Commercial glass and floor cleaners to maintain spotless glass displays, counters, and customer walking aisles.',
     examples: 'Retail Shops, Supermarkets, Commercial Showrooms',
   },
   {
-    id: 'cleaning-services',
+    id: 'contractors',
     title: 'Cleaning Contractors & Housekeeping Teams',
-    description: 'Direct wholesale rates on 5L bulk cans for cleaning contractors and housekeeping staff.',
-    examples: 'Janitorial Staff, Maintenance Teams, Cleaning Vendors',
+    description: 'Direct wholesale rates on bulk cans and professional cleaning solutions for local housekeeping teams and janitorial vendors.',
+    examples: 'Facility Teams, Cleaning Contractors, Maintenance Staff',
   },
   {
-    id: 'institutions',
-    title: 'Institutions & Commercial Facilities',
-    description: 'Reliable bulk supplies of floor cleaners, tile cleaners, and washroom essentials for daily facility care.',
-    examples: 'Coaching Centers, Schools, Workspaces, Function Halls',
+    id: 'schools',
+    title: 'Schools & Educational Institutions',
+    description: 'Safe sanitization and floor cleaning products for classrooms, desks, restrooms, and dining areas.',
+    examples: 'Schools, Colleges, Tuition Centers, Day Care Centers',
   },
 ];
 
 export const PRODUCT_BENEFITS: ProductBenefit[] = [
   {
-    id: 'quality',
-    title: 'Quality Products',
-    description: 'Reliable cleaning liquids that clean effectively without damaging surfaces.',
-    highlight: 'Reliable Quality',
+    id: 'wholesale-rates',
+    title: 'Direct Wholesale Rates',
+    description: 'Competitive bulk rates for commercial facilities, societies, and bulk buyers in Tirupati.',
+    highlight: 'Cost Savings',
   },
   {
-    id: 'safe',
-    title: 'Safe & Effective',
-    description: 'Practical formulas designed for daily home and business use.',
-    highlight: 'Safe to Use',
+    id: 'quality-formulas',
+    title: 'Surface-Safe Formulations',
+    description: 'Practical formulations designed for regular maintenance without degrading surfaces or fittings.',
+    highlight: 'Surface-Safe',
   },
   {
-    id: 'delivery',
-    title: 'On-Time Local Delivery',
-    description: 'Prompt delivery and pickup support across Tirupati with quick WhatsApp response.',
-    highlight: 'Tirupati Delivery',
+    id: 'local-tirupati',
+    title: 'Local Tirupati Delivery & Pickup',
+    description: 'Fast local dispatch across all areas of Tirupati and surrounding neighborhoods.',
+    highlight: 'Local Tirupati',
   },
   {
-    id: 'wholesale',
-    title: 'Wholesale Pricing',
-    description: 'Direct bulk pricing for hotels, offices, shops, and regular home buyers.',
-    highlight: 'Wholesale Rates',
+    id: 'expert-advice',
+    title: 'Cleaning Service Expertise',
+    description: 'Backed by our hands-on experience in residential and commercial cleaning across Tirupati.',
+    highlight: 'Expert Support',
   },
 ];
 
-/**
- * Builds dynamic WhatsApp enquiry URL with product-specific context
- */
-export function buildProductWhatsAppUrl(productName?: string): string {
-  const phone = '917799552084';
-  const text = productName
-    ? `Hello Garuda Liquids Wholesale, I would like to enquire about ${productName}. Please share availability, can sizes (like 5L), and wholesale prices in Tirupati.`
-    : `Hello Garuda Liquids Wholesale, I am looking for wholesale cleaning products in Tirupati. Please share your catalog and bulk price list.`;
-  return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+export const PRODUCT_FAQS = [
+  {
+    q: 'What types of cleaning liquids and supplies do you provide in Tirupati?',
+    a: 'We supply floor cleaners, toilet cleaners, bathroom descalers, streak-free glass cleaners, concentrated phenyl, multipurpose surface cleaners, dishwash liquids, tile cleaners, laundry detergents, and stain removers.',
+  },
+  {
+    q: 'Can I purchase products in wholesale / bulk quantities?',
+    a: 'Yes, wholesale quantities and bulk supplies are available for apartments, hotels, guest lodges, corporate offices, retail stores, educational institutions, and housekeeping contractors across Tirupati.',
+  },
+  {
+    q: 'How do I get the latest wholesale price list or place an order?',
+    a: 'You can tap "Get Wholesale Price List" or click "WhatsApp to Order" to send us your list of required items and quantities. Our coordinator will provide the latest price list and assist with order fulfillment.',
+  },
+  {
+    q: 'Do you deliver bulk orders across Tirupati?',
+    a: 'Yes, we coordinate delivery and pickup across Tirupati city, including Balaji Colony, MR Palli, AIR Bypass Road, Renigunta, Tiruchanur, and surrounding areas.',
+  },
+  {
+    q: 'Are your cleaning liquids suitable for commercial dispensers?',
+    a: 'Yes, our wholesale cans and liquid formulations are suitable for commercial wall dispensers, restroom soap holders, and dilution systems.',
+  },
+];
+
+export interface WholesaleEnquiryPayload {
+  name?: string;
+  businessType?: string;
+  products?: string[];
+  packSize?: string;
+  quantity?: string;
+  location?: string;
+  message?: string;
 }
+
+export const buildWholesaleWhatsAppUrl = (payload?: WholesaleEnquiryPayload): string => {
+  const phone = '917799552084';
+  const name = payload?.name || 'Customer';
+  const business = payload?.businessType || 'General Enquiry';
+  const products = payload?.products && payload.products.length > 0 ? payload.products.join(', ') : 'Wholesale Price List';
+  const packSize = payload?.packSize || 'Wholesale Quantity';
+  const qty = payload?.quantity || 'As needed';
+  const location = payload?.location || 'Tirupati';
+  const notes = payload?.message ? `\nNotes: ${payload.message}` : '';
+
+  const text = `*Garuda Wholesale Cleaning Liquids Enquiry*
+Name: ${name}
+Business Type: ${business}
+Products: ${products}
+Pack Size: ${packSize}
+Quantity: ${qty}
+Location: ${location}${notes}
+
+Please send the latest wholesale price list and availability.`;
+
+  return `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+};

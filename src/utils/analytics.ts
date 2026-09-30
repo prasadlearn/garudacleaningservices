@@ -4,7 +4,9 @@ export type AnalyticsEvent =
   | 'book_click'
   | 'gallery_service_filter'
   | 'gallery_category_filter'
-  | 'area_chip_click';
+  | 'area_chip_click'
+  | 'wholesale_enquiry_submit'
+  | 'product_click';
 
 export interface AnalyticsPayload {
   serviceSlug?: string;

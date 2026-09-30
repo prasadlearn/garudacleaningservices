@@ -17,6 +17,7 @@ import {
   formatPrice,
   formatAmount,
   getServiceBySlug,
+  getServiceInclusionCards,
   SLUG_REDIRECT_MAP
 } from '../data/servicesData';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
@@ -51,7 +52,7 @@ export const ServiceDetailPage: React.FC = () => {
   const isHomeCleaning = service.slug === 'home-cleaning';
   const hasTiers = service.price.kind === 'tiers';
   const isPerUnit = service.price.kind === 'per-unit';
-  const isInspection = service.price.kind === 'inspection' || service.price.kind === 'quote';
+  const isQuoteOrInspection = service.price.kind === 'inspection' || service.price.kind === 'quote';
 
   const bhkTiers = service.price.kind === 'tiers' ? service.price.tiers : [];
   const activeBhkObj = bhkTiers.find((t) => t.label === selectedBhkTier) || bhkTiers[0];
@@ -93,13 +94,6 @@ export const ServiceDetailPage: React.FC = () => {
           priceCurrency: 'INR',
           availability: 'https://schema.org/InStock'
         };
-      case 'from':
-        return {
-          '@type': 'AggregateOffer',
-          lowPrice: service.price.amount,
-          priceCurrency: 'INR',
-          availability: 'https://schema.org/InStock'
-        };
       case 'per-unit':
         return {
           '@type': 'UnitPriceSpecification',
@@ -113,13 +107,15 @@ export const ServiceDetailPage: React.FC = () => {
           }
         };
       case 'tiers':
-        return service.price.tiers.map((t) => ({
-          '@type': 'Offer',
-          name: t.label,
-          price: t.amount ?? undefined,
-          priceCurrency: 'INR',
-          availability: 'https://schema.org/InStock'
-        }));
+        return service.price.tiers
+          .filter(t => t.amount !== null && t.amount !== undefined)
+          .map((t) => ({
+            '@type': 'Offer',
+            name: t.label,
+            price: t.amount ?? undefined,
+            priceCurrency: 'INR',
+            availability: 'https://schema.org/InStock'
+          }));
       case 'inspection':
       case 'quote':
         return undefined;
@@ -173,58 +169,111 @@ export const ServiceDetailPage: React.FC = () => {
   const getCustomPageTitle = (slug: string, title: string): string => {
     switch (slug) {
       case 'home-cleaning':
-        return 'Home Cleaning in Tirupati | 1, 2 & 3 BHK | Garuda Cleaning Services';
+        return 'Home Cleaning in Tirupati | 1, 2 & 3 BHK';
       case 'villa-cleaning':
-        return 'Villa Cleaning in Tirupati | Garuda Cleaning Services';
+        return 'Villa Cleaning in Tirupati | Get a Quote';
       case 'kitchen-cleaning':
-        return 'Kitchen Cleaning in Tirupati | ₹999 | Garuda Cleaning Services';
+        return 'Kitchen Cleaning in Tirupati | ₹999';
       case 'washroom-cleaning':
-        return 'Washroom Cleaning in Tirupati | ₹449 | Garuda Cleaning Services';
+        return 'Washroom Cleaning in Tirupati | ₹449';
       case 'mattress-cleaning':
-        return 'Mattress Cleaning in Tirupati | ₹349 | Garuda Cleaning Services';
+        return 'Mattress Cleaning in Tirupati | ₹349';
       case 'sofa-cleaning':
-        return 'Sofa Cleaning in Tirupati | From ₹249/Seat | Garuda Cleaning Services';
+        return 'Sofa Cleaning in Tirupati | ₹249/Seat';
       case 'carpet-cleaning':
-        return 'Carpet Cleaning in Tirupati | ₹499 | Garuda Cleaning Services';
+        return 'Carpet Cleaning in Tirupati | ₹499';
       case 'move-in-out-cleaning':
-        return 'Move-In & Move-Out Cleaning in Tirupati | Garuda Cleaning Services';
+        return 'Move-In & Move-Out Cleaning in Tirupati';
       case 'fridge-cleaning':
-        return 'Fridge Cleaning in Tirupati | Get a Quote | Garuda Cleaning Services';
+        return 'Fridge Cleaning in Tirupati | Get a Quote';
       case 'pest-control':
-        return 'Pest Control in Tirupati | BHK & Villa Services | Garuda Cleaning Services';
+        return 'Pest Control in Tirupati | BHK & Villa Services';
       case 'water-tank-cleaning':
-        return 'Water Tank & Sump Cleaning in Tirupati | Garuda Cleaning Services';
+        return 'Water Tank & Sump Cleaning in Tirupati';
       case 'window-cleaning':
-        return 'Window Cleaning in Tirupati | Garuda Cleaning Services';
+        return 'Window Cleaning in Tirupati | ₹199';
       case 'glass-cleaning':
-        return 'Glass Cleaning in Tirupati | Garuda Cleaning Services';
+        return 'Glass Cleaning in Tirupati | ₹149';
       case 'fan-cleaning':
-        return 'Fan Cleaning in Tirupati | Garuda Cleaning Services';
+        return 'Fan Cleaning in Tirupati | ₹99';
       case 'post-construction-cleaning':
         return 'Post-Construction Cleaning in Tirupati | From ₹5/sq.ft';
       case 'office-cleaning':
         return 'Office Cleaning in Tirupati | From ₹5/sq.ft';
       case 'shop-cleaning':
-        return 'Shop Cleaning in Tirupati | Garuda Cleaning Services';
+        return 'Shop Cleaning in Tirupati';
       case 'hotel-guest-house-cleaning':
-        return 'Hotel & Guest House Cleaning in Tirupati | Garuda Cleaning Services';
+        return 'Hotel & Guest House Cleaning in Tirupati';
       case 'school-classroom-cleaning':
-        return 'School & Classroom Cleaning in Tirupati | Garuda Cleaning Services';
+        return 'School & Classroom Cleaning in Tirupati';
       default:
         return `${title} in Tirupati | Garuda Cleaning Services`;
     }
   };
 
+  const getCustomMetaDescription = (slug: string): string => {
+    switch (slug) {
+      case 'home-cleaning':
+        return 'Complete home cleaning services in Tirupati for 1 BHK (₹2,399), 2 BHK (₹3,299), and 3 BHK (₹4,999). Book online or get a quote on WhatsApp.';
+      case 'villa-cleaning':
+        return 'Comprehensive villa and duplex house cleaning services in Tirupati across all floors, washrooms, balconies, and living areas. Get a customized quote.';
+      case 'kitchen-cleaning':
+        return 'Thorough kitchen cleaning in Tirupati for ₹999. Degreasing of countertops, wall tiles, sinks, and exhaust areas with food-safe solutions.';
+      case 'washroom-cleaning':
+        return 'Effective washroom and bathroom descaling in Tirupati for ₹449. Removes hard water white scale from tiles, commodes, basins, and taps.';
+      case 'mattress-cleaning':
+        return 'Hygienic mattress vacuuming and dust mite extraction in Tirupati for ₹349. Keeps sleeping areas fresh and allergen-free.';
+      case 'sofa-cleaning':
+        return 'Fabric sofa seat foam shampooing and vacuum extraction in Tirupati at ₹249 per seat. Lifts stains, grime, and food spots.';
+      case 'carpet-cleaning':
+        return 'Professional carpet shampooing and water extraction in Tirupati for ₹499. Restores clean textures and lifts ground-in dirt.';
+      case 'move-in-out-cleaning':
+        return 'Vacant apartment and house move-in & move-out cleaning in Tirupati for ₹1,499. Cleans cupboards, washrooms, kitchens, and floors.';
+      case 'fridge-cleaning':
+        return 'Refrigerator interior shelf washing, food-safe sanitization, and odor removal in Tirupati. Contact us for price and scheduling.';
+      case 'pest-control':
+        return 'Targeted pest control treatment for cockroaches and household pests in Tirupati. 1 BHK ₹1,000, 2 BHK ₹1,200, 3 BHK ₹1,400, Villa ₹3,000.';
+      case 'water-tank-cleaning':
+        return 'High-pressure water jet and sump cleaning in Tirupati. Up to 800L (₹699), 1000L (₹1,199), and >1000L (₹1,799).';
+      case 'window-cleaning':
+        return 'Streak-free window glass and sliding channel track vacuuming in Tirupati at ₹199 per window.';
+      case 'glass-cleaning':
+        return 'Crystal clear partition, window, and door glass cleaning in Tirupati at ₹149 with rubber squeegee finish. Book online.';
+      case 'fan-cleaning':
+        return 'Ceiling fan degreasing and blade dust removal in Tirupati at ₹99 per fan.';
+      case 'post-construction-cleaning':
+        return 'Post-renovation and post-construction paint scraping, cement dust extraction, and floor cleaning in Tirupati from ₹5/sq.ft.';
+      case 'office-cleaning':
+        return 'Professional office and commercial workspace cleaning in Tirupati starting from ₹5/sq.ft. Desks, floors, glass, and washrooms.';
+      case 'shop-cleaning':
+        return 'Retail showroom and supermarket floor and glass cleaning in Tirupati. Contact us for commercial pricing and scheduling.';
+      case 'hotel-guest-house-cleaning':
+        return 'Dedicated guest room, washroom, and lodge cleaning in Tirupati for hospitality businesses and pilgrim stay facilities.';
+      case 'school-classroom-cleaning':
+        return 'Sanitizing school classrooms, student benches, hallways, and washrooms across Tirupati institutions. Request a customized quote.';
+      default:
+        return `${service.title} in Tirupati with upfront pricing (${formattedPrice}). ${service.shortDescription}`;
+    }
+  };
+
+  const getCategoryBadgeLabel = (serviceSlug: string, category: string): string => {
+    if (serviceSlug === 'hotel-guest-house-cleaning') {
+      return 'HOTEL & GUEST HOUSE CLEANING • TIRUPATI';
+    }
+    if (serviceSlug === 'school-classroom-cleaning') {
+      return 'INSTITUTIONAL CLEANING • TIRUPATI';
+    }
+    return `${category.toUpperCase()} CLEANING • TIRUPATI`;
+  };
+
   const pageTitle = getCustomPageTitle(service.slug, service.title);
+  const metaDescription = getCustomMetaDescription(service.slug);
 
   return (
     <div className="bg-slate-50 min-h-screen">
       {/* React 19 Head */}
       <title>{pageTitle}</title>
-      <meta
-        name="description"
-        content={`${service.title} in Tirupati with upfront pricing (${formattedPrice}). ${service.shortDescription}`}
-      />
+      <meta name="description" content={metaDescription} />
       <link rel="canonical" href={`https://garudacleaningservices.in/services/${service.slug}`} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbsSchema) }} />
@@ -245,7 +294,7 @@ export const ServiceDetailPage: React.FC = () => {
             <div className="lg:col-span-7 space-y-4">
               <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-white/10 text-emerald-400 text-xs font-bold uppercase tracking-wider border border-white/15">
                 <ServiceIcon slug={service.slug} name={service.icon} className="w-3.5 h-3.5" />
-                {service.category} Cleaning • Tirupati
+                {getCategoryBadgeLabel(service.slug, service.category)}
               </span>
 
               <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
@@ -258,7 +307,7 @@ export const ServiceDetailPage: React.FC = () => {
 
               <div className="pt-2">
                 <span className="text-xs uppercase font-bold text-slate-400 block tracking-wider">
-                  {isInspection ? 'Pricing Model' : 'Indicative Pricing'}
+                  {isQuoteOrInspection ? 'Pricing' : 'Indicative Pricing'}
                 </span>
                 <span className="text-2xl sm:text-3xl font-black text-[#22AC33]">
                   {formattedPrice}
@@ -284,7 +333,7 @@ export const ServiceDetailPage: React.FC = () => {
                   className="btn-homecare-green text-xs sm:text-sm py-3 px-6 font-bold cursor-pointer flex items-center gap-2"
                 >
                   <Phone className="w-4 h-4" />
-                  <span>{isInspection ? 'Request Site Inspection' : 'Book This Service'}</span>
+                  <span>{isQuoteOrInspection ? 'Request a Quote' : 'Book This Service'}</span>
                 </button>
 
                 <a
@@ -338,7 +387,7 @@ export const ServiceDetailPage: React.FC = () => {
               Why You Need Professional {service.title}
             </h2>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Daily sweeping and normal cloth wiping cannot remove hard water white salt marks, sticky oil grease, or settled dirt inside floor tiles and fixtures. Our team brings powerful single-disc floor scrubbers, high-suction vacuums, and safe cleaning solutions to make your property spotlessly clean and fresh without damaging your tiles or fittings.
+              Daily sweeping and normal cloth wiping cannot remove hard water white salt marks, sticky oil grease, or settled dirt inside floor tiles and fixtures. Our team brings powerful floor scrubbing equipment, high-suction vacuums, and safe cleaning solutions to make your property spotlessly clean and fresh without damaging your tiles or fittings.
             </p>
           </div>
 
@@ -368,7 +417,7 @@ export const ServiceDetailPage: React.FC = () => {
                 </button>
               </div>
 
-              <div className="grid grid-cols-3 gap-1.5 sm:gap-3">
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5 sm:gap-3">
                 {bhkTiers.map((t) => (
                   <button
                     key={t.label}
@@ -421,7 +470,7 @@ export const ServiceDetailPage: React.FC = () => {
             </div>
           )}
 
-          {/* Section: What's Included with Visual Equipment & Areas Breakdown */}
+          {/* Section: What's Included with Visual Area Breakdown */}
           <div className="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-xs space-y-6">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2 text-[#041B3B]">
@@ -429,575 +478,40 @@ export const ServiceDetailPage: React.FC = () => {
                 <h2 className="text-xl font-extrabold text-[#041B3B]">What's Included in This Service</h2>
               </div>
               <span className="text-xs font-bold text-[#22AC33] bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200">
-                Supervisor Verified
+                Surface-Safe Standards
               </span>
             </div>
 
-            {/* Visual Equipment & Area Cards */}
+            {/* Visual Area Breakdown Cards (Max 2 service-specific focus cards) */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {(isHomeCleaning || service.slug === 'villa-cleaning' || service.slug === 'move-in-out-cleaning' || service.slug === 'post-construction-cleaning') ? (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
+              {getServiceInclusionCards(service.slug).map((card, idx) => (
+                <div key={idx} className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col justify-between">
+                  <div>
+                    <div className="h-44 overflow-hidden relative bg-slate-900">
                       <img
-                        src="/images/equipment/floor-machine.webp"
-                        alt="Single-disc floor scrubbing machine"
+                        src={card.image}
+                        alt={card.alt}
                         className="w-full h-full object-cover"
                         loading="lazy"
                       />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Floor Machine Scrubbing
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Floor Scrubbing Machine</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Rotary machine scrubs vitrified, marble, and tile floors to remove black grout dirt and bring back shine.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Single-Disc Machine + Wet Mop
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/bathroom-tools.webp"
-                        alt="Washroom tile cleaning tools"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Washroom Tile Cleaning
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Hard Water Stain Removal</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Safe acid-free cleaner removes white salt marks from wall tiles, commode, washbasins, and steel taps without damaging tile color.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Safe Scale Cleaner
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/kitchen-tools.webp"
-                        alt="Kitchen degreasing kit"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Kitchen Oil Removal
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Cooking Oil & Grease Cleaning</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Countertop slabs, wall tiles, steel sink, and outer chimney hood cleaned with safe oil-removing spray.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Food-Safe Degreaser
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/window-tools.webp"
-                        alt="Window wiper and channel brush"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Windows & Fans
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Sliding Tracks & Ceiling Fans</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Vacuuming dust from sliding window channels, streak-free rubber wiper for glass, ceiling fan blades dusted, and switchboards wiped.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Rubber Wiper + Channel Brush
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : service.slug === 'washroom-cleaning' ? (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/bathroom-tools.webp"
-                        alt="Washroom descaling equipment"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Hard Water Solution
+                      <span className="absolute top-2.5 left-2.5 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wider">
+                        {card.tag}
                       </span>
                     </div>
                     <div className="p-4 space-y-1">
-                      <h3 className="text-sm font-black text-[#041B3B]">Wall Tiles & Grout Cleaning</h3>
-                      <p className="text-xs text-slate-600">Removes borewell hard water deposits (uppu karalu) and soap scum without harming tile glaze.</p>
+                      <h3 className="text-sm font-black text-[#041B3B]">{card.title}</h3>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {card.description}
+                      </p>
                     </div>
                   </div>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/bathroom-tools.webp"
-                        alt="Sanitaryware and chrome tap care"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Chrome & Glass
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1">
-                      <h3 className="text-sm font-black text-[#041B3B]">Taps, Commode & Mirrors</h3>
-                      <p className="text-xs text-slate-600">Acid-free chrome polishing, toilet rim sanitization, and streak-free partition glass wipe.</p>
+                  <div className="px-4 pb-4 pt-1">
+                    <div className="text-[11px] text-[#22AC33] font-bold flex items-center gap-1.5 border-t border-slate-200/60 pt-2">
+                      <Check className="w-3.5 h-3.5" /> {card.benefit}
                     </div>
                   </div>
-                </>
-              ) : service.slug === 'sofa-cleaning' || service.slug === 'carpet-cleaning' || service.slug === 'mattress-cleaning' ? (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/sofa-vacuum.webp"
-                        alt="Fabric injection extraction wand"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Extraction Tool
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1">
-                      <h3 className="text-sm font-black text-[#041B3B]">Injection-Extraction Vacuum</h3>
-                      <p className="text-xs text-slate-600">High-suction extraction wand injects foam and suctions out trapped dirt and allergens.</p>
-                    </div>
-                  </div>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/full-kit.webp"
-                        alt="Commercial vacuum kit"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Fabric Shampoo
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1">
-                      <h3 className="text-sm font-black text-[#041B3B]">Stain Spot Treatment</h3>
-                      <p className="text-xs text-slate-600">Fabric-friendly shampoo loosens beverage spills, food spots, and armrest grease safely.</p>
-                    </div>
-                  </div>
-                </>
-              ) : service.slug === 'kitchen-cleaning' ? (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/kitchen-tools.webp"
-                        alt="Kitchen degreasing tools"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Oil Degreasing
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1">
-                      <h3 className="text-sm font-black text-[#041B3B]">Platform & Backsplash Tiles</h3>
-                      <p className="text-xs text-slate-600">Heavy cooking oil grease, masala stains, and grime lifted with professional food-safe degreaser.</p>
-                    </div>
-                  </div>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/kitchen-tools.webp"
-                        alt="Sink and chimney exterior clean"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Exhaust & Sink
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1">
-                      <h3 className="text-sm font-black text-[#041B3B]">Exhaust, Chimney & Steel Sink</h3>
-                      <p className="text-xs text-slate-600">Detailed wipe-down of chimney mesh exterior, exhaust fan blades, and stainless steel sink polishing.</p>
-                    </div>
-                  </div>
-                </>
-              ) : service.slug === 'fridge-cleaning' ? (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/services/fridge-cleaning.webp"
-                        alt="Refrigerator interior sanitization"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Hygienic Washing
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Shelf & Tray Washing</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          All removable shelves and bins washed with food-safe anti-bacterial liquid to remove dried spills and stains.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Food-Safe Sanitizer
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/kitchen-tools.webp"
-                        alt="Gasket seal and odor neutralizing"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Odor & Gaskets
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Door Gasket & Deodorizing</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Mold and grime cleared from rubber door gaskets and interior air vents deodorized for fresh smelling food storage.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Gasket Mold Remover
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : service.slug === 'pest-control' ? (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/services/pest-control.webp"
-                        alt="Herbal gel baiting and odorless pest control"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Herbal Gel Baiting
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Cockroach & Ant Gel Treatment</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Odorless herbal dots placed strategically in cabinet hinges, drawers, and under appliances to eradicate nests.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Targeted Gel Baiting
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/full-kit.webp"
-                        alt="Barrier spray and drain protection"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Crevice & Drain Barrier
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Skirting & Pipe Protection</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Precision barrier spraying along skirting walls and bathroom drainage pipes to protect key entry points.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Perimeter Barrier Spray
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : service.slug === 'water-tank-cleaning' ? (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/full-kit.webp"
-                        alt="Submersible pump and dirty water extraction kit"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Bottom Mud & Water Draining
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Mud & Silt Water Extraction</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Submersible water pump completely drains dirty water and removes thick mud and silt settled at the bottom of both underground sumps and overhead tanks.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Submersible Drainage Pump + Hose
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/services/water-tank-cleaning.webp"
-                        alt="High-pressure jet wash and tank wall descaling"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        High-Pressure Washing
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">High-Pressure Jet & Sanitization</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          High-pressure jet wash cleans green algae, slime, and dirt from tank and sump walls, finished with an antibacterial clean water wash.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Pressure Jet + Antibacterial Rinse
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (service.slug === 'window-cleaning' || service.slug === 'glass-cleaning') ? (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/window-tools.webp"
-                        alt="Sliding track crevice vacuum and brush"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Track Detailing
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Sliding Track & Channel Vacuum</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Precision vacuum nozzles and track brushes remove years of compacted dust, dead insects, and grit from sliding window channels.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Crevice Nozzle + Track Brush
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/services/glass-cleaning.webp"
-                        alt="Streak-free squeegee glass cleaning"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Streak-Free Glass
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Streak-Free Squeegee Shine</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          High-grade rubber squeegee wipes away water spots, mineral scale, and fingerprint smudges leaving crystal-clear glass panels.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Pro Rubber Squeegee + Microfiber
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : service.slug === 'fan-cleaning' ? (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/services/fan-cleaning.webp"
-                        alt="Fan blade degreasing"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Blade Degreasing
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Sticky Oil & Dust Removal</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Specialized cleaning wraps break down sticky kitchen and bedroom grease film on both sides of fan blades without bending them.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Degreaser + Microfiber Wrap
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/full-kit.webp"
-                        alt="Ceiling fan motor and canopy dusting"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Motor Detailing
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Motor Housing & Downrod Clean</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Dust extraction from motor vents, canopy covers, and downrods with protective floor sheeting to keep furniture spotless.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Drop Sheet + Motor Brush
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (service.slug === 'office-cleaning' || service.slug === 'shop-cleaning' || service.slug === 'school-classroom-cleaning' || service.slug === 'hotel-guest-house-cleaning') ? (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/floor-machine.webp"
-                        alt="Commercial single disc floor scrubbing"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        High-Torque Scrubbing
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Commercial Floor Scrubbing & Wash</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Single-disc scrubbing machine restores high-traffic corridors, retail showroom floors, office halls & dining spaces to a mirror shine.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Single-Disc Machine + Wet Extractor
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/full-kit.webp"
-                        alt="Workstation and washroom sanitization kit"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Workspace & Washrooms
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1.5 flex-1 flex flex-col justify-between">
-                      <div>
-                        <h3 className="text-sm font-black text-[#041B3B]">Desks, Partitions & Washrooms</h3>
-                        <p className="text-xs text-slate-600 mt-1 leading-relaxed">
-                          Vacuuming of desks, sanitization of shared washrooms, streak-free glass partition wipe-down & pantry cleaning.
-                        </p>
-                      </div>
-                      <div className="text-[11px] text-[#22AC33] font-bold pt-2 flex items-center gap-1">
-                        <Check className="w-3.5 h-3.5" /> Vacuum + Surface Sanitizer
-                      </div>
-                    </div>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/full-kit.webp"
-                        alt="Commercial cleaning equipment"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Mechanized Tools
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1">
-                      <h3 className="text-sm font-black text-[#041B3B]">Professional Cleaning Tools</h3>
-                      <p className="text-xs text-slate-600">Industrial floor scrubbers, wet/dry vacuums, and surface-safe solutions suited for the task.</p>
-                    </div>
-                  </div>
-                  <div className="rounded-2xl border border-slate-200 overflow-hidden bg-slate-50 flex flex-col">
-                    <div className="h-40 overflow-hidden relative bg-slate-900">
-                      <img
-                        src="/images/equipment/window-tools.webp"
-                        alt="Detailing and wiping tools"
-                        className="w-full h-full object-cover"
-                        loading="lazy"
-                      />
-                      <span className="absolute top-2 left-2 bg-[#041B3B]/90 backdrop-blur-xs text-white text-[11px] font-bold px-2.5 py-1 rounded-md">
-                        Surface Detailing
-                      </span>
-                    </div>
-                    <div className="p-4 space-y-1">
-                      <h3 className="text-sm font-black text-[#041B3B]">Edge & Glass Detailing</h3>
-                      <p className="text-xs text-slate-600">Color-coded microfiber towels, squeegees, and precision corner brushes for spotless finish.</p>
-                    </div>
-                  </div>
-                </>
-              )}
+                </div>
+              ))}
             </div>
 
             {/* Checklist items */}
@@ -1011,55 +525,9 @@ export const ServiceDetailPage: React.FC = () => {
                 </div>
               ))}
             </div>
-            <p className="text-[11px] text-slate-400 italic pt-1">
-              Inclusions are verified on-site by our lead supervisor before starting work.
+            <p className="text-[11px] text-slate-500 italic pt-1">
+              Inclusions are confirmed on-site before starting work.
             </p>
-          </div>
-
-          {/* Section: Professional Equipment Kit Banner */}
-          <div className="bg-[#041B3B] text-white p-6 sm:p-8 rounded-3xl border border-white/10 shadow-xs space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-              <div className="md:col-span-7 space-y-3">
-                <div className="inline-flex items-center gap-2 text-emerald-400 text-xs font-black uppercase tracking-wider">
-                  <Zap className="w-4 h-4" />
-                  <span>On-Site Machinery & Gear</span>
-                </div>
-                <h3 className="text-xl sm:text-2xl font-black text-white">
-                  Professional Equipment We Bring To Your Home
-                </h3>
-                <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                  We do not rely on standard domestic brooms. Garuda teams arrive equipped with single-disc floor buffers, industrial wet/dry vacuum extractors, non-scratch microfiber tools, and specialized non-acidic descaling liquids.
-                </p>
-                <div className="grid grid-cols-2 gap-2 pt-2 text-xs text-slate-200">
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Single-Disc Rotary Scrubber</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Commercial Wet-Dry Vacuum</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Acid-Free Descalers</span>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>Rubber Window Squeegees</span>
-                  </div>
-                </div>
-              </div>
-              <div className="md:col-span-5">
-                <div className="rounded-2xl overflow-hidden border-2 border-white/20 shadow-lg aspect-[4/3] bg-slate-900">
-                  <img
-                    src="/images/equipment/full-kit.webp"
-                    alt="Garuda Professional Cleaning Equipment Kit"
-                    className="w-full h-full object-cover"
-                    loading="lazy"
-                  />
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* Section: Before & After Comparison Slider */}
@@ -1098,19 +566,19 @@ export const ServiceDetailPage: React.FC = () => {
                 <p className="text-[11px] text-slate-600 mt-1">Non-acidic formulations protecting vitrified tile enamel and chrome.</p>
               </div>
               <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100">
-                <span className="text-xs font-bold text-[#041B3B] block">Mechanized Machinery</span>
-                <p className="text-[11px] text-slate-600 mt-1">Single-disc scrubbers and high-suction extraction vacuums.</p>
+                <span className="text-xs font-bold text-[#041B3B] block">Mechanized Equipment</span>
+                <p className="text-[11px] text-slate-600 mt-1">Industrial vacuum extractors and surface-safe scrubbers.</p>
               </div>
               <div className="p-4 rounded-2xl bg-emerald-50/50 border border-emerald-100">
                 <span className="text-xs font-bold text-[#041B3B] block">Joint Walkthrough</span>
-                <p className="text-[11px] text-slate-600 mt-1">Room-by-room check with our supervisor before final payment.</p>
+                <p className="text-[11px] text-slate-600 mt-1">Room-by-room check with our team before final payment.</p>
               </div>
             </div>
           </div>
 
           {/* Footnote */}
           <div className="p-4 bg-slate-100 rounded-2xl text-xs text-slate-600 text-center font-medium">
-            Prices shown are starting/indicative; final quote is confirmed after inspection.
+            Prices shown are upfront indicative rates; final quote is confirmed after on-site walkthrough.
           </div>
         </div>
 

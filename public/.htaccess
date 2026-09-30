@@ -6,6 +6,19 @@
   RewriteEngine On
   RewriteBase /
 
+  # 301 Permanent Redirects for Old/Renamed Service URLs & Products
+  RewriteRule ^services/bhk-deep-cleaning/?$ /services/home-cleaning [R=301,L]
+  RewriteRule ^services/full-home-deep-cleaning-package/?$ /services/home-cleaning [R=301,L]
+  RewriteRule ^services/villa-deep-cleaning/?$ /services/villa-cleaning [R=301,L]
+  RewriteRule ^services/kitchen-deep-cleaning/?$ /services/kitchen-cleaning [R=301,L]
+  RewriteRule ^services/bathroom-deep-cleaning/?$ /services/washroom-cleaning [R=301,L]
+  RewriteRule ^services/move-in-cleaning/?$ /services/move-in-out-cleaning [R=301,L]
+  RewriteRule ^services/move-out-cleaning/?$ /services/move-in-out-cleaning [R=301,L]
+  RewriteRule ^services/bed-cleaning/?$ /services/mattress-cleaning [R=301,L]
+  RewriteRule ^services/office-deep-cleaning/?$ /services/office-cleaning [R=301,L]
+  RewriteRule ^products/?$ /cleaning-liquids [R=301,L]
+  RewriteRule ^areas/?$ /service-areas [R=301,L]
+
   # SPA Routing - Direct all non-file/non-directory requests to index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

@@ -59,11 +59,6 @@ export const Header: React.FC = () => {
     };
   }, []);
 
-  // Close dropdown on route change
-  useEffect(() => {
-    setServicesDropdownOpen(false);
-  }, [location.pathname]);
-
   // Dropdown outside click & Escape key listener
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -109,25 +104,22 @@ export const Header: React.FC = () => {
         ref={headerRef}
         className="fixed top-0 left-0 right-0 z-[var(--z-header)] bg-white/98 backdrop-blur-md border-b border-slate-100 shadow-2xs transition-all"
         style={{
-          paddingLeft: 'max(1rem, env(safe-area-inset-left))',
-          paddingRight: 'max(1rem, env(safe-area-inset-right))',
+          paddingLeft: 'max(0.75rem, env(safe-area-inset-left))',
+          paddingRight: 'max(0.75rem, env(safe-area-inset-right))',
         }}
       >
-        <div className="max-w-7xl mx-auto h-16 sm:h-18 flex items-center justify-between gap-2 min-w-0">
-          {/* Brand Logo Lockup (flex-1 min-w-0) */}
+        <div className="max-w-7xl mx-auto h-16 sm:h-18 flex items-center justify-between gap-1.5 sm:gap-3 min-w-0">
+          {/* Brand Logo Lockup */}
           <Link
             to="/"
             className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1 group"
             aria-label="Garuda Cleaning Services Home"
           >
-            <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-[#22AC33] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform shrink-0">
-              <Home className="w-5 h-5 sm:w-6 sm:h-6 fill-current" />
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-[#22AC33] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform shrink-0">
+              <Home className="w-4 h-4 sm:w-6 sm:h-6 fill-current" />
             </div>
             <div className="flex flex-col min-w-0 leading-tight">
-              <span
-                className="font-black text-[#041B3B] tracking-tight truncate block"
-                style={{ fontSize: 'clamp(14px, 3.8vw, 19px)' }}
-              >
+              <span className="font-black text-[#041B3B] tracking-tight text-[13px] min-[360px]:text-[14px] sm:text-[18px] whitespace-nowrap block leading-tight">
                 Garuda <span className="text-[#22AC33] font-bold">Cleaning Services</span>
               </span>
               <span className="text-[10px] sm:text-xs font-semibold text-slate-500 tracking-normal hidden sm:block truncate">
@@ -168,7 +160,7 @@ export const Header: React.FC = () => {
               )}
             </Link>
 
-            {/* Services Dropdown with Bridge Area & Intent Delay */}
+            {/* Services Dropdown */}
             <div
               ref={dropdownRef}
               className="relative py-2"
@@ -354,13 +346,13 @@ export const Header: React.FC = () => {
             </Link>
 
             <Link
-              to="/products"
+              to="/cleaning-liquids"
               className={`py-2 transition-colors relative ${
-                isExactActive('/products') ? 'text-[#22AC33] font-black' : 'hover:text-[#22AC33] text-slate-700'
+                isExactActive('/cleaning-liquids') ? 'text-[#22AC33] font-black' : 'hover:text-[#22AC33] text-slate-700'
               }`}
             >
-              Products
-              {isExactActive('/products') && (
+              Cleaning Liquids
+              {isExactActive('/cleaning-liquids') && (
                 <motion.div
                   layoutId="activeTab"
                   className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#22AC33] rounded-full"
@@ -408,19 +400,17 @@ export const Header: React.FC = () => {
             </button>
           </div>
 
-          {/* Mobile Right Controls: Call button (hidden < 360px) + Hamburger (always visible 44x44) */}
-          <div className="flex lg:hidden items-center gap-1.5 shrink-0">
-            {/* Call icon button: 44x44 touch target, hidden only below 360px */}
+          {/* Mobile Right Controls: Call button + Hamburger */}
+          <div className="flex lg:hidden items-center gap-1 sm:gap-1.5 shrink-0">
             <a
               href={BUSINESS_CONFIG.contact.phoneTel}
               onClick={() => trackEvent('call_click', { sourcePage: location.pathname })}
-              className="hidden min-[360px]:flex w-11 h-11 rounded-xl bg-[#E8F8EC] text-[#22AC33] items-center justify-center border border-[#22AC33]/20 transition-colors shrink-0"
+              className="hidden min-[360px]:flex w-10 h-10 min-[400px]:w-11 min-[400px]:h-11 rounded-xl bg-[#E8F8EC] text-[#22AC33] items-center justify-center border border-[#22AC33]/20 transition-colors shrink-0"
               aria-label="Call Garuda Cleaning Services"
             >
-              <Phone className="w-5 h-5" />
+              <Phone className="w-4 h-4 min-[400px]:w-5 min-[400px]:h-5" />
             </a>
 
-            {/* Hamburger button: always visible, never wraps, 44x44 */}
             <button
               ref={hamburgerRef}
               type="button"
@@ -428,9 +418,9 @@ export const Header: React.FC = () => {
               aria-expanded={mobileOpen}
               aria-controls="mobile-drawer"
               aria-label="Toggle Navigation Menu"
-              className="w-11 h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center cursor-pointer transition-colors shrink-0"
+              className="w-10 h-10 min-[400px]:w-11 min-[400px]:h-11 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 flex items-center justify-center cursor-pointer transition-colors shrink-0"
             >
-              <Menu className="w-6 h-6" />
+              <Menu className="w-5 h-5 min-[400px]:w-6 min-[400px]:h-6" />
             </button>
           </div>
         </div>
@@ -445,3 +435,5 @@ export const Header: React.FC = () => {
     </>
   );
 };
+
+export default Header;

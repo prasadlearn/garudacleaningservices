@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { FooterSection } from './components/FooterSection';
 import { MobileStickyBar } from './components/MobileStickyBar';
@@ -40,9 +40,11 @@ export const App: React.FC = () => {
                 <Route path="/services/:id" element={<ServiceDetailPage />} />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/pricing" element={<PricingPage />} />
-                <Route path="/products" element={<ProductsPage />} />
+                <Route path="/cleaning-liquids" element={<ProductsPage />} />
+                <Route path="/products" element={<Navigate to="/cleaning-liquids" replace />} />
                 <Route path="/gallery" element={<GalleryPage />} />
                 <Route path="/service-areas" element={<ServiceAreaPage />} />
+                <Route path="/areas" element={<Navigate to="/service-areas" replace />} />
                 <Route path="/faq" element={<FAQPage />} />
                 <Route path="/contact" element={<ContactPage />} />
                 <Route path="*" element={<NotFoundPage />} />
@@ -61,4 +63,3 @@ export const App: React.FC = () => {
 };
 
 export default App;
-
