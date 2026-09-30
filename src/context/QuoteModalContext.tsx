@@ -42,11 +42,11 @@ export const QuoteModalProvider: React.FC<{ children: ReactNode }> = ({ children
     setInitialService('');
   }, []);
 
-  // Automatic booking form opening when user opens the website
+  // Automatic booking form opening after 10 seconds of opening website
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 1000);
+    }, 10000);
     return () => clearTimeout(timer);
   }, []);
 

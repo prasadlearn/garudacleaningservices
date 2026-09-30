@@ -92,9 +92,9 @@ export const ChooseAndBookSection: React.FC = () => {
 
                     <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-baseline justify-between">
                       <span className="text-[9px] sm:text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                        {service.price.kind === 'tiers' || service.price.kind === 'from' || (service.price.kind === 'per-unit' && service.price.unit === 'sq.ft') ? 'Starting' : 'Price'}
+                        Price
                       </span>
-                      <span className="text-xs sm:text-base font-black text-[#1A8C28]">{formatPrice(service.price)}</span>
+                      <span className="text-xs sm:text-base font-black text-[#1A8C28] whitespace-nowrap">{formatPrice(service.price)}</span>
                     </div>
                   </div>
                 </div>

@@ -43,9 +43,9 @@ export const formatPrice = (model: PriceModel): string => {
     case 'per-unit':
       if (model.unit === 'sq.ft') {
         if (model.max !== undefined && model.max !== model.min) {
-          return `Starting from ${formatAmount(model.min)}–${formatAmount(model.max)} / ${model.unit}`;
+          return `${formatAmount(model.min)}–${formatAmount(model.max)}/sq.ft`;
         }
-        return `Starting from ${formatAmount(model.min)}/sq.ft`;
+        return `${formatAmount(model.min)}/sq.ft`;
       }
       if (model.max !== undefined && model.max !== model.min) {
         return `${formatAmount(model.min)}–${formatAmount(model.max)} / ${model.unit}`;
@@ -383,7 +383,7 @@ export const SERVICES_DATA: ServiceItem[] = [
       'Exterior stainless steel body wipe, condenser vent dusting, and handle sanitization'
     ],
     enabled: true,
-    price: { kind: 'quote' },
+    price: { kind: 'fixed', amount: 299 },
     image: '/images/services/fridge-cleaning.webp',
     imageSource: 'illustrative'
   },

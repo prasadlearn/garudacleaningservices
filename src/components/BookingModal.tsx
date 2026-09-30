@@ -54,8 +54,8 @@ export const BookingModal: React.FC = () => {
     return isoOrTextDate;
   };
 
-  // Multi-service selection states
-  const [selectedServices, setSelectedServices] = useState<string[]>(['Home Cleaning']);
+  // Multi-service selection states (starts empty by default so user chooses freely)
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [homeCleaningBhk, setHomeCleaningBhk] = useState<string>('2 BHK');
   const [showServicePicker, setShowServicePicker] = useState<boolean>(false);
   const [serviceSearchQuery, setServiceSearchQuery] = useState<string>('');
@@ -112,7 +112,7 @@ export const BookingModal: React.FC = () => {
     };
   }, [isOpen, showServicePicker, closeModal]);
 
-  // Sync initial service from context
+  // Sync initial service from context (or start empty if generic booking)
   useEffect(() => {
     if (initialService) {
       const match = initialService.match(/^(.*?)(?:\s*\((.*?)\))?$/);
@@ -132,7 +132,7 @@ export const BookingModal: React.FC = () => {
         setSelectedServices([serviceName]);
       }
     } else {
-      setSelectedServices(['Home Cleaning']);
+      setSelectedServices([]);
     }
 
     if (isOpen) {
@@ -148,10 +148,6 @@ export const BookingModal: React.FC = () => {
   const toggleService = (serviceTitle: string) => {
     setServiceError('');
     if (selectedServices.includes(serviceTitle)) {
-      if (selectedServices.length === 1) {
-        setServiceError('Please keep at least one service selected.');
-        return;
-      }
       setSelectedServices(selectedServices.filter((s) => s !== serviceTitle));
     } else {
       setSelectedServices([...selectedServices, serviceTitle]);
@@ -159,10 +155,6 @@ export const BookingModal: React.FC = () => {
   };
 
   const removeService = (serviceTitle: string) => {
-    if (selectedServices.length === 1) {
-      setServiceError('Please keep at least one service selected.');
-      return;
-    }
     setServiceError('');
     setSelectedServices(selectedServices.filter((s) => s !== serviceTitle));
   };
@@ -196,6 +188,7 @@ export const BookingModal: React.FC = () => {
 
     if (selectedServices.length === 0) {
       setServiceError('Please select at least one service to proceed.');
+      setShowServicePicker(true);
       return;
     }
 
@@ -504,32 +497,59 @@ export const BookingModal: React.FC = () => {
                   <div className="flex items-center gap-1.5">
                     <Layers className="w-3.5 h-3.5 text-[#22AC33]" />
                     <span className="text-[11px] font-extrabold text-[#041B3B] uppercase tracking-wider">
-                      Selected Services ({selectedServices.length})
+                      {selectedServices.length > 0
+                        ? `Selected Services (${selectedServices.length})`
+                        : 'Services Required *'}
                     </span>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowServicePicker(true)}
-                    className="text-[11px] font-bold text-[#22AC33] hover:text-[#1c8f2b] flex items-center gap-1 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs hover:border-[#22AC33]/40 active:scale-95 transition-all"
-                  >
-                    <span>+ Add / Change</span>
-                    <ChevronRight className="w-3 h-3" />
-                  </button>
+                  {selectedServices.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setShowServicePicker(true)}
+                      className="text-[11px] font-bold text-[#22AC33] hover:text-[#1c8f2b] flex items-center gap-1 cursor-pointer bg-white px-2.5 py-1 rounded-lg border border-slate-200 shadow-2xs hover:border-[#22AC33]/40 active:scale-95 transition-all"
+                    >
+                      <span>+ Add / Change</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </button>
+                  )}
                 </div>
 
                 {serviceError && (
-                  <p className="text-[11px] text-red-600 font-semibold">{serviceError}</p>
+                  <p className="text-[11px] text-red-600 font-bold bg-red-50 p-2 rounded-lg border border-red-200">
+                    {serviceError}
+                  </p>
                 )}
 
-                {/* Selected Service Chips */}
-                <div className="flex flex-wrap gap-1.5 pt-0.5">
-                  {selectedServices.map((srvTitle) => (
-                    <span
-                      key={srvTitle}
-                      className="inline-flex items-center gap-1.5 text-[11px] font-bold bg-[#E8F8EC] text-[#041B3B] border border-[#22AC33]/40 px-2.5 py-1 rounded-lg shadow-2xs"
-                    >
-                      <span className="truncate max-w-[170px] sm:max-w-none">{srvTitle}</span>
-                      {selectedServices.length > 1 && (
+                {/* Empty State: Prompt User to Select */}
+                {selectedServices.length === 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowServicePicker(true)}
+                    className="w-full py-3 px-3.5 rounded-xl bg-white hover:bg-[#E8F8EC] border-2 border-dashed border-[#22AC33]/50 text-[#041B3B] flex items-center justify-between transition-all cursor-pointer shadow-2xs group"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-7 h-7 rounded-lg bg-[#22AC33] text-white flex items-center justify-center shrink-0 shadow-2xs">
+                        <Plus className="w-4 h-4" />
+                      </div>
+                      <div className="text-left">
+                        <span className="text-xs font-black block text-[#041B3B]">Select Services</span>
+                        <span className="text-[10px] text-slate-500 font-medium block">Choose 1 or more from 19 services</span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs font-bold text-[#22AC33]">
+                      <span>Choose</span>
+                      <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
+                  </button>
+                ) : (
+                  /* Selected Service Chips */
+                  <div className="flex flex-wrap gap-1.5 pt-0.5">
+                    {selectedServices.map((srvTitle) => (
+                      <span
+                        key={srvTitle}
+                        className="inline-flex items-center gap-1.5 text-[11px] font-bold bg-[#E8F8EC] text-[#041B3B] border border-[#22AC33]/40 px-2.5 py-1 rounded-lg shadow-2xs"
+                      >
+                        <span className="truncate max-w-[170px] sm:max-w-none">{srvTitle}</span>
                         <button
                           type="button"
                           onClick={() => removeService(srvTitle)}
@@ -539,12 +559,12 @@ export const BookingModal: React.FC = () => {
                         >
                           <X className="w-2.5 h-2.5" />
                         </button>
-                      )}
-                    </span>
-                  ))}
-                </div>
+                      </span>
+                    ))}
+                  </div>
+                )}
 
-                {/* Home Cleaning BHK Size Segment (if Home Cleaning is selected) */}
+                {/* Home Cleaning BHK Size Segment (ONLY IF Home Cleaning is selected) */}
                 {selectedServices.includes('Home Cleaning') && (
                   <div className="pt-2 border-t border-slate-200/80">
                     <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">

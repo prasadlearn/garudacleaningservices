@@ -313,9 +313,9 @@ export const ServicesPage: React.FC = () => {
                     {/* Price Indicator */}
                     <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-baseline justify-between">
                       <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">
-                        {isInspection ? 'Assessment' : (service.price.kind === 'tiers' || service.price.kind === 'from' || (service.price.kind === 'per-unit' && service.price.unit === 'sq.ft')) ? 'Starting' : 'Price'}
+                        {isInspection ? 'Assessment' : 'Price'}
                       </span>
-                      <span className="text-sm sm:text-lg font-black text-[#1A8C28] truncate">{activePriceLabel}</span>
+                      <span className="text-sm sm:text-lg font-black text-[#1A8C28] truncate whitespace-nowrap">{activePriceLabel}</span>
                     </div>
                   </div>
                 </div>

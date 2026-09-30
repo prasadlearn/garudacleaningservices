@@ -36,14 +36,14 @@ export function buildGarudaServiceRequestWhatsAppUrl(data: ServiceRequestData): 
   let formattedServices = '';
   if (Array.isArray(data.serviceRequired)) {
     if (data.serviceRequired.length === 0) {
-      formattedServices = 'Home Cleaning';
+      formattedServices = 'Cleaning Service Inquiry';
     } else if (data.serviceRequired.length === 1) {
       formattedServices = data.serviceRequired[0];
     } else {
       formattedServices = '\n' + data.serviceRequired.map((s, idx) => `  ${idx + 1}. ${s}`).join('\n');
     }
   } else {
-    formattedServices = data.serviceRequired?.trim() || 'Home Cleaning';
+    formattedServices = data.serviceRequired?.trim() || 'Cleaning Service Inquiry';
   }
 
   const text = `*New Cleaning Booking*
