@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
 import { getServicesByCategory } from '../data/servicesData';
 import { useQuoteModal } from '../context/QuoteModalContext';
+import { useWholesaleCart } from '../features/cleaning-liquids';
 import { trackEvent } from '../utils/analytics';
 
 interface MobileDrawerProps {
@@ -16,6 +17,7 @@ interface MobileDrawerProps {
 export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, triggerRef }) => {
   const location = useLocation();
   const { openModal } = useQuoteModal();
+  const { totalItemsCount } = useWholesaleCart();
   const [servicesExpanded, setServicesExpanded] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -304,20 +306,28 @@ export const MobileDrawer: React.FC<MobileDrawerProps> = ({ isOpen, onClose, tri
               </div>
 
               {/* Other Links */}
-              {navLinks.slice(2).map((link) => (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  onClick={onClose}
-                  className={`min-h-[44px] flex items-center px-4 rounded-xl font-bold text-sm transition-colors ${
-                    isExactActive(link.path)
-                      ? 'bg-[#E8F8EC] text-[#22AC33]'
-                      : 'text-slate-800 hover:bg-slate-100'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              {navLinks.slice(2).map((link) => {
+                const isLiquids = link.path === '/cleaning-liquids';
+                return (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    onClick={onClose}
+                    className={`min-h-[44px] flex items-center justify-between px-4 rounded-xl font-bold text-sm transition-colors ${
+                      isExactActive(link.path)
+                        ? 'bg-[#E8F8EC] text-[#22AC33]'
+                        : 'text-slate-800 hover:bg-slate-100'
+                    }`}
+                  >
+                    <span>{link.label}</span>
+                    {isLiquids && totalItemsCount > 0 && (
+                      <span className="px-2 py-0.5 rounded-full bg-[#22AC33] text-white text-[10px] font-black leading-none animate-pulse">
+                        {totalItemsCount}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
             </div>
 
             {/* Drawer Bottom CTAs */}

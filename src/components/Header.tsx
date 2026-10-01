@@ -4,6 +4,7 @@ import { Phone, Menu, Home, ChevronDown, MapPin, Sparkles, ArrowRight } from 'lu
 import { motion, AnimatePresence } from 'framer-motion';
 import { BUSINESS_CONFIG } from '../config/businessConfig';
 import { useQuoteModal } from '../context/QuoteModalContext';
+import { useWholesaleCart } from '../features/cleaning-liquids';
 import { getServicesByCategory } from '../data/servicesData';
 import { trackEvent } from '../utils/analytics';
 import { MobileDrawer } from './MobileDrawer';
@@ -16,6 +17,7 @@ export const Header: React.FC = () => {
   const hamburgerRef = useRef<HTMLButtonElement>(null);
   const closeTimeoutRef = useRef<number | null>(null);
   const { openModal } = useQuoteModal();
+  const { totalItemsCount } = useWholesaleCart();
   const location = useLocation();
 
   const residentialServices = getServicesByCategory('residential');
@@ -122,8 +124,8 @@ export const Header: React.FC = () => {
               <span className="font-black text-[#041B3B] tracking-tight text-[13px] min-[360px]:text-[14px] sm:text-[18px] whitespace-nowrap block leading-tight">
                 Garuda <span className="text-[#22AC33] font-bold">Cleaning Services</span>
               </span>
-              <span className="text-[10px] sm:text-xs font-semibold text-slate-500 tracking-normal hidden sm:block truncate">
-                Professional Mechanized Cleaning • Tirupati
+              <span className="text-[9px] sm:text-[11px] font-semibold text-slate-500 tracking-normal hidden sm:block truncate">
+                Professional Cleaning • Tirupati
               </span>
             </div>
           </Link>
@@ -347,11 +349,16 @@ export const Header: React.FC = () => {
 
             <Link
               to="/cleaning-liquids"
-              className={`py-2 transition-colors relative ${
+              className={`py-2 transition-colors relative flex items-center gap-1.5 ${
                 isExactActive('/cleaning-liquids') ? 'text-[#22AC33] font-black' : 'hover:text-[#22AC33] text-slate-700'
               }`}
             >
-              Cleaning Liquids
+              <span>Cleaning Liquids</span>
+              {totalItemsCount > 0 && (
+                <span className="px-1.5 py-0.5 rounded-full bg-[#22AC33] text-white text-[10px] font-black leading-none animate-pulse">
+                  {totalItemsCount}
+                </span>
+              )}
               {isExactActive('/cleaning-liquids') && (
                 <motion.div
                   layoutId="activeTab"

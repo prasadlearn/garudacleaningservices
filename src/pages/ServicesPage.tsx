@@ -307,11 +307,13 @@ export const ServicesPage: React.FC = () => {
                     </div>
 
                     {/* Price Indicator */}
-                    <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-baseline justify-between">
-                      <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider">
+                    <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-1">
+                      <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider shrink-0">
                         {isInspection ? 'Assessment' : 'Price'}
                       </span>
-                      <span className="text-sm sm:text-lg font-black text-[#1A8C28] truncate whitespace-nowrap">{activePriceLabel}</span>
+                      <span className="text-xs sm:text-base lg:text-lg font-black text-[#1A8C28] text-right">
+                        {activePriceLabel}
+                      </span>
                     </div>
                   </div>
                 </div>

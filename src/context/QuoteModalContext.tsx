@@ -50,7 +50,7 @@ export const QuoteModalProvider: React.FC<{ children: ReactNode }> = ({ children
         const timer = window.setTimeout(() => {
           sessionStorage.setItem(AUTO_OPEN_STORAGE_KEY, 'true');
           setIsOpen(true);
-        }, 2500);
+        }, 10000); // 10 seconds after opening website
         return () => window.clearTimeout(timer);
       }
     } catch {

@@ -6,6 +6,7 @@ export type AnalyticsEvent =
   | 'gallery_category_filter'
   | 'area_chip_click'
   | 'wholesale_enquiry_submit'
+  | 'wholesale_cart_add'
   | 'product_click';
 
 export interface AnalyticsPayload {

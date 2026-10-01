@@ -7,6 +7,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 import { QuoteModalProvider } from './context/QuoteModalContext';
 import { BookingModal } from './components/BookingModal';
 import { ScrollToTopButton } from './components/ScrollToTopButton';
+import { WholesaleCart } from './features/cleaning-liquids';
 
 // Eager load HomePage for instant first contentful paint
 import { HomePage } from './pages/HomePage';
@@ -56,6 +57,7 @@ export const App: React.FC = () => {
           <MobileStickyBar />
           <ScrollToTopButton />
           <BookingModal />
+          <WholesaleCart />
         </div>
       </QuoteModalProvider>
     </BrowserRouter>

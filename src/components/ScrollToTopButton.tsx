@@ -23,12 +23,10 @@ export const ScrollToTopButton: React.FC = () => {
       type="button"
       onClick={scrollToTop}
       aria-label="Scroll to top"
-      className="fixed right-4 sm:right-6 z-[var(--z-back-to-top)] w-11 h-11 rounded-full bg-[#041B3B] hover:bg-[#22AC33] text-white flex items-center justify-center shadow-xl border-2 border-white/40 transition-all cursor-pointer"
-      style={{
-        bottom: 'calc(var(--bar-h, 60px) + env(safe-area-inset-bottom, 0px) + 12px)'
-      }}
+      className="fixed right-4 sm:right-6 bottom-36 sm:bottom-24 z-30 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-slate-800/80 hover:bg-[#041B3B] text-white flex items-center justify-center shadow-md border border-white/20 transition-all cursor-pointer backdrop-blur-xs hover:scale-105"
+      title="Scroll to top"
     >
-      <ArrowUp className="w-5 h-5" />
+      <ArrowUp className="w-4 h-4" />
     </button>
   );
 };

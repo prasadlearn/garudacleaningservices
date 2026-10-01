@@ -46,15 +46,26 @@ export function buildGarudaServiceRequestWhatsAppUrl(data: ServiceRequestData): 
     formattedServices = data.serviceRequired?.trim() || 'Cleaning Service Inquiry';
   }
 
+  const addressLines: string[] = [];
+  if (data.address.trim() && !data.address.trim().startsWith('GPS Pinned')) {
+    addressLines.push(`Address / Locality: ${data.address.trim()}`);
+  }
+  if (data.landmark && data.landmark.trim() && data.landmark.trim() !== '-' && data.landmark.trim() !== data.address.trim()) {
+    addressLines.push(`Landmark: ${data.landmark.trim()}`);
+  }
+  if (gps && gps !== '-') {
+    addressLines.push(`GPS Location: ${gps}`);
+  } else if (addressLines.length === 0) {
+    addressLines.push(`Address: ${data.address.trim() || 'Tirupati'}`);
+  }
+
   const text = `*New Cleaning Booking*
 Customer Name: ${data.name.trim()}
 Phone Number: ${data.phone.trim()}
 Services: ${formattedServices}
 Appointment Date: ${dateStr}
 Preferred Time: ${priorityTime}
-Address: ${data.address.trim()}
-Landmark: ${landmark}
-GPS Location: ${gps}
+${addressLines.join('\n')}
 Remarks: ${remarks}`;
 
   return `https://wa.me/917799552084?text=${encodeURIComponent(text)}`;

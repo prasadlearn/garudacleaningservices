@@ -764,22 +764,34 @@ export const ContactPage: React.FC = () => {
                           Apartment Size (Optional):
                         </label>
                         <span className="text-[10px] sm:text-[11px] font-bold text-[#22AC33] bg-white px-2 py-0.5 rounded-md border border-emerald-200 shrink-0">
-                          Starting ₹2,399
+                          {homeCleaningBhk === '1 BHK' && '₹2,399'}
+                          {homeCleaningBhk === '2 BHK' && '₹3,299'}
+                          {homeCleaningBhk === '3 BHK' && '₹4,999'}
+                          {homeCleaningBhk === '4 BHK' && 'Starting ₹6,499'}
+                          {!homeCleaningBhk && 'Starting ₹2,399'}
                         </span>
                       </div>
                       <div className="grid grid-cols-4 gap-1.5 sm:gap-2">
-                        {['1 BHK', '2 BHK', '3 BHK', '4 BHK'].map((tier) => (
+                        {[
+                          { label: '1 BHK', price: '₹2,399' },
+                          { label: '2 BHK', price: '₹3,299' },
+                          { label: '3 BHK', price: '₹4,999' },
+                          { label: '4 BHK', price: '₹6,499+' }
+                        ].map((tier) => (
                           <button
-                            key={tier}
+                            key={tier.label}
                             type="button"
-                            onClick={() => setHomeCleaningBhk(homeCleaningBhk === tier ? '' : tier)}
-                            className={`py-2 px-1 text-center rounded-lg text-[11px] sm:text-xs font-bold transition-all cursor-pointer truncate ${
-                              homeCleaningBhk === tier
-                                ? 'bg-[#22AC33] text-white shadow-2xs'
-                                : 'bg-white text-slate-700 border border-slate-200 hover:bg-slate-100'
+                            onClick={() => setHomeCleaningBhk(homeCleaningBhk === tier.label ? '' : tier.label)}
+                            className={`py-1.5 sm:py-2 px-1 text-center rounded-lg transition-all cursor-pointer border ${
+                              homeCleaningBhk === tier.label
+                                ? 'bg-[#22AC33] text-white border-[#22AC33] shadow-2xs'
+                                : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
                             }`}
                           >
-                            {tier}
+                            <div className="text-[11px] sm:text-xs font-bold leading-tight truncate">{tier.label}</div>
+                            <div className={`text-[9px] sm:text-[10px] leading-tight truncate mt-0.5 ${homeCleaningBhk === tier.label ? 'text-white/95 font-bold' : 'text-slate-500 font-medium'}`}>
+                              {tier.price}
+                            </div>
                           </button>
                         ))}
                       </div>
