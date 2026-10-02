@@ -8,6 +8,7 @@ import { MarqueeText } from '../components/MarqueeText';
 import { TrustedExpertsCards } from '../components/TrustedExpertsCards';
 import { ChooseAndBookSection } from '../components/ChooseAndBookSection';
 import { ComboOffersSection } from '../components/ComboOffersSection';
+import { HomeLiquidsSection } from '../components/HomeLiquidsSection';
 import { TeamInActionSection } from '../components/TeamInActionSection';
 import { WorkProcessSection } from '../components/WorkProcessSection';
 import { CustomerFeedbackSection } from '../components/CustomerFeedbackSection';
@@ -18,8 +19,8 @@ import { FAQAccordionSection } from '../components/FAQAccordionSection';
 export const HomePage: React.FC = () => {
   const homeSchema = {
     '@context': 'https://schema.org',
-    '@type': 'HomeAndConstructionBusiness',
-    '@id': 'https://garudacleaningservices.in/#business',
+    '@type': 'Organization',
+    '@id': 'https://garudacleaningservices.in/#organization',
     name: 'Garuda Cleaning Services',
     alternateName: 'Garuda Cleaning Services Tirupati',
     url: 'https://garudacleaningservices.in/',
@@ -28,12 +29,6 @@ export const HomePage: React.FC = () => {
     telephone: '+917799552084',
     email: 'garudacleaningservices1@gmail.com',
     priceRange: '₹99 - ₹4999',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Tirupati',
-      addressRegion: 'Andhra Pradesh',
-      addressCountry: 'IN'
-    },
     openingHoursSpecification: {
       '@type': 'OpeningHoursSpecification',
       dayOfWeek: [
@@ -112,7 +107,10 @@ export const HomePage: React.FC = () => {
       {/* 9. Mint green Combo Offers table */}
       <ComboOffersSection />
 
-      {/* 10. See Our Cleaning Teams in Action */}
+      {/* 10. Direct Wholesale Cleaning Liquids & Supplies Showcase */}
+      <HomeLiquidsSection />
+
+      {/* 11. See Our Cleaning Teams in Action */}
       <TeamInActionSection />
 
       {/* 11. How Our Cleaning Services Works (4 steps) */}

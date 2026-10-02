@@ -53,19 +53,13 @@ export const ServiceAreaPage: React.FC = () => {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": "LocalBusiness",
+        "@type": "Organization",
         "@id": "https://garudacleaningservices.in/#organization",
         "name": BUSINESS_CONFIG.brandName,
         "description": "Professional residential and commercial mechanized cleaning services across all localities in Tirupati.",
         "url": "https://garudacleaningservices.in/service-areas",
         "telephone": BUSINESS_CONFIG.contact.phoneDisplay,
         "priceRange": "₹₹",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Tirupati",
-          "addressRegion": "Andhra Pradesh",
-          "addressCountry": "IN"
-        },
         "areaServed": [
           {
             "@type": "City",

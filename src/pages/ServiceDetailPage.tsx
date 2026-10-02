@@ -128,13 +128,12 @@ export const ServiceDetailPage: React.FC = () => {
     name: service.title,
     description: service.shortDescription,
     provider: {
-      '@type': 'LocalBusiness',
+      '@type': 'Organization',
       name: BUSINESS_CONFIG.brandName,
       telephone: BUSINESS_CONFIG.contact.phoneTel,
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Tirupati',
-        addressRegion: 'Andhra Pradesh'
+      areaServed: {
+        '@type': 'City',
+        name: 'Tirupati'
       }
     },
     url: `https://garudacleaningservices.in/services/${service.slug}`,
@@ -185,7 +184,7 @@ export const ServiceDetailPage: React.FC = () => {
       case 'move-in-out-cleaning':
         return 'Move-In & Move-Out Cleaning in Tirupati';
       case 'fridge-cleaning':
-        return 'Fridge Cleaning in Tirupati | Get a Quote';
+        return 'Fridge Cleaning in Tirupati | ₹299';
       case 'pest-control':
         return 'Pest Control in Tirupati | BHK & Villa Services';
       case 'water-tank-cleaning':
@@ -230,7 +229,7 @@ export const ServiceDetailPage: React.FC = () => {
       case 'move-in-out-cleaning':
         return 'Vacant apartment and house move-in & move-out cleaning in Tirupati for ₹1,499. Cleans cupboards, washrooms, kitchens, and floors.';
       case 'fridge-cleaning':
-        return 'Refrigerator interior shelf washing, food-safe sanitization, and odor removal in Tirupati. Contact us for price and scheduling.';
+        return 'Refrigerator interior shelf washing, food-safe sanitization, and odor removal in Tirupati starting from ₹299. Book online or WhatsApp.';
       case 'pest-control':
         return 'Targeted pest control treatment for cockroaches and household pests in Tirupati. 1 BHK ₹1,000, 2 BHK ₹1,200, 3 BHK ₹1,400, Villa ₹3,000.';
       case 'water-tank-cleaning':
@@ -307,7 +306,7 @@ export const ServiceDetailPage: React.FC = () => {
 
               <div className="pt-2">
                 <span className="text-xs uppercase font-bold text-slate-400 block tracking-wider">
-                  {isQuoteOrInspection ? 'Pricing' : 'Indicative Pricing'}
+                  {isQuoteOrInspection ? 'Assessment' : 'Starting From'}
                 </span>
                 <span className="text-2xl sm:text-3xl font-black text-[#22AC33]">
                   {formattedPrice}

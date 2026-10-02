@@ -117,8 +117,13 @@ export const Header: React.FC = () => {
             className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1 group"
             aria-label="Garuda Cleaning Services Home"
           >
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-[#22AC33] text-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform shrink-0">
-              <Home className="w-4 h-4 sm:w-6 sm:h-6 fill-current" />
+            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl overflow-hidden shadow-sm group-hover:scale-105 transition-transform shrink-0 border border-slate-200/80 bg-slate-900">
+              <img
+                src="/images/garuda-logo.webp"
+                alt="Garuda Cleaning Services Logo"
+                className="w-full h-full object-cover"
+                loading="eager"
+              />
             </div>
             <div className="flex flex-col min-w-0 leading-tight">
               <span className="font-black text-[#041B3B] tracking-tight text-[13px] min-[360px]:text-[14px] sm:text-[18px] whitespace-nowrap block leading-tight">

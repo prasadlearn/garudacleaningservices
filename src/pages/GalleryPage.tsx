@@ -69,17 +69,11 @@ export const GalleryPage: React.FC = () => {
     '@type': 'ImageGallery',
     name: 'Garuda Cleaning Services - Project Work Gallery',
     description: 'Before & after cleaning comparisons, project photos, trained team, and equipment in Tirupati, Andhra Pradesh.',
-    url: 'https://garudacleaningservices.com/gallery',
+    url: 'https://garudacleaningservices.in/gallery',
     publisher: {
-      '@type': 'LocalBusiness',
+      '@type': 'Organization',
       name: 'Garuda Cleaning Services',
       telephone: '+917799552084',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Tirupati',
-        addressRegion: 'Andhra Pradesh',
-        addressCountry: 'IN'
-      },
       areaServed: {
         '@type': 'City',
         name: 'Tirupati'

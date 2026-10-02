@@ -22,11 +22,14 @@ export const ServicesPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'all' | ServiceCategory>('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Per-unit custom estimator states keyed by service slug
+  // Per-unit custom estimator states keyed by service slug (starting at 1)
   const [unitValues, setUnitValues] = useState<Record<string, number | ''>>({
-    'post-construction-cleaning': 1000,
-    'office-cleaning': 1200,
-    'sofa-cleaning': 5
+    'post-construction-cleaning': 1,
+    'office-cleaning': 1,
+    'sofa-cleaning': 1,
+    'fan-cleaning': 1,
+    'window-cleaning': 1,
+    'glass-cleaning': 1
   });
 
   // BHK tier state for home-cleaning
@@ -64,6 +67,7 @@ export const ServicesPage: React.FC = () => {
   };
 
   const calculateEstimate = (price: PriceModel, rawQty: number | '') => {
+    // If input is cleared or 0, calculate based on 1 unit as starting base price
     const qty = typeof rawQty === 'number' && rawQty > 0 ? rawQty : 1;
     if (price.kind === 'per-unit') {
       if (price.max !== undefined && price.max !== price.min) {
@@ -260,8 +264,8 @@ export const ServicesPage: React.FC = () => {
                         ))}
                       </div>
 
-                      {/* DYNAMIC CARD COMPONENT: BHK SEGMENTED SELECTOR */}
-                      {isHomeCleaning && bhkTiers.length > 0 && (
+                      {/* DYNAMIC CARD COMPONENT OR UNIFORM FEATURE TAG */}
+                      {isHomeCleaning && bhkTiers.length > 0 ? (
                         <div className="mt-2.5 p-2 bg-slate-50 rounded-xl border border-slate-200">
                           <span className="text-[8px] sm:text-[9px] font-extrabold text-slate-500 uppercase tracking-wider block mb-1">
                             Apartment Size:
@@ -283,10 +287,7 @@ export const ServicesPage: React.FC = () => {
                             ))}
                           </div>
                         </div>
-                      )}
-
-                      {/* DYNAMIC CARD COMPONENT: PER-UNIT ESTIMATOR */}
-                      {isPerUnit && (
+                      ) : isPerUnit ? (
                         <div className="mt-2.5 p-2 bg-slate-50 rounded-xl border border-slate-200">
                           <div className="flex items-center justify-between gap-1">
                             <label className="text-[8px] sm:text-[9px] font-extrabold text-slate-500 uppercase tracking-wider">
@@ -297,19 +298,20 @@ export const ServicesPage: React.FC = () => {
                               min={1}
                               max={50000}
                               value={unitValues[service.slug] ?? ''}
+                              placeholder="1"
                               onChange={(e) => handleUnitChange(service.slug, e.target.value)}
                               onBlur={() => handleUnitBlur(service.slug)}
                               className="w-16 px-1.5 py-0.5 bg-white border border-slate-300 rounded-lg text-[10px] sm:text-xs font-bold text-slate-800 text-center focus:outline-none focus:border-[#22AC33]"
                             />
                           </div>
                         </div>
-                      )}
+                      ) : null}
                     </div>
 
                     {/* Price Indicator */}
                     <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between gap-1">
-                      <span className="text-[9px] sm:text-xs font-bold text-slate-400 uppercase tracking-wider shrink-0">
-                        {isInspection ? 'Assessment' : 'Price'}
+                      <span className="text-[9px] sm:text-[10px] font-bold text-slate-400 uppercase tracking-wider shrink-0">
+                        {isInspection ? 'Assessment' : 'Starting from'}
                       </span>
                       <span className="text-xs sm:text-base lg:text-lg font-black text-[#1A8C28] text-right">
                         {activePriceLabel}

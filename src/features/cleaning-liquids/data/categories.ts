@@ -1,13 +1,12 @@
 import type { ProductCategory } from '../types/product';
 
 export const PRODUCT_CATEGORIES: ProductCategory[] = [
-  'All Products',
-  '5L Bulk Savers',
+  'All',
   'Floor Care',
-  'Washroom Care',
+  'Bathroom Care',
   'Kitchen Care',
   'Glass Care',
-  'Multipurpose',
-  'Fabric Care',
-  'Disinfectants'
+  'Laundry Care',
+  'Fresheners',
+  'General Care'
 ];

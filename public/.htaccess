@@ -19,6 +19,11 @@
   RewriteRule ^products/?$ /cleaning-liquids [R=301,L]
   RewriteRule ^areas/?$ /service-areas [R=301,L]
 
+  # Explicit 410 Gone / 404 for deleted legacy routes (never redirect to unrelated pages)
+  RewriteRule ^services/floor-cleaning/?$ - [G,L]
+  RewriteRule ^services/commercial-cleaning/?$ - [G,L]
+  RewriteRule ^services/deep-cleaning/?$ - [G,L]
+
   # SPA Routing - Direct all non-file/non-directory requests to index.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d

@@ -2,7 +2,7 @@ import React from 'react';
 import { Tag, Sparkles, MessageCircle, Plus } from 'lucide-react';
 import type { Product, PackOption } from '../types/product';
 import { CLEANING_PRODUCTS } from '../data/products';
-import { formatCurrency, calculatePackPricing } from '../utils/pricingUtils';
+import { calculatePackPricing } from '../utils/pricingUtils';
 import { sendDirectProductWhatsApp } from '../utils/whatsappUtils';
 
 interface BulkOffersProps {
@@ -14,21 +14,21 @@ export const BulkOffers: React.FC<BulkOffersProps> = ({
   onAddToCart,
   className = ''
 }) => {
-  // Focus on top 5L products
+  // Focus exclusively on confirmed priced 5L products
   const targetIds = [
     'phenyl',
     'multipurpose-cleaner',
-    'laundry-liquid',
-    'floor-cleaner',
-    'bathroom-cleaner',
+    'detergent',
+    'dishwash',
     'glass-cleaner',
-    'dishwash'
+    'blue-harpic',
+    'floor-cleaner'
   ];
   const bulkProducts = CLEANING_PRODUCTS.filter((p) => targetIds.includes(p.id));
 
   return (
     <section id="bulk-offers" className={`space-y-4 sm:space-y-6 scroll-mt-20 ${className}`}>
-      {/* Mandatory H2 */}
+      {/* Section Header */}
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2 border-b border-slate-200 pb-3">
         <div>
           <div className="flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#22AC33] mb-0.5">

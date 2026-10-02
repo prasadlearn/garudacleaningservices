@@ -213,16 +213,10 @@ export const ContactPage: React.FC = () => {
     description: 'Contact Garuda Cleaning Services in Tirupati for professional cleaning bookings, quotes, and inspections.',
     url: 'https://garudacleaningservices.in/contact',
     mainEntity: {
-      '@type': 'LocalBusiness',
+      '@type': 'Organization',
       name: 'Garuda Cleaning Services',
       telephone: '+917799552084',
       email: 'garudacleaningservices1@gmail.com',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Tirupati',
-        addressRegion: 'Andhra Pradesh',
-        addressCountry: 'IN'
-      },
       areaServed: {
         '@type': 'City',
         name: 'Tirupati'

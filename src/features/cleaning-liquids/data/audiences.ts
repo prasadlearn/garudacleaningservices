@@ -7,15 +7,15 @@ export const WHOLESALE_AUDIENCES: WholesaleAudience[] = [
     icon: 'Building',
     description: 'Bulk cans for clubhouse maintenance, corridor mopping, lobby sanitization, and common area upkeep.',
     recommendedPacks: '5L Bulk Cans (Monthly Schedule)',
-    popularProducts: ['Phenyl (Floor Wash)', 'Floor Cleaner', 'Bathroom Cleaner']
+    popularProducts: ['Phenyl (Floor Wash)', 'Floor Cleaner', 'Blue Harpic']
   },
   {
     id: 'hotels',
     title: 'Hotels & Guest Houses',
     icon: 'Home',
-    description: 'Reliable bulk supply for daily guest room housekeeping, bathroom descaling, mirror polishing, and linen care.',
+    description: 'Reliable bulk supply for daily guest room housekeeping, bathroom sanitation, mirror polishing, and linen care.',
     recommendedPacks: '5L Bulk Cans & Case Quantities',
-    popularProducts: ['Glass Cleaner', 'Bathroom Cleaner', 'Laundry Liquid Detergent']
+    popularProducts: ['Glass Cleaner', 'Blue Harpic', 'Detergent']
   },
   {
     id: 'offices',

@@ -8,6 +8,7 @@ interface ProductGridProps {
   products: Product[];
   cartItems?: CartItem[];
   onAddToCart?: (product: Product, option: PackOption) => void;
+  onUpdateQuantity?: (productId: string, size: string, quantity: number) => void;
   onResetFilters?: () => void;
   className?: string;
 }
@@ -16,6 +17,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   products,
   cartItems = [],
   onAddToCart,
+  onUpdateQuantity,
   onResetFilters,
   className = ''
 }) => {
@@ -54,18 +56,16 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       <div
         className={`grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4 md:gap-6 ${className}`}
       >
-        {products.map((product) => {
-          const isItemInCart = cartItems.some((item) => item.productId === product.id);
-          return (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onAddToCart={onAddToCart}
-              onOpenDetails={(p) => setActiveDrawerProduct(p)}
-              isItemInCart={isItemInCart}
-            />
-          );
-        })}
+        {products.map((product) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            cartItems={cartItems}
+            onAddToCart={onAddToCart}
+            onUpdateQuantity={onUpdateQuantity}
+            onOpenDetails={(p) => setActiveDrawerProduct(p)}
+          />
+        ))}
       </div>
 
       {/* Product Details Drawer / Bottom Sheet */}

@@ -17,10 +17,11 @@ export const TeamAboutSection: React.FC = () => {
             <div className="lg:col-span-6 relative">
               <div className="rounded-2xl overflow-hidden aspect-4/3 bg-slate-900 shadow-xl border-4 border-white">
                 <SafeImage
-                  src="/images/office-clean.webp"
+                  src="/images/team-about.webp"
                   alt="Garuda Cleaning Services Team"
                   fallbackLabel="Garuda Cleaning Services Team"
                   className="w-full h-full object-cover"
+                  loading="eager"
                 />
               </div>
 

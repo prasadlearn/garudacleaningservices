@@ -2,14 +2,14 @@ import type { ReferenceType } from './pricing';
 
 export type PricingStatus = 'confirmed' | 'suggested' | 'enquiry';
 
-export type PackSize = '500 ml' | '1 L' | '5 L' | '1 kg' | '5 kg' | string;
+export type PackSize = '500 ml' | '1 L' | '5 L' | '10 L' | string;
 
 export interface PackOption {
   size: PackSize;
-  offerPrice: number | null; // e.g. 70, 125, 575 (null if enquiry only)
+  offerPrice: number | null; // null if enquiry only
   price?: number | null; // backward compatibility alias for offerPrice
   pricingStatus?: PricingStatus;
-  referencePrice?: number | null; // calculated promotional comparison or 5x 1L reference
+  referencePrice?: number | null; // calculated promotional comparison or pack comparison
   referenceType?: ReferenceType;
   savingsAmount?: number;
   discountLabel?: string;
@@ -20,15 +20,16 @@ export interface PackOption {
 }
 
 export type ProductCategory =
+  | 'All'
   | 'All Products'
-  | '5L Bulk Savers'
   | 'Floor Care'
-  | 'Washroom Care'
+  | 'Bathroom Care'
   | 'Kitchen Care'
   | 'Glass Care'
-  | 'Multipurpose'
-  | 'Fabric Care'
-  | 'Disinfectants';
+  | 'Laundry Care'
+  | 'Fresheners'
+  | 'General Care'
+  | '5L Bulk Savers';
 
 export interface Product {
   id: string;
@@ -37,7 +38,7 @@ export interface Product {
   image: string;
   shortDescription: string;
   use?: string;
-  suitableFor?: string[];
+  suitableFor: string[];
   packs: PackOption[];
   orderEnabled?: boolean;
 }

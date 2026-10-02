@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Plus, Check, MessageCircle, Info } from 'lucide-react';
-import type { Product, PackOption } from '../types/product';
+import type { Product, PackOption, CartItem } from '../types/product';
 import { SafeImage } from '../../../components/SafeImage';
 import { ProductPriceBlock } from './ProductPriceBlock';
 import { sendDirectProductWhatsApp } from '../utils/whatsappUtils';
@@ -9,15 +9,18 @@ import { calculatePackPricing } from '../utils/pricingUtils';
 interface ProductCardProps {
   product: Product;
   onAddToCart?: (product: Product, option: PackOption) => void;
+  onUpdateQuantity?: (productId: string, size: string, quantity: number) => void;
   onOpenDetails?: (product: Product) => void;
+  cartItems?: CartItem[];
   isItemInCart?: boolean;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onAddToCart,
+  onUpdateQuantity,
   onOpenDetails,
-  isItemInCart = false
+  cartItems = []
 }) => {
   // Default to 1L pack option if available, otherwise first option
   const defaultOption =
@@ -42,6 +45,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     oneLitrePack?.offerPrice ?? oneLitrePack?.price
   );
 
+  // Exact pack-specific quantity lookup in wholesale cart
+  const matchingCartItem = cartItems.find(
+    (item) => item.productId === product.id && item.size === currentOption.size
+  );
+  const currentPackQty = matchingCartItem ? matchingCartItem.quantity : 0;
+
   const [justAdded, setJustAdded] = useState<boolean>(false);
 
   const handleWhatsApp = (e: React.MouseEvent) => {
@@ -60,7 +69,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       setJustAdded(true);
       setTimeout(() => {
         setJustAdded(false);
-      }, 2000);
+      }, 1500);
     }
   };
 
@@ -71,30 +80,30 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     >
       {/* 1. Media Area */}
       <div>
-        <div className="relative aspect-4/3 sm:aspect-16/10 bg-slate-100 overflow-hidden">
+        <div className="relative aspect-4/3 sm:aspect-16/10 bg-slate-50 overflow-hidden flex items-center justify-center p-1.5">
           <SafeImage
             src={product.image}
             alt={`${product.name} cleaning liquid Tirupati`}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
-            decoding="async"
+            className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
+            loading="eager"
+            decoding="auto"
           />
 
-          {/* Category Badge */}
-          <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2">
-            <span className="px-1.5 sm:px-2 py-0.5 rounded text-[9px] sm:text-[10px] font-extrabold uppercase tracking-wider bg-[#041B3B]/90 text-white backdrop-blur-xs">
+          {/* Clean Category Badge at Bottom-Left */}
+          <div className="absolute bottom-1.5 left-1.5 pointer-events-none z-10">
+            <span className="px-1.5 sm:px-2 py-0.5 rounded text-[8px] sm:text-[9px] font-black uppercase tracking-wider bg-black text-white border border-white/20 shadow-2xs block">
               {product.category}
             </span>
           </div>
 
-          {/* Info Details Icon */}
+          {/* Discreet Info Icon */}
           <button
             type="button"
             onClick={(e) => {
               e.stopPropagation();
               onOpenDetails && onOpenDetails(product);
             }}
-            className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 p-1 rounded-full bg-white/90 text-slate-600 hover:text-[#041B3B] hover:bg-white shadow-xs transition-all"
+            className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 p-1.5 rounded-full bg-white/90 text-slate-500 hover:text-[#041B3B] hover:bg-white shadow-xs transition-all cursor-pointer opacity-85 group-hover:opacity-100 z-10"
             title="View product details"
           >
             <Info className="w-3.5 h-3.5" />
@@ -102,14 +111,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         {/* 2. Text Content */}
-        <div className="p-2 sm:p-3.5 space-y-1.5 sm:space-y-2">
+        <div className="p-2.5 sm:p-3.5 space-y-1.5 sm:space-y-2">
           <div>
             <h3 className="text-xs sm:text-sm font-black text-[#041B3B] group-hover:text-[#22AC33] transition-colors leading-tight line-clamp-1">
               {product.name}
             </h3>
-            <p className="text-[10px] sm:text-xs text-slate-500 font-medium line-clamp-1 mt-0.5 leading-tight hidden xs:block">
-              {product.shortDescription}
-            </p>
+
+            {/* What's Inside / Suitable For Quick Tags (Matching Services Cards) */}
+            {product.suitableFor && product.suitableFor.length > 0 && (
+              <div className="mt-1 flex flex-col gap-0.5">
+                {product.suitableFor.slice(0, 2).map((item, i) => (
+                  <span
+                    key={i}
+                    className="inline-flex items-center gap-1 text-[8px] sm:text-[9.5px] text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded font-semibold truncate max-w-full"
+                  >
+                    <span className="text-[#22AC33] font-black">✓</span>
+                    <span className="truncate">{item}</span>
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Pack Selector Pills */}
@@ -118,9 +139,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <span>Pack:</span>
               <span className="text-[#22AC33] font-black">{currentOption.size}</span>
             </div>
-            <div className="flex flex-wrap gap-1">
+            <div className="flex items-center gap-0.5 sm:gap-1 w-full min-h-[24px]">
               {product.packs.map((opt) => {
                 const isSelected = selectedSize === opt.size;
+                const displayLabel = opt.size.replace(/\s+/g, '');
+                const is500ml = displayLabel.toLowerCase().includes('500');
                 return (
                   <button
                     key={opt.size}
@@ -129,13 +152,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                       e.stopPropagation();
                       setSelectedSize(opt.size);
                     }}
-                    className={`px-1.5 sm:px-2 py-0.5 rounded text-[10px] sm:text-xs font-bold transition-all cursor-pointer border ${
+                    className={`py-1 rounded-md text-[8px] xs:text-[9px] sm:text-[10.5px] font-black transition-all cursor-pointer border text-center leading-none flex items-center justify-center ${
+                      is500ml ? 'flex-[1.3] px-0.5 tracking-tighter' : 'flex-1 px-0.5 tracking-tight'
+                    } ${
                       isSelected
-                        ? 'bg-[#041B3B] text-white border-[#041B3B]'
-                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
+                        ? 'bg-[#041B3B] text-white border-[#041B3B] shadow-2xs'
+                        : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100 hover:border-slate-300'
                     }`}
+                    title={opt.size}
                   >
-                    {opt.size}
+                    {displayLabel}
                   </button>
                 );
               })}
@@ -166,35 +192,64 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </button>
 
           {onAddToCart && (
-            <button
-              type="button"
-              onClick={handleAdd}
-              className={`py-1.5 sm:py-2 px-1 sm:px-2 rounded-lg text-[10px] sm:text-xs font-bold justify-center flex items-center gap-1 transition-all cursor-pointer border truncate ${
-                justAdded
-                  ? 'bg-[#22AC33] text-white border-[#22AC33] scale-102 shadow-xs'
-                  : isItemInCart
-                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
-                  : 'bg-white text-[#041B3B] border-slate-200 hover:bg-slate-100 hover:border-slate-300'
-              }`}
-              title="Add to wholesale enquiry cart"
-            >
-              {justAdded ? (
-                <>
-                  <Check className="w-3 h-3 text-white stroke-[3] animate-bounce" />
-                  <span className="truncate">✓ Added</span>
-                </>
-              ) : isItemInCart ? (
-                <>
-                  <Check className="w-3 h-3 text-emerald-600 shrink-0" />
-                  <span className="truncate">In Cart</span>
-                </>
-              ) : (
-                <>
-                  <Plus className="w-3 h-3 text-slate-500 shrink-0" />
-                  <span className="truncate">+ Add</span>
-                </>
-              )}
-            </button>
+            currentPackQty > 0 ? (
+              <div className="flex items-center justify-between bg-emerald-50 border border-emerald-300 rounded-lg p-0.5 text-[10px] sm:text-xs">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (onUpdateQuantity) {
+                      onUpdateQuantity(product.id, currentOption.size, currentPackQty - 1);
+                    }
+                  }}
+                  className="w-5 h-5 sm:w-6 sm:h-6 rounded bg-white text-emerald-800 font-black flex items-center justify-center hover:bg-emerald-100 cursor-pointer shadow-2xs"
+                  title="Decrease quantity"
+                >
+                  −
+                </button>
+                <span className="font-extrabold text-emerald-900 px-1 text-[10px] sm:text-xs">
+                  {currentPackQty}
+                </span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (onUpdateQuantity) {
+                      onUpdateQuantity(product.id, currentOption.size, currentPackQty + 1);
+                    } else if (onAddToCart) {
+                      onAddToCart(product, currentOption);
+                    }
+                  }}
+                  className="w-5 h-5 sm:w-6 sm:h-6 rounded bg-[#22AC33] text-white font-black flex items-center justify-center hover:bg-[#1b8c29] cursor-pointer shadow-2xs"
+                  title="Increase quantity"
+                >
+                  +
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={handleAdd}
+                className={`py-1.5 sm:py-2 px-1 sm:px-2 rounded-lg text-[10px] sm:text-xs font-bold justify-center flex items-center gap-1 transition-all cursor-pointer border truncate ${
+                  justAdded
+                    ? 'bg-[#22AC33] text-white border-[#22AC33] scale-102 shadow-xs'
+                    : 'bg-white text-[#041B3B] border-slate-200 hover:bg-slate-100 hover:border-slate-300'
+                }`}
+                title="Add to wholesale enquiry cart"
+              >
+                {justAdded ? (
+                  <>
+                    <Check className="w-3 h-3 text-white stroke-[3] animate-bounce" />
+                    <span className="truncate">✓ Added</span>
+                  </>
+                ) : (
+                  <>
+                    <Plus className="w-3 h-3 text-slate-500 shrink-0" />
+                    <span className="truncate">Add</span>
+                  </>
+                )}
+              </button>
+            )
           )}
         </div>
       </div>

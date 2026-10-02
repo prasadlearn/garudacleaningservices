@@ -26,8 +26,12 @@ export const FooterSection: React.FC = () => {
           {/* Logo & Intro */}
           <div className="lg:col-span-4 space-y-4">
             <Link to="/" className="flex items-center gap-2.5 group" aria-label="Garuda Cleaning Services Home">
-              <div className="w-11 h-11 rounded-2xl bg-[#1A8C28] text-white flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform shrink-0">
-                <Home className="w-6 h-6 fill-current" />
+              <div className="w-11 h-11 rounded-xl overflow-hidden shadow-xs group-hover:scale-105 transition-transform shrink-0 border border-slate-200 bg-slate-900">
+                <img
+                  src="/images/garuda-logo.webp"
+                  alt="Garuda Cleaning Services Logo"
+                  className="w-full h-full object-cover"
+                />
               </div>
               <div className="flex flex-col min-w-0 leading-tight">
                 <span className="font-black text-xl text-[#041B3B] tracking-tight block">

@@ -2,7 +2,7 @@ import React from 'react';
 
 const SMILES = [
   { image: '/images/hero-interior.webp', name: 'Ramesh & Family', locality: 'Balaji Colony' },
-  { image: '/images/sofa-clean.webp', name: 'Srinivasulu Garu', locality: 'AIR Bypass Road' },
+  { image: '/images/sofa-clean-real.webp', name: 'Srinivasulu Garu', locality: 'AIR Bypass Road' },
   { image: '/images/kitchen-clean.webp', name: 'Sunitha Reddy', locality: 'MR Palli' },
   { image: '/images/floor-clean.webp', name: 'Venkat Rao', locality: 'Renigunta Road' },
 ];

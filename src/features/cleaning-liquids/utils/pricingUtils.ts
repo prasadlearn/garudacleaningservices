@@ -17,7 +17,8 @@ export function formatCurrency(amount: number | null | undefined): string {
 }
 
 /**
- * Calculates reference price and accurate savings for any pack option.
+ * Calculates reference price and accurate rupee savings for any pack option.
+ * Always displays clear rupee savings (e.g. Save ₹20, Save ₹30, Save ₹50) for marketing attraction.
  */
 export function calculatePackPricing(
   pack: PackOption,
@@ -39,7 +40,42 @@ export function calculatePackPricing(
     };
   }
 
-  // 1. Check if 5L pack with 1L reference comparison
+  // 1. If pack has explicit referencePrice already configured in data
+  if (pack.referencePrice && pack.referencePrice > offerPrice) {
+    const savings = pack.referencePrice - offerPrice;
+    const label = `Save ₹${savings}`;
+
+    return {
+      offerPrice,
+      referencePrice: pack.referencePrice,
+      savingsAmount: savings,
+      discountLabel: label,
+      referenceType: pack.referenceType || 'regular-pack-comparison',
+      referenceNote: REFERENCE_PRICE_DISCLAIMER,
+      isExactDiscount: false,
+      formattedOffer: formatCurrency(offerPrice),
+      formattedReference: formatCurrency(pack.referencePrice)
+    };
+  }
+
+  // 2. Check if 10L pack with 1L reference comparison
+  if (pack.size === '10 L' && oneLitrePrice && oneLitrePrice > 0) {
+    const regularPackCost = 10 * oneLitrePrice;
+    const savings = Math.max(0, regularPackCost - offerPrice);
+    return {
+      offerPrice,
+      referencePrice: regularPackCost,
+      savingsAmount: savings,
+      discountLabel: savings > 0 ? `Save ₹${savings}` : null,
+      referenceType: 'regular-pack-comparison',
+      referenceNote: REFERENCE_PRICE_DISCLAIMER,
+      isExactDiscount: false,
+      formattedOffer: formatCurrency(offerPrice),
+      formattedReference: formatCurrency(regularPackCost)
+    };
+  }
+
+  // 3. Check if 5L pack with 1L reference comparison
   if (pack.size === '5 L' && oneLitrePrice && oneLitrePrice > 0) {
     const regularPackCost = 5 * oneLitrePrice;
     const savings = Math.max(0, regularPackCost - offerPrice);
@@ -49,45 +85,24 @@ export function calculatePackPricing(
       savingsAmount: savings,
       discountLabel: savings > 0 ? `Save ₹${savings}` : null,
       referenceType: 'regular-pack-comparison',
-      referenceNote: 'Regular-pack comparison (5 × 1L regular price)',
+      referenceNote: REFERENCE_PRICE_DISCLAIMER,
       isExactDiscount: false,
       formattedOffer: formatCurrency(offerPrice),
       formattedReference: formatCurrency(regularPackCost)
     };
   }
 
-  // 2. If pack has explicit referencePrice already configured
-  if (pack.referencePrice && pack.referencePrice > offerPrice) {
-    const savings = pack.referencePrice - offerPrice;
-    const isExact = savings / pack.referencePrice === 0.2;
-    return {
-      offerPrice,
-      referencePrice: pack.referencePrice,
-      savingsAmount: savings,
-      discountLabel: isExact ? '20% OFF' : `Save ₹${savings}`,
-      referenceType: pack.referenceType || 'promotional-comparison',
-      referenceNote: REFERENCE_PRICE_DISCLAIMER,
-      isExactDiscount: isExact,
-      formattedOffer: formatCurrency(offerPrice),
-      formattedReference: formatCurrency(pack.referencePrice)
-    };
-  }
-
-  // 3. Central promotional calculation: offerPrice / 0.80
-  const calculatedRef = Math.round(offerPrice / 0.8);
-  const savings = Math.max(0, calculatedRef - offerPrice);
-  const isExact20 = savings > 0 && savings / calculatedRef === 0.2;
-
+  // 4. Default return if no reference comparison
   return {
     offerPrice,
-    referencePrice: calculatedRef,
-    savingsAmount: savings,
-    discountLabel: isExact20 ? '20% OFF' : savings > 0 ? `Save ₹${savings}` : null,
-    referenceType: 'promotional-comparison',
+    referencePrice: null,
+    savingsAmount: 0,
+    discountLabel: null,
+    referenceType: 'none',
     referenceNote: REFERENCE_PRICE_DISCLAIMER,
-    isExactDiscount: isExact20,
+    isExactDiscount: false,
     formattedOffer: formatCurrency(offerPrice),
-    formattedReference: formatCurrency(calculatedRef)
+    formattedReference: null
   };
 }
 

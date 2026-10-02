@@ -39,7 +39,7 @@ export const formatPrice = (model: PriceModel): string => {
       return formatAmount(model.amount);
     case 'per-unit':
       if (model.unit === 'sq.ft') {
-        return `Starting from ${formatAmount(model.min)}/sq.ft`;
+        return `${formatAmount(model.min)}/sq.ft`;
       }
       return `${formatAmount(model.min)} / ${model.unit}`;
     case 'tiers': {
@@ -555,6 +555,35 @@ export const SERVICES_DATA: ServiceItem[] = [
     imageSource: 'illustrative'
   },
   {
+    id: 'sofa-cleaning',
+    slug: 'sofa-cleaning',
+    title: 'Sofa Cleaning',
+    name: 'Sofa Cleaning',
+    category: 'residential',
+    icon: 'Sofa',
+    shortDescription: 'Machine foam washing and vacuum extraction to remove stains, dust, and odors from sofas.',
+    shortDesc: 'Machine foam washing and vacuum extraction to remove stains, dust, and odors from sofas.',
+    whatsIncluded: [
+      'Dry vacuuming of sofa seats, cushions, and corners',
+      'Safe foam shampoo applied to break down dirt and food stains',
+      'High-power vacuum extraction of dirty foam and moisture',
+      'Armrest, backrest, and headrest spot cleaning',
+      'Wooden and leatherette borders wiped clean'
+    ],
+    inclusions: [
+      'Dry vacuuming of sofa seats, cushions, and corners',
+      'Safe foam shampoo applied to break down dirt and food stains',
+      'High-power vacuum extraction of dirty foam and moisture',
+      'Armrest, backrest, and headrest spot cleaning',
+      'Wooden and leatherette borders wiped clean'
+    ],
+    enabled: true,
+    price: { kind: 'per-unit', min: 249, unit: 'seat' },
+    unitLabel: 'seat',
+    image: '/images/services/sofa-cleaning.webp',
+    imageSource: 'illustrative'
+  },
+  {
     id: 'villa-cleaning',
     slug: 'villa-cleaning',
     title: 'Villa Cleaning',
@@ -667,35 +696,6 @@ export const SERVICES_DATA: ServiceItem[] = [
     imageSource: 'illustrative'
   },
   {
-    id: 'sofa-cleaning',
-    slug: 'sofa-cleaning',
-    title: 'Sofa Cleaning',
-    name: 'Sofa Cleaning',
-    category: 'residential',
-    icon: 'Sofa',
-    shortDescription: 'Machine foam washing and vacuum extraction to remove stains, dust, and odors from sofas.',
-    shortDesc: 'Machine foam washing and vacuum extraction to remove stains, dust, and odors from sofas.',
-    whatsIncluded: [
-      'Dry vacuuming of sofa seats, cushions, and corners',
-      'Safe foam shampoo applied to break down dirt and food stains',
-      'High-power vacuum extraction of dirty foam and moisture',
-      'Armrest, backrest, and headrest spot cleaning',
-      'Wooden and leatherette borders wiped clean'
-    ],
-    inclusions: [
-      'Dry vacuuming of sofa seats, cushions, and corners',
-      'Safe foam shampoo applied to break down dirt and food stains',
-      'High-power vacuum extraction of dirty foam and moisture',
-      'Armrest, backrest, and headrest spot cleaning',
-      'Wooden and leatherette borders wiped clean'
-    ],
-    enabled: true,
-    price: { kind: 'per-unit', min: 249, unit: 'seat' },
-    unitLabel: 'seat',
-    image: '/images/services/sofa-cleaning.webp',
-    imageSource: 'illustrative'
-  },
-  {
     id: 'mattress-cleaning',
     slug: 'mattress-cleaning',
     title: 'Mattress Cleaning',
@@ -769,7 +769,7 @@ export const SERVICES_DATA: ServiceItem[] = [
       'Exterior stainless steel body wipe, condenser vent dusting, and handle sanitization'
     ],
     enabled: true,
-    price: { kind: 'quote', customLabel: 'Contact for Price' },
+    price: { kind: 'fixed', amount: 299 },
     image: '/images/services/fridge-cleaning.webp',
     imageSource: 'illustrative'
   },

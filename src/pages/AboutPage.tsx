@@ -21,15 +21,9 @@ export const AboutPage: React.FC = () => {
     description: 'Learn about Garuda Cleaning Services, our mechanized cleaning machinery, verified team, and surface-safe methods in Tirupati.',
     url: 'https://garudacleaningservices.in/about',
     mainEntity: {
-      '@type': 'LocalBusiness',
+      '@type': 'Organization',
       name: 'Garuda Cleaning Services',
       telephone: '+917799552084',
-      address: {
-        '@type': 'PostalAddress',
-        addressLocality: 'Tirupati',
-        addressRegion: 'Andhra Pradesh',
-        addressCountry: 'IN'
-      },
       areaServed: {
         '@type': 'City',
         name: 'Tirupati'

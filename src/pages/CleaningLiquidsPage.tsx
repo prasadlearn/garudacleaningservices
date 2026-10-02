@@ -31,6 +31,7 @@ export const CleaningLiquidsPage: React.FC = () => {
   const {
     cartItems,
     addItem,
+    updateQuantity,
     openDrawer
   } = useWholesaleCart();
 
@@ -47,12 +48,6 @@ export const CleaningLiquidsPage: React.FC = () => {
       name: 'Garuda Cleaning Services',
       url: 'https://garudacleaningservices.in'
     },
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Tirupati',
-      addressRegion: 'Andhra Pradesh',
-      addressCountry: 'IN'
-    },
     areaServed: {
       '@type': 'City',
       name: 'Tirupati'
@@ -66,7 +61,7 @@ export const CleaningLiquidsPage: React.FC = () => {
       <title>Cleaning Liquids & Wholesale Supplies in Tirupati | Garuda</title>
       <meta
         name="description"
-        content="Buy cleaning liquids and bulk cleaning supplies in Tirupati for homes, offices, shops, hotels and institutions. View pack prices, bulk offers and enquire on WhatsApp."
+        content="Cleaning liquids, detergents and wholesale cleaning supplies in Tirupati for homes, businesses, hotels and institutions. View pack prices and enquire on WhatsApp."
       />
       <link rel="canonical" href="https://garudacleaningservices.in/cleaning-liquids" />
       <script
@@ -111,14 +106,12 @@ export const CleaningLiquidsPage: React.FC = () => {
             products={filteredProducts}
             cartItems={cartItems}
             onAddToCart={addItem}
+            onUpdateQuantity={updateQuantity}
             onResetFilters={resetFilters}
           />
         </section>
 
-        {/* 4. Bulk Offers for Businesses */}
-        <BulkOffers onAddToCart={addItem} />
-
-        {/* 5. Wholesale Promotional Banner */}
+        {/* 4. Wholesale Promotional Banner */}
         <WholesaleBanner onOpenEnquiryModal={openDrawer} />
 
         {/* 6. Wholesale Audience Grid */}

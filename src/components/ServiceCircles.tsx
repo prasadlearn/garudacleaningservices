@@ -15,8 +15,18 @@ export const ServiceCircles: React.FC = () => {
     }
   };
 
+  const cleaningLiquidsItem = {
+    id: 'cleaning-liquids-circle',
+    slug: 'cleaning-liquids',
+    title: 'Cleaning Liquids',
+    image: '/images/products/floor-cleaner.webp',
+    route: '/cleaning-liquids'
+  };
+
+  const allItems = [...enabledServices, cleaningLiquidsItem];
+
   // Double the list for infinite seamless marquee loop
-  const duplicatedCircles = [...enabledServices, ...enabledServices];
+  const duplicatedCircles = [...allItems, ...allItems];
 
   return (
     <section className="py-16 sm:py-20 px-4 sm:px-8 bg-white overflow-hidden border-b border-slate-100 relative">
@@ -62,7 +72,7 @@ export const ServiceCircles: React.FC = () => {
               {duplicatedCircles.map((service, i) => (
                 <Link
                   key={`${service.id}-${i}`}
-                  to={`/services/${service.slug}`}
+                  to={(service as { route?: string; slug: string }).route || `/services/${service.slug}`}
                   className="flex flex-col items-center gap-3 shrink-0 group/circle transition-transform duration-300 hover:scale-105"
                 >
                   <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full overflow-hidden border-4 border-slate-200 group-hover/circle:border-[#22AC33] transition-all duration-300 shadow-md group-hover/circle:shadow-xl relative bg-slate-900">

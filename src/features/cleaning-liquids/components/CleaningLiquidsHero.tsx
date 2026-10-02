@@ -12,8 +12,8 @@ export const CleaningLiquidsHero: React.FC = () => {
 
       <div className="max-w-4xl mx-auto text-center space-y-3 sm:space-y-4 relative z-10">
         {/* Verified Badge */}
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold uppercase tracking-wider bg-white/10 text-[#22AC33] border border-white/15 backdrop-blur-xs">
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 backdrop-blur-xs shadow-sm">
+          <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
           <span>CLEANING LIQUIDS • WHOLESALE SUPPLIES • TIRUPATI</span>
         </div>
 

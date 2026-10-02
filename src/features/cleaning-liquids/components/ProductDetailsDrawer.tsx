@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { X, MessageCircle, Plus, Check, ShieldCheck, Sparkles, CheckCircle2, ShoppingBag } from 'lucide-react';
+import { X, MessageCircle, Plus, Check, ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
 import type { Product, PackOption, CartItem } from '../types/product';
 import { SafeImage } from '../../../components/SafeImage';
-import { formatCurrency, calculatePackPricing, REFERENCE_PRICE_DISCLAIMER } from '../utils/pricingUtils';
+import { calculatePackPricing, REFERENCE_PRICE_DISCLAIMER } from '../utils/pricingUtils';
 import { sendDirectProductWhatsApp } from '../utils/whatsappUtils';
 
 interface ProductDetailsDrawerProps {
@@ -23,7 +23,7 @@ export const ProductDetailsDrawer: React.FC<ProductDetailsDrawerProps> = ({
   const [selectedPackIndex, setSelectedPackIndex] = useState<number>(0);
   const [justAdded, setJustAdded] = useState<boolean>(false);
 
-  // Reset pack selection when product changes
+  // Reset pack selection when product changes (prefer 1 L default, fallback to 0)
   React.useEffect(() => {
     if (product) {
       const idx1L = product.packs.findIndex((p) => p.size === '1 L');
@@ -95,7 +95,7 @@ export const ProductDetailsDrawer: React.FC<ProductDetailsDrawerProps> = ({
 
         {/* Content Body */}
         <div className="p-5 space-y-5 flex-1">
-          {/* Image */}
+          {/* Large Product Image */}
           <div className="relative aspect-4/3 rounded-2xl overflow-hidden bg-slate-100 border border-slate-100 shadow-inner">
             <SafeImage
               src={product.image}
@@ -117,8 +117,8 @@ export const ProductDetailsDrawer: React.FC<ProductDetailsDrawerProps> = ({
             </div>
           )}
 
-          {/* Description & Use */}
-          <div className="space-y-2">
+          {/* Short Description */}
+          <div className="space-y-1.5">
             <h4 className="text-xs font-black uppercase tracking-wider text-slate-400">
               Product Overview
             </h4>
@@ -126,39 +126,39 @@ export const ProductDetailsDrawer: React.FC<ProductDetailsDrawerProps> = ({
               {product.shortDescription}
             </p>
             {product.use && (
-              <p className="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100 leading-relaxed">
+              <p className="text-xs text-slate-600 bg-slate-50 p-3 rounded-xl border border-slate-100 leading-relaxed mt-2">
                 <strong className="text-[#041B3B] font-bold">Recommended Use: </strong>
                 {product.use}
               </p>
             )}
           </div>
 
-          {/* Suitable surfaces */}
+          {/* What's Inside / Suitable For Section */}
           {product.suitableFor && product.suitableFor.length > 0 && (
             <div className="space-y-2">
-              <h4 className="text-xs font-black uppercase tracking-wider text-slate-400">
-                Suitable Surfaces & Applications
+              <h4 className="text-xs font-black uppercase tracking-wider text-[#041B3B]">
+                What's Inside / Suitable For
               </h4>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="space-y-1.5 bg-slate-50/80 p-3.5 rounded-2xl border border-slate-100">
                 {product.suitableFor.map((item) => (
-                  <span
+                  <div
                     key={item}
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200"
+                    className="flex items-center gap-2 text-xs font-semibold text-slate-800"
                   >
-                    <CheckCircle2 className="w-3 h-3 text-[#22AC33]" />
-                    {item}
-                  </span>
+                    <CheckCircle2 className="w-4 h-4 text-[#22AC33] shrink-0" />
+                    <span>{item}</span>
+                  </div>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Available Pack Sizes */}
+          {/* Pack sizes */}
           <div className="space-y-3 pt-2 border-t border-slate-100">
             <h4 className="text-xs font-black uppercase tracking-wider text-slate-400">
               Select Pack Size & Rates
             </h4>
-            <div className="grid grid-cols-3 gap-2">
+            <div className={`grid ${product.packs.length === 4 ? 'grid-cols-2 sm:grid-cols-4' : 'grid-cols-3'} gap-2`}>
               {product.packs.map((pack, idx) => {
                 const isSelected = selectedPackIndex === idx;
                 const packCalc = calculatePackPricing(
@@ -202,7 +202,7 @@ export const ProductDetailsDrawer: React.FC<ProductDetailsDrawerProps> = ({
             </div>
           </div>
 
-          {/* Selected Pack Pricing Card */}
+          {/* Price comparison & Offer Card */}
           <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 space-y-2">
             <div className="flex items-center justify-between">
               <div>
@@ -219,9 +219,21 @@ export const ProductDetailsDrawer: React.FC<ProductDetailsDrawerProps> = ({
                 </span>
               </div>
               {calculation.discountLabel && (
-                <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-[#22AC33] text-white uppercase shadow-xs">
-                  {calculation.discountLabel}
-                </span>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <span className="px-2.5 py-1 rounded-lg text-xs font-black bg-[#22AC33] text-white uppercase shadow-xs">
+                    {calculation.discountLabel}
+                  </span>
+                  {currentPack.size === '5 L' && (
+                    <span className="px-2 py-1 rounded-lg text-xs font-black bg-amber-100 text-amber-900 border border-amber-300 uppercase">
+                      +₹20 Bulk Off
+                    </span>
+                  )}
+                  {currentPack.size === '10 L' && (
+                    <span className="px-2 py-1 rounded-lg text-xs font-black bg-amber-100 text-amber-900 border border-amber-300 uppercase">
+                      +₹31 Bulk Off
+                    </span>
+                  )}
+                </div>
               )}
             </div>
 
@@ -275,7 +287,7 @@ export const ProductDetailsDrawer: React.FC<ProductDetailsDrawerProps> = ({
                 ) : currentQuantityInCart > 0 ? (
                   <>
                     <Check className="w-4 h-4 text-emerald-600 stroke-[3]" />
-                    <span>In Cart (Qty: {currentQuantityInCart}) • Add Another</span>
+                    <span>In Cart ({currentQuantityInCart}) • + Add</span>
                   </>
                 ) : (
                   <>

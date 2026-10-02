@@ -218,7 +218,7 @@ export const WholesaleCart: React.FC<WholesaleCartProps> = (props) => {
                         {item.productName}
                       </h4>
                       <div className="flex items-center gap-2 text-slate-500 mt-0.5 font-semibold">
-                        <span className="bg-white px-1.5 py-0.5 rounded border border-slate-200 text-[10px] font-bold">
+                        <span className="bg-white px-2 py-0.5 rounded border border-slate-200 text-[10px] font-bold whitespace-nowrap inline-flex items-center justify-center shrink-0 min-w-[38px] text-center">
                           {item.size}
                         </span>
                         <span>{formatCurrency(item.unitPrice)} each</span>
@@ -313,12 +313,12 @@ export const WholesaleCart: React.FC<WholesaleCartProps> = (props) => {
                   </div>
                 </div>
 
-                {/* GPS LOCATION (OPTIONAL) with Auto-Pin GPS */}
+                {/* Delivery Location (Optional GPS) */}
                 <div className="space-y-1.5 p-3 rounded-xl bg-slate-50 border border-slate-200">
                   <div className="flex items-center justify-between gap-1.5 mb-1">
                     <label className="block text-[11px] font-bold text-[#041B3B] uppercase tracking-wider flex items-center gap-1">
                       <MapPin className="w-3.5 h-3.5 text-[#22AC33]" />
-                      <span>GPS Location (Optional)</span>
+                      <span>Delivery Location</span>
                     </label>
                     <button
                       type="button"
@@ -334,7 +334,7 @@ export const WholesaleCart: React.FC<WholesaleCartProps> = (props) => {
                       ) : (
                         <>
                           <MapPin className="w-3 h-3 text-[#22AC33]" />
-                          <span>Auto-Pin GPS</span>
+                          <span>Use My Location</span>
                         </>
                       )}
                     </button>
@@ -346,8 +346,8 @@ export const WholesaleCart: React.FC<WholesaleCartProps> = (props) => {
                     onChange={(e) => {
                       setDeliveryLocation(e.target.value);
                     }}
-                    placeholder="Click 'Auto-Pin GPS' or enter area name in Tirupati"
-                    className="w-full h-9 px-3 rounded-lg border border-slate-200 text-xs font-mono focus:border-[#22AC33] outline-none bg-white font-medium text-slate-800"
+                    placeholder="Enter your area / location in Tirupati"
+                    className="w-full h-9 px-3 rounded-lg border border-slate-200 text-xs focus:border-[#22AC33] outline-none bg-white font-medium text-slate-800"
                   />
 
                   {locationError && (
