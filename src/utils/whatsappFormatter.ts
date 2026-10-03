@@ -29,7 +29,8 @@ export function buildGarudaServiceRequestWhatsAppUrl(data: ServiceRequestData): 
   const gps = data.gpsLocation?.trim() || '-';
   const totalAmount = data.totalAmount?.trim() || 'To be confirmed';
   const subscription = data.subscriptionClient?.trim() || 'No';
-  const priorityTime = data.priorityTime?.trim() || '10:00 AM - 01:00 PM (Morning Slot)';
+  let priorityTime = data.priorityTime?.trim() || '10:00 AM - 01:00 PM (Morning Slot)';
+  priorityTime = priorityTime.replace(/^Preferred\s*Time\s*:\s*/i, '').trim();
   const remarks = data.remarks?.trim() || '-';
 
   // Format single or multi services

@@ -64,10 +64,10 @@ export const BookingModal: React.FC = () => {
   const [serviceError, setServiceError] = useState<string>('');
 
   const TIME_SLOTS = [
-    'Preferred Time: 08:00 AM - 11:00 AM (Early Morning)',
-    'Preferred Time: 10:00 AM - 01:00 PM (Morning Slot)',
-    'Preferred Time: 01:00 PM - 04:00 PM (Afternoon Slot)',
-    'Preferred Time: 04:00 PM - 07:00 PM (Evening Slot)',
+    '08:00 AM - 11:00 AM (Early Morning)',
+    '10:00 AM - 01:00 PM (Morning Slot)',
+    '01:00 PM - 04:00 PM (Afternoon Slot)',
+    '04:00 PM - 07:00 PM (Evening Slot)',
     'Urgent Booking (Today / ASAP)',
   ];
 
@@ -80,7 +80,7 @@ export const BookingModal: React.FC = () => {
     gpsLocation: '-',
     totalAmount: 'To be confirmed after inspection',
     subscriptionClient: 'No',
-    priorityTime: 'Preferred Time: 10:00 AM - 01:00 PM (Morning Slot)',
+    priorityTime: '10:00 AM - 01:00 PM (Morning Slot)',
     remarks: '',
   });
 
