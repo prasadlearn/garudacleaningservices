@@ -30,6 +30,7 @@ import { AreasList } from '../components/AreasList';
 import { ServiceBeforeAfter } from '../components/ServiceBeforeAfter';
 import { PROJECT_PROCESS_STEPS } from '../data/galleryData';
 import { NotFoundPage } from './NotFoundPage';
+import { BusinessContactNumbers } from '../components/BusinessContactNumbers';
 
 export const ServiceDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -131,10 +132,16 @@ export const ServiceDetailPage: React.FC = () => {
       '@type': 'Organization',
       name: BUSINESS_CONFIG.brandName,
       telephone: BUSINESS_CONFIG.contact.phoneTel,
-      areaServed: {
-        '@type': 'City',
-        name: 'Tirupati'
-      }
+      areaServed: [
+        {
+          '@type': 'City',
+          name: 'Tirupati'
+        },
+        {
+          '@type': 'City',
+          name: 'Rayachoty'
+        }
+      ]
     },
     url: `https://garudacleaningservices.in/services/${service.slug}`,
     offers: getOffersSchema()
@@ -587,36 +594,29 @@ export const ServiceDetailPage: React.FC = () => {
           <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-xs space-y-4">
             <h3 className="text-base font-extrabold text-[#041B3B]">Direct Coordinator Contact</h3>
             <p className="text-xs text-slate-500 leading-relaxed">
-              Have special requirements or want a quick quote for your Tirupati home? Call or WhatsApp directly:
+              Professional {service.title.toLowerCase()} available across Tirupati and Rayachoty. Contact our coordinator:
             </p>
 
-            <a
-              href={BUSINESS_CONFIG.contact.phoneTel}
-              onClick={() =>
-                trackEvent('call_click', { serviceSlug: service.slug, sourcePage: `/services/${service.slug}` })
-              }
-              className="w-full btn-homecare-green py-2.5 text-xs font-bold justify-center flex items-center gap-2"
-            >
-              <Phone className="w-3.5 h-3.5" />
-              <span>Call: {BUSINESS_CONFIG.contact.phoneDisplay}</span>
-            </a>
+            <BusinessContactNumbers variant="compact" sourcePage={`/services/${service.slug}`} />
 
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() =>
-                trackEvent('whatsapp_click', { serviceSlug: service.slug, sourcePage: `/services/${service.slug}` })
-              }
-              className="w-full btn-homecare-navy py-2.5 text-xs font-bold justify-center flex items-center gap-2"
-            >
-              <MessageCircle className="w-3.5 h-3.5 text-[#22AC33]" />
-              <span>WhatsApp Instant Booking</span>
-            </a>
+            <div className="pt-2">
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() =>
+                  trackEvent('whatsapp_click', { serviceSlug: service.slug, sourcePage: `/services/${service.slug}` })
+                }
+                className="w-full btn-homecare-green py-2.5 text-xs font-bold justify-center flex items-center gap-2 shadow-2xs"
+              >
+                <MessageCircle className="w-3.5 h-3.5" />
+                <span>WhatsApp Booking &amp; Photos</span>
+              </a>
+            </div>
 
             <div className="pt-2 border-t border-slate-100 flex items-center gap-2 text-[11px] text-slate-500 font-medium">
               <ShieldCheck className="w-4 h-4 text-[#22AC33] shrink-0" />
-              <span>Zero hidden transport fees within Tirupati.</span>
+              <span>Doorstep mechanized cleaning across Tirupati &amp; Rayachoty.</span>
             </div>
           </div>
 

@@ -7,7 +7,7 @@ export const CLEANING_LIQUIDS_FAQS: CleaningLiquidsFaq[] = [
   {
     question: 'Do you provide cleaning liquids for commercial and wholesale buyers?',
     answer:
-      'Yes. We supply 5L commercial bulk packs and regular sizes for apartments, hotels, corporate offices, shops, schools, hospitals, and cleaning contractors across Tirupati.'
+      'Yes. We supply 5L commercial bulk packs and regular sizes for apartments, hotels, corporate offices, shops, schools, hospitals, and cleaning contractors across Tirupati and Rayachoty.'
   },
   {
     question: 'What pack sizes are available?',
@@ -22,12 +22,12 @@ export const CLEANING_LIQUIDS_FAQS: CleaningLiquidsFaq[] = [
   {
     question: 'How are delivery charges calculated?',
     answer:
-      'Delivery charges are not included in displayed product prices. Delivery charges will be confirmed based on order size and delivery location in Tirupati.'
+      'Delivery charges are not included in displayed product prices. Delivery charges will be confirmed based on order size and delivery location in Tirupati, Rayachoty, or nearby service areas.'
   },
   {
     question: 'Can individual households buy these products?',
     answer:
-      'Yes. Individual households in Tirupati can purchase single bottles (500 ml or 1 L) as well as 5 L bulk cans for monthly household cleaning.'
+      'Yes. Individual households in Tirupati and Rayachoty can purchase single bottles (500 ml or 1 L) as well as 5 L bulk cans for regular household cleaning.'
   },
   {
     question: 'Can I order multiple products together?',

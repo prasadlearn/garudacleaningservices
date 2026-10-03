@@ -65,8 +65,8 @@ const FAQ_DATA: FAQCategory[] = [
     category: 'Pricing & Payment',
     items: [
       {
-        q: 'Are there any extra travel or hidden charges in Tirupati?',
-        a: 'No hidden charges. All quotes include team labor, machine use, cleaning liquids, and travel to your doorstep anywhere in Tirupati.'
+        q: 'Are there any hidden charges?',
+        a: 'No hidden charges. All service prices are quoted upfront before our team begins work.'
       },
       {
         q: 'Can I check the cleaning quality before paying?',

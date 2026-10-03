@@ -31,7 +31,7 @@ export const DeliveryNote: React.FC<DeliveryNoteProps> = ({
           Delivery charges are not included in the displayed product prices.
         </p>
         <p className="text-[11px] sm:text-xs text-slate-600 font-medium leading-relaxed">
-          Delivery charges will be confirmed based on order size and delivery location across Tirupati and surrounding areas.
+          Delivery charges will be confirmed based on order size and delivery location across Tirupati, Rayachoty, and surrounding service areas.
         </p>
       </div>
     </div>

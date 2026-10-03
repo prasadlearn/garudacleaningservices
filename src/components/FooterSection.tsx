@@ -4,6 +4,7 @@ import { Home, Phone, MapPin, Send, CheckCircle2, ShieldCheck, Clock, ExternalLi
 import { BUSINESS_CONFIG } from '../config/businessConfig';
 import { getEnabledServices } from '../data/servicesData';
 import { TRUST_CONFIG } from '../config/trustConfig';
+import { BusinessContactNumbers } from './BusinessContactNumbers';
 
 export const FooterSection: React.FC = () => {
   const [formSent, setFormSent] = useState(false);
@@ -15,7 +16,7 @@ export const FooterSection: React.FC = () => {
     e.preventDefault();
     if (!name || !phone) return;
     setFormSent(true);
-    const msg = `Hello Garuda Cleaning Services, my name is ${name} (${phone}). I would like to request an instant callback for cleaning in Tirupati.`;
+    const msg = `Hello Garuda Cleaning Services, my name is ${name} (${phone}). I would like to request an instant callback for cleaning.`;
     window.open(BUSINESS_CONFIG.buildWhatsAppUrl(msg), '_blank');
   };
 
@@ -26,7 +27,7 @@ export const FooterSection: React.FC = () => {
           {/* Logo & Intro */}
           <div className="lg:col-span-4 space-y-4">
             <Link to="/" className="flex items-center gap-2.5 group" aria-label="Garuda Cleaning Services Home">
-              <div className="w-11 h-11 rounded-xl overflow-hidden shadow-xs group-hover:scale-105 transition-transform shrink-0 border border-slate-200 bg-slate-900">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden shadow-xs group-hover:scale-105 transition-transform shrink-0 border border-slate-200 bg-slate-900">
                 <img
                   src="/images/garuda-logo.webp"
                   alt="Garuda Cleaning Services Logo"
@@ -34,35 +35,29 @@ export const FooterSection: React.FC = () => {
                 />
               </div>
               <div className="flex flex-col min-w-0 leading-tight">
-                <span className="font-black text-xl text-[#041B3B] tracking-tight block">
+                <span className="font-black text-base min-[360px]:text-lg sm:text-xl text-[#041B3B] tracking-tight whitespace-nowrap block">
                   Garuda <span className="text-[#1A8C28]">Cleaning Services</span>
                 </span>
-                <span className="text-xs font-bold text-slate-600 uppercase tracking-wider block">
-                  Tirupati & Surroundings • Professional Cleaning Solutions
+                <span className="text-[10px] sm:text-xs font-bold text-slate-600 uppercase tracking-wider block">
+                  Tirupati &amp; Rayachoty • Cleaning Solutions
                 </span>
               </div>
             </Link>
 
             <p className="text-sm text-slate-600 leading-relaxed">
-              Professional cleaning solutions across Tirupati and surrounding areas. Providing apartment home cleaning, villa detailing, washroom scale clearing, kitchen degreasing, and commercial sanitization.
+              Professional cleaning solutions across Tirupati, Rayachoty, and surrounding areas. Providing apartment home cleaning, villa detailing, washroom scale clearing, kitchen degreasing, and office cleaning.
             </p>
 
             <div className="space-y-3 text-sm text-slate-700">
-              <div className="flex items-center gap-2.5 min-h-[44px]">
-                <Phone className="w-4 h-4 text-[#1A8C28] shrink-0" />
-                <a
-                  href={BUSINESS_CONFIG.contact.phoneTel}
-                  className="font-bold text-[#041B3B] hover:text-[#1A8C28] transition-colors py-2"
-                >
-                  {BUSINESS_CONFIG.contact.phoneDisplay}
-                </a>
-              </div>
-              <div className="flex items-start gap-2.5">
+              {/* Vertical Phone Component */}
+              <BusinessContactNumbers variant="footer" sourcePage="footer" />
+
+              <div className="flex items-start gap-2.5 pt-1 border-t border-slate-100">
                 <MapPin className="w-4 h-4 text-[#1A8C28] shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold text-[#041B3B] block">Service Area</span>
-                  <span>{BUSINESS_CONFIG.contact.serviceArea}</span>
-                  <span className="text-xs text-slate-500 block mt-0.5">Serving customers across Tirupati, Andhra Pradesh.</span>
+                  <span className="font-bold text-[#041B3B] block">Service Areas</span>
+                  <span>Tirupati • Rayachoty</span>
+                  <span className="text-xs text-slate-500 block mt-0.5">Serving customers across Tirupati, Rayachoty, and surrounding service areas.</span>
                 </div>
               </div>
               <div className="flex items-center gap-2.5 text-slate-800 font-semibold">
@@ -95,11 +90,12 @@ export const FooterSection: React.FC = () => {
               <li><Link to="/" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Home</Link></li>
               <li><Link to="/about" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">About Us</Link></li>
               <li><Link to="/services" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">All Services</Link></li>
-              <li><Link to="/pricing" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Rate Card & Pricing</Link></li>
+              <li><Link to="/pricing" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Rate Card &amp; Pricing</Link></li>
               <li><Link to="/cleaning-liquids" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Cleaning Liquids</Link></li>
-              <li><Link to="/gallery" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Before & After Gallery</Link></li>
+              <li><Link to="/gallery" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Before &amp; After Gallery</Link></li>
               <li><Link to="/service-areas" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Tirupati Surroundings</Link></li>
-              <li><Link to="/faq" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">FAQ & Guide</Link></li>
+              <li><Link to="/service-areas/rayachoty" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Rayachoty Service Area</Link></li>
+              <li><Link to="/faq" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">FAQ &amp; Guide</Link></li>
               <li><Link to="/contact" className="hover:text-[#1A8C28] text-slate-700 transition-colors min-h-[44px] flex items-center">Contact Us</Link></li>
             </ul>
           </div>

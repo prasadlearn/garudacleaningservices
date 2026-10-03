@@ -36,10 +36,10 @@ export const WholesaleAudienceSection: React.FC<WholesaleAudienceSectionProps> =
           <span>Tailored Commercial Supply</span>
         </div>
         <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#041B3B]">
-          Wholesale Supplies for Tirupati Businesses
+          Wholesale Supplies for Tirupati &amp; Rayachoty Businesses
         </h2>
         <p className="text-xs sm:text-sm text-slate-500 max-w-xl mx-auto font-medium">
-          Dependable cleaning chemicals and bulk liquid supply tailored to the operational needs of Tirupati facilities.
+          Dependable cleaning chemicals and bulk liquid supply tailored to the operational needs of facilities in Tirupati and Rayachoty.
         </p>
       </div>
 

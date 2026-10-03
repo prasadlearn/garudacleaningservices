@@ -630,14 +630,14 @@ export const BookingModal: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div>
                   <label htmlFor="modal-address" className="block text-[10px] sm:text-[11px] font-bold text-slate-700 uppercase tracking-wide mb-1">
-                    Address / Area in Tirupati *
+                    Service Address / Area *
                   </label>
                   <input
                     id="modal-address"
                     type="text"
                     required
                     autoComplete="street-address"
-                    placeholder="e.g. Balaji Colony, AIR Bypass Rd"
+                    placeholder="e.g. Balaji Colony, AIR Bypass, Rayachoty"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                     className="w-full h-10 px-3 rounded-xl border border-slate-200 text-xs sm:text-sm focus:border-[#22AC33] outline-none font-medium text-slate-900 bg-slate-50/60"
@@ -725,13 +725,21 @@ export const BookingModal: React.FC = () => {
               <span>Send Booking to WhatsApp</span>
             </button>
 
-            <div className="text-center">
+            <div className="flex items-center justify-center gap-3 text-[11px] font-bold text-slate-600 pt-0.5">
               <a
                 href={BUSINESS_CONFIG.contact.phoneTel}
-                className="text-[11px] font-bold text-slate-600 hover:text-[#22AC33] inline-flex items-center justify-center gap-1 py-0.5"
+                className="hover:text-[#22AC33] inline-flex items-center gap-1 py-0.5"
               >
                 <Phone className="w-3 h-3 text-[#22AC33]" />
-                <span>Or Call Coordinator: {BUSINESS_CONFIG.contact.phoneDisplay}</span>
+                <span>Call: {BUSINESS_CONFIG.contact.phoneDisplay}</span>
+              </a>
+              <span>•</span>
+              <a
+                href={BUSINESS_CONFIG.contact.phoneAltTel}
+                className="hover:text-[#22AC33] inline-flex items-center gap-1 py-0.5"
+              >
+                <Phone className="w-3 h-3 text-[#22AC33]" />
+                <span>{BUSINESS_CONFIG.contact.phoneAltDisplay}</span>
               </a>
             </div>
           </div>

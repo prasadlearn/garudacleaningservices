@@ -37,7 +37,7 @@ export const ServiceAreaPage: React.FC = () => {
     },
     {
       q: "How is the pricing confirmed for my location?",
-      a: "Pricing is transparent and based strictly on our standardized rate card according to your property size (BHK or square footage) and the scope of cleaning required. There are no surprise hidden travel or fuel fees within Tirupati city limits."
+      a: "Pricing is transparent and based strictly on our standardized rate card according to your property size (BHK or square footage) and the scope of cleaning required."
     },
     {
       q: "What should I do if my specific colony or village is not listed?",
@@ -56,7 +56,7 @@ export const ServiceAreaPage: React.FC = () => {
         "@type": "Organization",
         "@id": "https://garudacleaningservices.in/#organization",
         "name": BUSINESS_CONFIG.brandName,
-        "description": "Professional residential and commercial mechanized cleaning services across all localities in Tirupati.",
+        "description": "Professional mechanized cleaning services for homes and offices across Tirupati and Rayachoty service areas.",
         "url": "https://garudacleaningservices.in/service-areas",
         "telephone": BUSINESS_CONFIG.contact.phoneDisplay,
         "priceRange": "₹₹",
@@ -64,6 +64,10 @@ export const ServiceAreaPage: React.FC = () => {
           {
             "@type": "City",
             "name": "Tirupati"
+          },
+          {
+            "@type": "City",
+            "name": "Rayachoty"
           },
           ...(BUSINESS_CONFIG.coverage.nearbyOnRequest || []).map((area) => ({
             "@type": "Place",
@@ -110,10 +114,10 @@ export const ServiceAreaPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-slate-50">
       {/* React 19 Head */}
-      <title>Service Areas in Tirupati | Garuda Cleaning Services</title>
+      <title>Service Areas in Tirupati &amp; Rayachoty | Garuda Cleaning Services</title>
       <meta
         name="description"
-        content="Garuda Cleaning Services covers all residential and commercial localities across Tirupati including Balaji Colony, Bhavani Nagar, MR Palli, AIR Bypass Road, and Renigunta."
+        content="Garuda Cleaning Services provides doorstep cleaning services for homes, offices and properties across Tirupati and Rayachoty with upfront pricing."
       />
       <link rel="canonical" href="https://garudacleaningservices.in/service-areas" />
       {/* Schema.org JSON-LD */}
@@ -129,15 +133,15 @@ export const ServiceAreaPage: React.FC = () => {
         <div className="relative max-w-5xl mx-auto text-center space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[#22AC33] text-xs font-bold uppercase tracking-wider">
             <MapPin className="w-3.5 h-3.5 text-[#22AC33]" />
-            <span>Serving All of Tirupati</span>
+            <span>Serving Tirupati, Rayachoty &amp; Surrounding Areas</span>
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-tight">
-            Cleaning Services Across <span className="text-[#22AC33]">Tirupati</span>
+            Cleaning Services in <span className="text-[#22AC33]">Tirupati &amp; Rayachoty</span>
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed">
-            From Balaji Colony and AIR Bypass Road to Alipiri and MR Palli, Garuda Cleaning Services provides professional mechanized cleaning for homes, villas, and commercial spaces throughout Tirupati.
+            Garuda Cleaning Services is a service-area cleaning business serving customers at their properties in Tirupati and Rayachoty. We bring heavy-duty mechanized cleaning equipment, industrial floor scrubbers, and safe chemical solutions directly to your doorstep.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
@@ -185,7 +189,7 @@ export const ServiceAreaPage: React.FC = () => {
             </span>
             <span className="flex items-center gap-1.5">
               <CheckCircle2 className="w-4 h-4 text-[#22AC33]" />
-              Zero Hidden Travel Fees
+              Clear Upfront Pricing
             </span>
           </div>
         </div>
@@ -319,6 +323,32 @@ export const ServiceAreaPage: React.FC = () => {
             </div>
           )}
 
+          {/* DEDICATED RAYACHOTY SERVICE AREA SPOTLIGHT */}
+          <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-slate-900 to-[#041B3B] text-white border border-slate-800 shadow-xl flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="space-y-3 text-center md:text-left">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#22AC33]/20 border border-[#22AC33]/40 text-[#22AC33] text-xs font-black uppercase tracking-wider">
+                <MapPin className="w-3.5 h-3.5" />
+                <span>Rayachoty Service Area</span>
+              </div>
+              <h3 className="text-xl sm:text-2xl font-black text-white">
+                Doorstep Cleaning Services in Rayachoty
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
+                We also bring our mechanized cleaning teams, industrial floor scrubbers, and safe chemical solutions to homes and businesses across Rayachoty.
+              </p>
+            </div>
+
+            <div className="shrink-0 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                to="/service-areas/rayachoty"
+                className="btn-homecare-green px-6 py-3 min-h-[46px] rounded-full text-xs font-black flex items-center gap-2 shadow-md hover:scale-105 transition-all"
+              >
+                <span>Explore Rayachoty Service Area</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+
           {/* Closing Card: Don't see your locality? */}
           <div className="bg-[#041B3B] text-white p-6 sm:p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
             <div className="space-y-2 text-center md:text-left">
@@ -326,12 +356,12 @@ export const ServiceAreaPage: React.FC = () => {
                 Don't see your locality listed above?
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
-                We still serve your area! Garuda Cleaning Services covers all residential and commercial zones across Tirupati. Message or call us to confirm your location.
+                We still serve your area! Garuda Cleaning Services covers all residential and commercial zones across Tirupati and Rayachoty. Message or call us to confirm your location.
               </p>
             </div>
             <div className="flex flex-wrap items-center justify-center gap-3 shrink-0">
               <a
-                href={BUSINESS_CONFIG.buildWhatsAppUrl("Hello Garuda Cleaning Services, I would like to check cleaning availability for my location in Tirupati.")}
+                href={BUSINESS_CONFIG.buildWhatsAppUrl("Hello Garuda Cleaning Services, I would like to check cleaning availability for my location.")}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent('whatsapp_click', { sourcePage: '/service-areas', action: 'unlisted_area' })}

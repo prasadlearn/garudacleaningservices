@@ -25,7 +25,7 @@ export const CleaningLiquidsFaq: React.FC<CleaningLiquidsFaqProps> = ({ classNam
           Cleaning Liquids FAQ
         </h2>
         <p className="text-xs sm:text-sm text-slate-500 font-medium">
-          Common questions regarding pack sizes, wholesale rates, and delivery across Tirupati.
+          Common questions regarding pack sizes, wholesale rates, and delivery across Tirupati &amp; Rayachoty.
         </p>
       </div>
 

@@ -29,7 +29,7 @@ export const WholesaleBanner: React.FC<WholesaleBannerProps> = ({
           </h3>
 
           <p className="text-xs sm:text-sm text-slate-300 max-w-2xl leading-relaxed">
-            We provide recurring monthly supply schedules and custom slab discounts for apartment associations, hotels, corporate offices, institutions, and facility managers across Tirupati.
+            We provide recurring monthly supply schedules and custom slab discounts for apartment associations, hotels, corporate offices, institutions, and facility managers across Tirupati and Rayachoty.
           </p>
 
           <div className="flex flex-wrap gap-4 pt-1 text-xs text-slate-300 font-medium">
@@ -39,11 +39,11 @@ export const WholesaleBanner: React.FC<WholesaleBannerProps> = ({
             </div>
             <div className="flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-[#22AC33]" />
-              <span>5L Cans & Case Lots</span>
+              <span>5L Cans &amp; Case Lots</span>
             </div>
             <div className="flex items-center gap-1.5">
               <ShieldCheck className="w-4 h-4 text-[#22AC33]" />
-              <span>Local Tirupati Dispatch</span>
+              <span>Tirupati &amp; Rayachoty Delivery</span>
             </div>
           </div>
         </div>

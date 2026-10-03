@@ -77,7 +77,7 @@ export const HomeLiquidsSection: React.FC = () => {
               Direct Cleaning Liquids & Bulk 5L Cans
             </h2>
             <p className="text-xs sm:text-base text-slate-600 leading-relaxed font-normal">
-              High-power cleaning liquids for homes, apartments, hostels, hotels, and offices in Tirupati. Save more with commercial 5L & 10L cans.
+              High-power cleaning liquids for homes, apartments, hostels, hotels, and offices in Tirupati and Rayachoty. Save more with commercial 5L &amp; 10L cans.
             </p>
           </div>
 

@@ -24,20 +24,26 @@ export const AboutPage: React.FC = () => {
       '@type': 'Organization',
       name: 'Garuda Cleaning Services',
       telephone: '+917799552084',
-      areaServed: {
-        '@type': 'City',
-        name: 'Tirupati'
-      }
+      areaServed: [
+        {
+          '@type': 'City',
+          name: 'Tirupati'
+        },
+        {
+          '@type': 'City',
+          name: 'Rayachoty'
+        }
+      ]
     }
   };
 
   return (
     <div className="bg-white">
       {/* React 19 Head Hoisting */}
-      <title>About Garuda Cleaning Services | Tirupati</title>
+      <title>About Garuda Cleaning Services | Tirupati &amp; Rayachoty</title>
       <meta
         name="description"
-        content="Learn about Garuda Cleaning Services: our founding mission, mechanized cleaning equipment, and professional services across Tirupati."
+        content="Learn about Garuda Cleaning Services: our founding mission, mechanized cleaning equipment, and professional doorstep cleaning services across Tirupati and Rayachoty."
       />
       <link rel="canonical" href="https://garudacleaningservices.in/about" />
       <script
@@ -54,7 +60,7 @@ export const AboutPage: React.FC = () => {
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-md text-emerald-400 text-xs font-bold border border-white/20"
           >
             <ShieldCheck className="w-4 h-4 text-[#22AC33]" />
-            Professional Mechanized Cleaning
+            Professional Mechanized Cleaning • Tirupati &amp; Rayachoty
           </motion.div>
 
           <motion.h1
@@ -66,7 +72,7 @@ export const AboutPage: React.FC = () => {
           </motion.h1>
 
           <p className="text-slate-200 text-sm sm:text-base max-w-2xl mx-auto font-medium">
-            Providing reliable cleaning for homes, flats, villas, and offices all across Tirupati using modern cleaning machines and safe cleaning liquids.
+            Providing reliable cleaning for homes, flats, villas, and offices all across Tirupati and Rayachoty using modern cleaning machines and safe cleaning liquids.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-4 pt-4">
@@ -98,13 +104,13 @@ export const AboutPage: React.FC = () => {
           <div className="lg:col-span-6 space-y-6">
             <span className="homecare-pill">Why We Started Garuda</span>
             <h2 className="text-3xl sm:text-4xl font-black text-[#041B3B] leading-tight">
-              Clean, Fresh & Spotless Spaces for Every Home in Tirupati
+              Clean, Fresh &amp; Spotless Spaces for Every Home in Tirupati &amp; Rayachoty
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              We started <strong>Garuda Cleaning Services</strong> in Tirupati to provide professional, machine-based cleaning without using harsh, dangerous acids that damage tiles and leave strong fumes.
+              We started <strong>Garuda Cleaning Services</strong> to provide professional, machine-based doorstep cleaning across Tirupati and Rayachoty without using harsh, dangerous acids that damage tiles and leave strong fumes.
             </p>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Homes and offices in Tirupati often face tough cleaning challenges: hard borewell water white marks (uppu neellu karalu) on washroom tiles, thick road dust, and sticky oil grease in kitchens. Normal daily broom-and-mop cleaning only moves the dirt around.
+              Homes and offices across Tirupati and Rayachoty often face tough cleaning challenges: hard borewell water white marks (uppu neellu karalu) on washroom tiles, thick road dust, and sticky oil grease in kitchens. Normal daily broom-and-mop cleaning only moves the dirt around.
             </p>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
               Our trained team brings modern single-disc floor scrubbers, wet and dry vacuum machines, and gentle surface-safe cleaning liquids to make your floors, washrooms, kitchen, and sofas look clean, spotless, and like new.
@@ -114,13 +120,13 @@ export const AboutPage: React.FC = () => {
               <div className="p-4 rounded-2xl bg-[#E8F8EC] border border-emerald-200">
                 <div className="text-2xl font-black text-[#22AC33]">100% Acid-Free</div>
                 <div className="text-xs font-bold text-[#041B3B] mt-1">Safe Cleaning Liquids</div>
-                <div className="text-[11px] text-slate-600">Protects tiles, taps & fittings with no bad smell</div>
+                <div className="text-[11px] text-slate-600">Protects tiles, taps &amp; fittings with no bad smell</div>
               </div>
 
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200">
                 <div className="text-2xl font-black text-[#041B3B]">7 Days a Week</div>
-                <div className="text-xs font-bold text-[#041B3B] mt-1">Available Daily in Tirupati</div>
-                <div className="text-[11px] text-slate-600">8:00 AM – 8:00 PM for all localities</div>
+                <div className="text-xs font-bold text-[#041B3B] mt-1">Available in Tirupati &amp; Rayachoty</div>
+                <div className="text-[11px] text-slate-600">8:00 AM – 8:00 PM for all service areas</div>
               </div>
             </div>
           </div>
@@ -129,7 +135,7 @@ export const AboutPage: React.FC = () => {
             <div className="rounded-3xl overflow-hidden shadow-2xl border-4 border-slate-100 aspect-4/3 bg-slate-900 group">
               <SafeImage
                 src="/images/equipment/full-kit.webp"
-                alt="Garuda Cleaning Services Machinery and Equipment Kit in Tirupati"
+                alt="Garuda Cleaning Services Machinery and Equipment Kit for Tirupati and Rayachoty"
                 fallbackLabel="Garuda Cleaning Equipment Kit"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
               />
@@ -141,7 +147,7 @@ export const AboutPage: React.FC = () => {
               </div>
               <div>
                 <div className="text-sm font-black text-[#041B3B]">Trained Cleaning Specialists</div>
-                <div className="text-xs text-slate-500">Uniformed & Equipped In-House</div>
+                <div className="text-xs text-slate-500">Uniformed &amp; Equipped In-House</div>
               </div>
             </div>
           </div>
@@ -157,7 +163,7 @@ export const AboutPage: React.FC = () => {
               The 4 Pillars of Garuda Excellence
             </h2>
             <p className="text-slate-600 text-sm mt-2">
-              Our simple promises to every homeowner and business client in Tirupati.
+              Our simple promises to every homeowner and business client across Tirupati and Rayachoty.
             </p>
           </div>
 

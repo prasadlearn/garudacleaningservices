@@ -15,6 +15,7 @@ import { CustomerFeedbackSection } from '../components/CustomerFeedbackSection';
 import { BeforeAfterStrip } from '../components/BeforeAfterStrip';
 import { BenefitsSection } from '../components/BenefitsSection';
 import { FAQAccordionSection } from '../components/FAQAccordionSection';
+import { TwoCityCoverageSection } from '../components/TwoCityCoverageSection';
 
 export const HomePage: React.FC = () => {
   const homeSchema = {
@@ -44,7 +45,8 @@ export const HomePage: React.FC = () => {
       closes: '20:00'
     },
     areaServed: [
-      { '@type': 'AdministrativeArea', name: 'Tirupati' },
+      { '@type': 'City', name: 'Tirupati' },
+      { '@type': 'City', name: 'Rayachoty' },
       { '@type': 'AdministrativeArea', name: 'Renigunta' },
       { '@type': 'AdministrativeArea', name: 'Chandragiri' },
       { '@type': 'AdministrativeArea', name: 'Tiruchanur' },
@@ -53,7 +55,7 @@ export const HomePage: React.FC = () => {
       { '@type': 'AdministrativeArea', name: 'AIR Bypass Road' },
       { '@type': 'AdministrativeArea', name: 'MR Palli' }
     ],
-    keywords: 'cleaning services near me, house cleaning near me, sofa cleaning near me, washroom cleaning near me, hard surface cleaning near me, home cleaning services in Tirupati',
+    keywords: 'cleaning services near me, house cleaning near me, sofa cleaning near me, washroom cleaning near me, hard surface cleaning near me, home cleaning services in Tirupati, cleaning services in Rayachoty',
     knowsAbout: [
       'Home Cleaning',
       'Apartment BHK Cleaning',
@@ -72,8 +74,8 @@ export const HomePage: React.FC = () => {
   return (
     <div className="w-full">
       {/* React 19 Head Hoisting */}
-      <title>Garuda Cleaning Services | Cleaning Services in Tirupati</title>
-      <meta name="description" content="Garuda Cleaning Services provides professional residential & commercial cleaning in Tirupati. Upfront pricing, dedicated teams, and reliable service. Book online or call for a quote." />
+      <title>Cleaning Services in Tirupati &amp; Rayachoty | Garuda Cleaning Services</title>
+      <meta name="description" content="Garuda Cleaning Services provides professional cleaning services for homes and offices across Tirupati and Rayachoty. Upfront pricing, dedicated teams, and reliable service. Book online or call for a quote." />
       <link rel="canonical" href="https://garudacleaningservices.in/" />
       <script
         type="application/ld+json"
@@ -122,10 +124,13 @@ export const HomePage: React.FC = () => {
       {/* 13. Transformations & Completed Work */}
       <BeforeAfterStrip />
 
-      {/* 14. Benefits of Professional Cleaning in Tirupati (6 cards) */}
+      {/* 14. Two Service Areas Coverage (Tirupati & Rayachoty) */}
+      <TwoCityCoverageSection />
+
+      {/* 15. Benefits of Professional Cleaning in Tirupati (6 cards) */}
       <BenefitsSection />
 
-      {/* 15. FAQ with cleaner photo on left */}
+      {/* 16. FAQ with cleaner photo on left */}
       <FAQAccordionSection />
     </div>
   );

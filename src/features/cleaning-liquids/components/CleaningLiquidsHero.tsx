@@ -14,17 +14,17 @@ export const CleaningLiquidsHero: React.FC = () => {
         {/* Verified Badge */}
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider bg-emerald-500/15 text-emerald-300 border border-emerald-400/30 backdrop-blur-xs shadow-sm">
           <Sparkles className="w-3.5 h-3.5 text-emerald-300" />
-          <span>CLEANING LIQUIDS • WHOLESALE SUPPLIES • TIRUPATI</span>
+          <span>CLEANING LIQUIDS • WHOLESALE SUPPLIES • TIRUPATI &amp; RAYACHOTY</span>
         </div>
 
         {/* Mandatory SEO H1 */}
         <h1 className="text-2xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight">
-          Cleaning Liquids & Wholesale Supplies in Tirupati
+          Cleaning Liquids &amp; Wholesale Supplies in Tirupati &amp; Rayachoty
         </h1>
 
         {/* Supporting Text */}
         <p className="text-slate-300 text-xs sm:text-base max-w-2xl mx-auto leading-relaxed font-normal">
-          Everyday cleaning liquids for homes, businesses and bulk buyers — with pack options for regular and wholesale requirements.
+          Everyday cleaning liquids for homes, businesses and bulk buyers across Tirupati and Rayachoty — with pack options for regular and wholesale requirements.
         </p>
 
         {/* Small Visual Line */}

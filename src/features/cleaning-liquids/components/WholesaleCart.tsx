@@ -181,7 +181,7 @@ export const WholesaleCart: React.FC<WholesaleCartProps> = (props) => {
                       Request Sent via WhatsApp!
                     </h3>
                     <p className="text-slate-600 text-xs sm:text-sm max-w-xs mx-auto">
-                      Thank you! Our Tirupati coordinator has received your request and will confirm your timing and estimate shortly.
+                      Thank you! Our coordinator has received your request and will confirm your timing and estimate shortly.
                     </p>
                     <div className="pt-4 flex justify-center">
                       <button
@@ -346,7 +346,7 @@ export const WholesaleCart: React.FC<WholesaleCartProps> = (props) => {
                     onChange={(e) => {
                       setDeliveryLocation(e.target.value);
                     }}
-                    placeholder="Enter your area / location in Tirupati"
+                    placeholder="Enter your area / locality (Tirupati or Rayachoty)"
                     className="w-full h-9 px-3 rounded-lg border border-slate-200 text-xs focus:border-[#22AC33] outline-none bg-white font-medium text-slate-800"
                   />
 

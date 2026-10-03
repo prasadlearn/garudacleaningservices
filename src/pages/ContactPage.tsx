@@ -28,6 +28,7 @@ import { SERVICES_DATA, getServiceBySlug, formatPrice, type ServiceCategory } fr
 import { ServiceIcon } from '../components/ServiceIcon';
 import { buildGarudaServiceRequestWhatsAppUrl } from '../utils/whatsappFormatter';
 import { trackEvent } from '../utils/analytics';
+import { BusinessContactNumbers } from '../components/BusinessContactNumbers';
 
 const TIME_SLOTS = [
   'Morning (8:00 AM – 12:00 PM)',
@@ -209,28 +210,34 @@ export const ContactPage: React.FC = () => {
   const contactSchema = {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
-    name: 'Contact Garuda Cleaning Services Tirupati',
-    description: 'Contact Garuda Cleaning Services in Tirupati for professional cleaning bookings, quotes, and inspections.',
+    name: 'Contact Garuda Cleaning Services',
+    description: 'Contact Garuda Cleaning Services in Tirupati and Rayachoty for professional cleaning bookings, quotes, and inspections.',
     url: 'https://garudacleaningservices.in/contact',
     mainEntity: {
       '@type': 'Organization',
       name: 'Garuda Cleaning Services',
       telephone: '+917799552084',
       email: 'garudacleaningservices1@gmail.com',
-      areaServed: {
-        '@type': 'City',
-        name: 'Tirupati'
-      }
+      areaServed: [
+        {
+          '@type': 'City',
+          name: 'Tirupati'
+        },
+        {
+          '@type': 'City',
+          name: 'Rayachoty'
+        }
+      ]
     }
   };
 
   return (
     <div className="bg-slate-50 min-h-screen">
       {/* React 19 Head */}
-      <title>Contact Garuda Cleaning Services | Tirupati</title>
+      <title>Contact Garuda Cleaning Services | Tirupati &amp; Rayachoty</title>
       <meta
         name="description"
-        content="Contact Garuda Cleaning Services in Tirupati. Call +91 77995 52084 or message on WhatsApp for instant price estimates, home inspections, and bookings."
+        content="Contact Garuda Cleaning Services in Tirupati and Rayachoty. Call +91 77995 52084 or +91 93916 13240, or message on WhatsApp for instant price estimates and bookings."
       />
       <link rel="canonical" href="https://garudacleaningservices.in/contact" />
       <script
@@ -242,59 +249,21 @@ export const ContactPage: React.FC = () => {
       <div className="bg-[#041B3B] text-white py-14 sm:py-20 px-4 sm:px-8 border-b border-white/10 text-center">
         <div className="max-w-4xl mx-auto space-y-3">
           <span className="inline-block px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-white/10 text-[#22AC33] border border-white/10">
-            Tirupati Support & Bookings
+            Tirupati &amp; Rayachoty Support &amp; Bookings
           </span>
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            Contact Garuda Cleaning Services – Tirupati
+            Contact Garuda Cleaning Services
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Reach out directly for upfront quotes, schedule a cleaning crew, or arrange a site inspection across Tirupati.
+            Reach out directly for upfront quotes, schedule a cleaning crew, or arrange a site inspection across Tirupati, Rayachoty, and surrounding service areas.
           </p>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 sm:space-y-12 pb-24 sm:pb-12">
-        {/* Top Big Action Buttons */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-3xl mx-auto">
-          <a
-            href={BUSINESS_CONFIG.contact.phoneTel}
-            onClick={() => trackEvent('call_click', { sourcePage: '/contact' })}
-            className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#22AC33] hover:shadow-md transition-all flex items-center gap-3.5 sm:gap-4 group"
-          >
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-emerald-50 text-[#22AC33] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <Phone className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
-            <div className="min-w-0">
-              <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-                Direct Telephone
-              </span>
-              <span className="text-base sm:text-lg font-black text-[#041B3B] block truncate">
-                {BUSINESS_CONFIG.contact.phoneDisplay}
-              </span>
-              <span className="text-[11px] sm:text-xs text-[#22AC33] font-semibold block truncate">Tap to call our customer support team</span>
-            </div>
-          </a>
-
-          <a
-            href={BUSINESS_CONFIG.buildWhatsAppUrl()}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => trackEvent('whatsapp_click', { sourcePage: '/contact' })}
-            className="p-4 sm:p-5 bg-white rounded-2xl border border-slate-200 shadow-xs hover:border-[#22AC33] hover:shadow-md transition-all flex items-center gap-3.5 sm:gap-4 group"
-          >
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-emerald-50 text-[#22AC33] flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <MessageCircle className="w-5 h-5 sm:w-6 sm:h-6" />
-            </div>
-            <div className="min-w-0">
-              <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider block">
-                Instant WhatsApp Quote
-              </span>
-              <span className="text-base sm:text-lg font-black text-[#041B3B] block truncate">
-                {BUSINESS_CONFIG.contact.whatsappDisplay}
-              </span>
-              <span className="text-[11px] sm:text-xs text-[#22AC33] font-semibold block truncate">Chat with photos & get quotes</span>
-            </div>
-          </a>
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 sm:space-y-12">
+        {/* Top Direct Contact Action Cards: Side by side on big screens, stacked on mobile */}
+        <div className="flex justify-center">
+          <BusinessContactNumbers variant="cards" sourcePage="/contact" />
         </div>
 
         {/* 2-Column Grid: Contact Info & Booking Form */}
@@ -796,14 +765,14 @@ export const ContactPage: React.FC = () => {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4">
                     <div>
                       <label className="block text-[11px] sm:text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                        Locality / Area in Tirupati *
+                        Locality / Service Area *
                       </label>
                       <input
                         type="text"
                         required
                         value={locality}
                         onChange={(e) => setLocality(e.target.value)}
-                        placeholder="e.g. MR Palli, AIR Bypass, Balaji Colony"
+                        placeholder="e.g. Balaji Colony, MR Palli, Rayachoty"
                         className="w-full h-10 sm:h-11 px-3.5 rounded-xl border border-slate-300 text-xs sm:text-sm focus:border-[#22AC33] focus:outline-none bg-slate-50/50"
                       />
                     </div>

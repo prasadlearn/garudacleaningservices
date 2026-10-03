@@ -22,8 +22,8 @@ const FAQS = [
     a: 'We apply acid-free descaling foam to taps, tiles, and glass surfaces to break down mineral deposits before scrubbing and wiping them clean.'
   },
   {
-    q: 'How does payment work? Are there any hidden travel charges?',
-    a: 'We have fixed, upfront pricing with zero hidden travel charges anywhere within Tirupati. You pay only after the cleaning is completed and you have checked the work.'
+    q: 'How does payment work?',
+    a: 'We have fixed, upfront pricing for all services. You pay only after the cleaning is completed and you have checked the work.'
   },
   {
     q: 'How do I book a cleaning appointment?',
@@ -53,14 +53,17 @@ export const FAQAccordionSection: React.FC = () => {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#041B3B]/80 via-transparent to-transparent" />
 
-            <div className="absolute bottom-6 left-6 right-6 p-5 rounded-2xl bg-white/95 backdrop-blur-md shadow-xl border border-white/50 text-[#041B3B]">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-[#22AC33] text-white flex items-center justify-center shrink-0">
-                  <PhoneCall className="w-5 h-5" />
+            <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-6 p-3.5 sm:p-5 rounded-2xl bg-white/95 backdrop-blur-md shadow-xl border border-white/50 text-[#041B3B]">
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#22AC33] text-white flex items-center justify-center shrink-0">
+                  <PhoneCall className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
-                <div>
-                  <div className="text-xs font-bold text-slate-500 uppercase">Have a Question?</div>
-                  <a href={BUSINESS_CONFIG.contact.phoneTel} className="text-sm font-black text-[#041B3B] hover:text-[#22AC33] transition-colors">
+                <div className="min-w-0 flex-1">
+                  <div className="text-[10px] sm:text-xs font-bold text-slate-500 uppercase tracking-wider">Have a Question?</div>
+                  <a
+                    href={BUSINESS_CONFIG.contact.phoneTel}
+                    className="text-xs min-[360px]:text-sm font-black text-[#041B3B] hover:text-[#22AC33] transition-colors whitespace-nowrap block"
+                  >
                     Call {BUSINESS_CONFIG.contact.phoneDisplay}
                   </a>
                 </div>
@@ -80,13 +83,13 @@ export const FAQAccordionSection: React.FC = () => {
           <div>
             <span className="homecare-pill mb-2">
               <HelpCircle className="w-3.5 h-3.5" />
-              Questions & Answers
+              Questions &amp; Answers
             </span>
             <h2 className="text-2xl sm:text-4xl font-extrabold text-[#041B3B] mt-1 tracking-tight">
               Frequently Asked Questions
             </h2>
             <p className="text-slate-600 text-sm mt-1">
-              Common questions about our cleaning services and booking process in Tirupati.
+              Common questions about our cleaning services and booking process in Tirupati &amp; Rayachoty.
             </p>
           </div>
 

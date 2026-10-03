@@ -54,7 +54,7 @@ export function buildWholesaleWhatsAppMessage(payload: WholesaleEnquiryPayload):
     ? `\n*Estimated Product Subtotal:* ${formatCurrency(subtotal)}`
     : '';
 
-  const deliveryNotice = `\n_Note: Delivery charges will be confirmed separately based on order size and delivery location in Tirupati._`;
+  const deliveryNotice = `\n_Note: Delivery charges will be confirmed separately based on order size and delivery location in Tirupati / Rayachoty._`;
 
   const customNotes = notes ? `\n*Additional Notes:* ${notes}` : '';
 
@@ -89,7 +89,7 @@ export function buildProductWhatsAppUrl(
     `Hello! I would like to check availability and order details for:`,
     `• *${productName}* (${packSize})${priceText ? ` — ${priceText}` : ''}`,
     ``,
-    `Delivery location: Tirupati`,
+    `Delivery location: Tirupati / Rayachoty`,
     `Please confirm stock availability and delivery charges.`
   ].join('\n');
 

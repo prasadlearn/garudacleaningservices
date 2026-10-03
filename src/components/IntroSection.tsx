@@ -33,11 +33,11 @@ export const IntroSection: React.FC = () => {
           </div>
 
           <h2 className="text-2xl sm:text-4xl font-extrabold text-[#041B3B] tracking-tight leading-tight">
-            Garuda Cleaning Services — Professional Cleaning in Tirupati
+            Garuda Cleaning Services — Professional Cleaning in Tirupati &amp; Rayachoty
           </h2>
 
           <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            Garuda Cleaning Services provides professional cleaning for apartments, independent houses, villas, and commercial spaces across Tirupati. Whether you need complete home cleaning, kitchen and washroom scrubbing, or sofa care, our team helps keep your property spotless and fresh. We serve homes and offices across Tirupati, including Balaji Colony, MR Palli, and nearby areas.
+            Garuda Cleaning Services provides professional cleaning for apartments, independent houses, villas, and commercial spaces across Tirupati and Rayachoty. Whether you need complete home cleaning, kitchen and washroom scrubbing, or sofa care, our team helps keep your property spotless and fresh. We serve homes and offices across Tirupati, Rayachoty, and surrounding service areas.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">

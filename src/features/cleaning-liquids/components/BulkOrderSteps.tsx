@@ -17,7 +17,7 @@ export const BulkOrderSteps: React.FC<BulkOrderStepsProps> = ({ className = '' }
       num: '02',
       icon: MessageSquare,
       title: 'Share Quantity & Location',
-      description: 'Send your requirements via WhatsApp enquiry along with your locality in Tirupati.'
+      description: 'Send your requirements via WhatsApp enquiry along with your locality in Tirupati or Rayachoty.'
     },
     {
       num: '03',
@@ -28,8 +28,8 @@ export const BulkOrderSteps: React.FC<BulkOrderStepsProps> = ({ className = '' }
     {
       num: '04',
       icon: Truck,
-      title: 'Local Tirupati Dispatch',
-      description: 'Your cleaning liquids order is dispatched promptly to your facility or pickup point.'
+      title: 'Prompt Regional Dispatch',
+      description: 'Your cleaning liquids order is dispatched promptly to your facility or doorstep location.'
     }
   ];
 
@@ -44,7 +44,7 @@ export const BulkOrderSteps: React.FC<BulkOrderStepsProps> = ({ className = '' }
           How to Order in Bulk
         </h2>
         <p className="text-xs sm:text-sm text-slate-500 font-medium">
-          Straightforward procurement for local Tirupati residential and commercial buyers.
+          Straightforward procurement for residential and commercial buyers across Tirupati &amp; Rayachoty.
         </p>
       </div>
 

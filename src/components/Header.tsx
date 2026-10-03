@@ -130,7 +130,7 @@ export const Header: React.FC = () => {
                 Garuda <span className="text-[#22AC33] font-bold">Cleaning Services</span>
               </span>
               <span className="text-[9px] sm:text-[11px] font-semibold text-slate-500 tracking-normal hidden sm:block truncate">
-                Professional Cleaning • Tirupati
+                Professional Cleaning • Tirupati &amp; Rayachoty
               </span>
             </div>
           </Link>
@@ -305,7 +305,7 @@ export const Header: React.FC = () => {
                       <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
                         <span className="flex items-center gap-1.5 font-semibold text-[#041B3B]">
                           <span className="w-2 h-2 rounded-full bg-[#22AC33] animate-pulse" />
-                          Serving {localityNames} & all surrounding areas
+                          Serving Tirupati, Rayachoty &amp; all surrounding areas
                         </span>
                         <Link
                           to="/services"

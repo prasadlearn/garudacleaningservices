@@ -40,7 +40,7 @@ export const CleaningLiquidsPage: React.FC = () => {
     '@type': 'LocalBusiness',
     name: 'Garuda Cleaning Liquids & Wholesale Supplies',
     description:
-      'Buy cleaning liquids and bulk cleaning supplies in Tirupati for homes, offices, shops, hotels and institutions. View pack prices, bulk offers and enquire on WhatsApp.',
+      'Buy cleaning liquids and bulk cleaning supplies in Tirupati and Rayachoty for homes, offices, shops, hotels and institutions. View pack prices, bulk offers and enquire on WhatsApp.',
     url: 'https://garudacleaningservices.in/cleaning-liquids',
     telephone: '+917799552084',
     parentOrganization: {
@@ -48,20 +48,26 @@ export const CleaningLiquidsPage: React.FC = () => {
       name: 'Garuda Cleaning Services',
       url: 'https://garudacleaningservices.in'
     },
-    areaServed: {
-      '@type': 'City',
-      name: 'Tirupati'
-    },
+    areaServed: [
+      {
+        '@type': 'City',
+        name: 'Tirupati'
+      },
+      {
+        '@type': 'City',
+        name: 'Rayachoty'
+      }
+    ],
     priceRange: '₹₹'
   };
 
   return (
     <div className="w-full bg-slate-50 min-h-screen">
       {/* React 19 SEO Metadata */}
-      <title>Cleaning Liquids & Wholesale Supplies in Tirupati | Garuda</title>
+      <title>Cleaning Liquids & Wholesale Supplies in Tirupati &amp; Rayachoty | Garuda</title>
       <meta
         name="description"
-        content="Cleaning liquids, detergents and wholesale cleaning supplies in Tirupati for homes, businesses, hotels and institutions. View pack prices and enquire on WhatsApp."
+        content="Cleaning liquids, detergents and wholesale cleaning supplies in Tirupati and Rayachoty for homes, businesses, hotels and institutions. View pack prices and enquire on WhatsApp."
       />
       <link rel="canonical" href="https://garudacleaningservices.in/cleaning-liquids" />
       <script
@@ -81,10 +87,10 @@ export const CleaningLiquidsPage: React.FC = () => {
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-2 border-b border-slate-200 pb-3">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-[#22AC33] block mb-0.5">
-                Tirupati Product Catalog ({totalProductsCount} Liquids)
+                Tirupati &amp; Rayachoty Product Catalog ({totalProductsCount} Liquids)
               </span>
               <h2 className="text-xl sm:text-2xl lg:text-3xl font-black text-[#041B3B]">
-                Cleaning Liquids & Maintenance Supplies
+                Cleaning Liquids &amp; Maintenance Supplies
               </h2>
             </div>
             <p className="text-xs text-slate-500 font-medium md:max-w-xs">

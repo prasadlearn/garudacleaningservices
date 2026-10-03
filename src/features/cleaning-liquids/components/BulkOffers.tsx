@@ -40,7 +40,7 @@ export const BulkOffers: React.FC<BulkOffersProps> = ({
           </h2>
         </div>
         <p className="text-xs text-slate-500 font-medium">
-          5L cans with regular-pack savings for apartments, hotels, and businesses in Tirupati.
+          5L cans with regular-pack savings for apartments, hotels, and businesses in Tirupati &amp; Rayachoty.
         </p>
       </div>
 

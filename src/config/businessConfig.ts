@@ -7,12 +7,14 @@ export const BUSINESS_CONFIG = {
   contact: {
     phoneDisplay: "+91 77995 52084",
     phoneTel: "tel:+917799552084",
+    phoneAltDisplay: "+91 93916 13240",
+    phoneAltTel: "tel:+919391613240",
     whatsappDisplay: "+91 77995 52084",
     whatsappRaw: "917799552084",
     email: "garudacleaningservices1@gmail.com",
-    address: "Tirupati, Andhra Pradesh",
-    serviceArea: "Tirupati, Andhra Pradesh",
-    serviceAreaNote: "Cleaning services available at your location.",
+    address: "Tirupati & Rayachoty, Andhra Pradesh",
+    serviceArea: "Tirupati & Rayachoty, Andhra Pradesh",
+    serviceAreaNote: "Service-area cleaning business serving customers at their doorstep.",
     city: "Tirupati",
     state: "Andhra Pradesh",
     operatingHours: "Monday – Sunday: 8:00 AM – 8:00 PM",
@@ -29,7 +31,7 @@ export const BUSINESS_CONFIG = {
   openingHoursLine: "Open Monday – Sunday: 8:00 AM – 8:00 PM",
 
   coverage: {
-    headline: "All areas of Tirupati",
+    headline: "Serving Tirupati, Rayachoty & Surrounding Areas",
     nearbyOnRequest: ["Renigunta", "Chandragiri", "Tiruchanur"],
     mapEmbedUrl: "https://www.google.com/maps?q=Tirupati,+Andhra+Pradesh,+India&z=12&output=embed",
     mapDirectUrl: "https://www.google.com/maps/search/?api=1&query=Tirupati%2C+Andhra+Pradesh"

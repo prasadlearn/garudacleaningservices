@@ -110,7 +110,7 @@ export const ServicesPage: React.FC = () => {
       <title>Cleaning Services in Tirupati | Garuda Cleaning Services</title>
       <meta
         name="description"
-        content={`Explore all ${totalCount} verified cleaning services in Tirupati with upfront pricing. Residential, specialized, and commercial cleaning solutions.`}
+        content={`Explore all ${totalCount} verified cleaning services in Tirupati with upfront pricing. Residential, specialized, and office cleaning solutions.`}
       />
       <link rel="canonical" href="https://garudacleaningservices.in/services" />
       <script
@@ -122,10 +122,10 @@ export const ServicesPage: React.FC = () => {
       <div className="bg-[#041B3B] text-white py-14 sm:py-20 px-4 sm:px-8 border-b border-white/10 text-center">
         <div className="max-w-4xl mx-auto space-y-4">
           <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            Cleaning Services in Tirupati – Prices & Booking
+            Cleaning Services in Tirupati &amp; Rayachoty – Prices &amp; Booking
           </h1>
           <p className="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-            Transparent rate card for flats, independent houses, villas, and commercial spaces across Tirupati. Inspect inclusions, calculate indicative estimates, and book with zero hidden surprises.
+            Transparent rate card for flats, independent houses, villas, and commercial spaces across Tirupati and Rayachoty. Inspect inclusions, calculate indicative estimates, and book with zero hidden surprises.
           </p>
         </div>
       </div>
