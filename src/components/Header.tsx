@@ -110,14 +110,14 @@ export const Header: React.FC = () => {
           paddingRight: 'max(0.75rem, env(safe-area-inset-right))',
         }}
       >
-        <div className="max-w-7xl mx-auto h-16 sm:h-18 flex items-center justify-between gap-1.5 sm:gap-3 min-w-0">
+        <div className="max-w-7xl mx-auto h-16 sm:h-18 flex items-center justify-between gap-1.5 sm:gap-2.5 lg:gap-3 xl:gap-4 min-w-0">
           {/* Brand Logo Lockup */}
           <Link
             to="/"
-            className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1 group"
+            className="flex items-center gap-2 sm:gap-2.5 min-w-0 flex-1 lg:flex-initial shrink-0 group"
             aria-label="Garuda Cleaning Services Home"
           >
-            <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-xl overflow-hidden shadow-sm group-hover:scale-105 transition-transform shrink-0 border border-slate-200/80 bg-slate-900">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 min-[1200px]:w-11 min-[1200px]:h-11 rounded-xl overflow-hidden shadow-sm group-hover:scale-105 transition-transform shrink-0 border border-slate-200/80 bg-slate-900">
               <img
                 src="/images/garuda-logo.webp"
                 alt="Garuda Cleaning Services Logo"
@@ -126,17 +126,17 @@ export const Header: React.FC = () => {
               />
             </div>
             <div className="flex flex-col min-w-0 leading-tight">
-              <span className="font-black text-[#041B3B] tracking-tight text-[13px] min-[360px]:text-[14px] sm:text-[18px] whitespace-nowrap block leading-tight">
+              <span className="font-black text-[#041B3B] tracking-tight text-[13px] min-[360px]:text-[14px] sm:text-[15px] min-[1200px]:text-[18px] whitespace-nowrap block leading-tight">
                 Garuda <span className="text-[#22AC33] font-bold">Cleaning Services</span>
               </span>
-              <span className="text-[9px] sm:text-[11px] font-semibold text-slate-500 tracking-normal hidden sm:block truncate">
+              <span className="text-[9px] sm:text-[10px] min-[1200px]:text-[11px] font-semibold text-slate-500 tracking-normal hidden sm:block lg:hidden min-[1200px]:block truncate">
                 Professional Cleaning • Tirupati &amp; Rayachoty
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation (>= 1024px) */}
-          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 text-sm font-bold text-slate-700 shrink-0">
+          <nav className="hidden lg:flex items-center gap-2 min-[1100px]:gap-3 min-[1200px]:gap-4 xl:gap-6 text-xs min-[1100px]:text-[13px] min-[1200px]:text-sm font-bold text-slate-700 shrink-0">
             <Link
               to="/"
               className={`py-2 transition-colors relative ${
@@ -388,15 +388,16 @@ export const Header: React.FC = () => {
             </Link>
           </nav>
 
-          {/* Desktop Right CTA Area: Phone + Quote Button */}
-          <div className="hidden lg:flex items-center gap-2.5 shrink-0">
+          {/* Desktop Right CTA Area: Phone + Quote Button (>= 1024px) */}
+          <div className="hidden lg:flex items-center gap-1.5 min-[1200px]:gap-2.5 shrink-0 desktop-cta">
             <a
               href={BUSINESS_CONFIG.contact.phoneTel}
               onClick={() => trackEvent('call_click', { sourcePage: location.pathname })}
-              className="min-h-[44px] flex items-center gap-2 bg-[#E8F8EC] text-[#041B3B] hover:bg-[#d6f2dc] px-4 py-2.5 rounded-full font-bold text-xs transition-colors border border-[#22AC33]/20"
+              className="min-h-[38px] min-[1200px]:min-h-[44px] flex items-center gap-1.5 min-[1200px]:gap-2 bg-[#E8F8EC] text-[#041B3B] hover:bg-[#d6f2dc] px-2.5 min-[1200px]:px-4 py-2 min-[1200px]:py-2.5 rounded-full font-bold text-xs transition-colors border border-[#22AC33]/20 shrink-0 whitespace-nowrap"
             >
-              <Phone className="w-3.5 h-3.5 text-[#22AC33]" />
-              <span>{BUSINESS_CONFIG.contact.phoneDisplay}</span>
+              <Phone className="w-3.5 h-3.5 text-[#22AC33] shrink-0" />
+              <span className="hidden min-[1150px]:inline">{BUSINESS_CONFIG.contact.phoneDisplay}</span>
+              <span className="min-[1150px]:hidden">Call</span>
             </a>
 
             <button
@@ -405,15 +406,15 @@ export const Header: React.FC = () => {
                 trackEvent('book_click', { sourcePage: location.pathname });
                 openModal();
               }}
-              className="btn-homecare-green text-xs min-h-[44px] py-2.5 px-5 font-bold cursor-pointer flex items-center gap-1.5"
+              className="btn-homecare-green text-xs min-h-[38px] min-[1200px]:min-h-[44px] py-2 min-[1200px]:py-2.5 px-3 min-[1200px]:px-5 font-bold cursor-pointer flex items-center gap-1.5 shrink-0 whitespace-nowrap"
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 shrink-0" />
               <span>Get Free Quote</span>
             </button>
           </div>
 
-          {/* Mobile Right Controls: Call button + Hamburger */}
-          <div className="flex lg:hidden items-center gap-1 sm:gap-1.5 shrink-0">
+          {/* Mobile Right Controls (< 1024px): Call button + Hamburger */}
+          <div className="flex lg:hidden items-center gap-1 sm:gap-1.5 shrink-0 mobile-controls">
             <a
               href={BUSINESS_CONFIG.contact.phoneTel}
               onClick={() => trackEvent('call_click', { sourcePage: location.pathname })}
