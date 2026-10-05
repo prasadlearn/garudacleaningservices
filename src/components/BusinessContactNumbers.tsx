@@ -22,33 +22,33 @@ export const BusinessContactNumbers: React.FC<BusinessContactNumbersProps> = ({
 
   if (variant === 'cards') {
     return (
-      <div className={`space-y-3.5 w-full max-w-md ${className}`}>
+      <div className={`grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 w-full max-w-3xl lg:max-w-4xl mx-auto ${className}`}>
         {/* Primary Card: Call / WhatsApp */}
         <div className="p-4 sm:p-5 bg-white rounded-2xl border-2 border-[#22AC33]/40 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-black uppercase tracking-wider text-[#22AC33] bg-[#E8F8EC] px-2.5 py-0.5 rounded-md">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-[#22AC33] bg-[#E8F8EC] px-2.5 py-0.5 rounded-md shrink-0">
               Call / WhatsApp • Primary
             </span>
-            <span className="text-xs text-slate-400 font-semibold">Main Business Line</span>
+            <span className="text-[11px] sm:text-xs text-slate-400 font-semibold truncate text-right">Main Business Line</span>
           </div>
 
-          <div className="flex items-center justify-between gap-3 pt-1">
+          <div className="flex items-center justify-between gap-2 pt-1">
             <div className="min-w-0">
               <a
                 href={primaryTel}
                 onClick={() => trackEvent('call_click', { sourcePage, target: 'primary_number' })}
-                className="text-lg sm:text-xl font-black text-[#041B3B] hover:text-[#22AC33] transition-colors block tracking-tight whitespace-nowrap"
+                className="text-base sm:text-lg lg:text-xl font-black text-[#041B3B] hover:text-[#22AC33] transition-colors block tracking-tight whitespace-nowrap"
               >
                 {primaryDisplay}
               </a>
-              <span className="text-xs text-slate-500 font-medium">Direct call &amp; instant estimates</span>
+              <span className="text-[11px] sm:text-xs text-slate-500 font-medium block truncate">Direct call &amp; instant estimates</span>
             </div>
 
-            <div className="flex items-center gap-2 shrink-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
               <a
                 href={primaryTel}
                 onClick={() => trackEvent('call_click', { sourcePage, target: 'primary_call_btn' })}
-                className="w-10 h-10 rounded-xl bg-[#E8F8EC] text-[#22AC33] hover:bg-[#d5f3dc] flex items-center justify-center transition-colors"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#E8F8EC] text-[#22AC33] hover:bg-[#d5f3dc] flex items-center justify-center transition-colors"
                 title={`Call ${primaryDisplay}`}
                 aria-label={`Call ${primaryDisplay}`}
               >
@@ -59,7 +59,7 @@ export const BusinessContactNumbers: React.FC<BusinessContactNumbersProps> = ({
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent('whatsapp_click', { sourcePage, target: 'primary_wa_btn' })}
-                className="w-10 h-10 rounded-xl bg-[#25D366] text-white hover:bg-[#20bd5a] flex items-center justify-center transition-colors shadow-2xs"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-[#25D366] text-white hover:bg-[#20bd5a] flex items-center justify-center transition-colors shadow-2xs"
                 title={`WhatsApp ${primaryDisplay}`}
                 aria-label={`WhatsApp ${primaryDisplay}`}
               >
@@ -71,29 +71,29 @@ export const BusinessContactNumbers: React.FC<BusinessContactNumbersProps> = ({
 
         {/* Alternative Card: Call Only */}
         <div className="p-4 sm:p-5 bg-slate-50/90 rounded-2xl border border-slate-200 shadow-2xs hover:border-slate-300 transition-all flex flex-col justify-between space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200">
+          <div className="flex items-center justify-between gap-2">
+            <span className="text-[10px] sm:text-[10.5px] font-bold uppercase tracking-wider text-slate-500 bg-white px-2 py-0.5 rounded border border-slate-200 shrink-0">
               Alternative Call
             </span>
-            <span className="text-[11px] text-slate-400 font-medium">Secondary Line</span>
+            <span className="text-[11px] text-slate-400 font-medium truncate text-right">Secondary Line</span>
           </div>
 
-          <div className="flex items-center justify-between gap-3 pt-1">
+          <div className="flex items-center justify-between gap-2 pt-1">
             <div className="min-w-0">
               <a
                 href={altTel}
                 onClick={() => trackEvent('call_click', { sourcePage, target: 'alt_number' })}
-                className="text-lg sm:text-xl font-extrabold text-slate-700 hover:text-[#041B3B] transition-colors block whitespace-nowrap"
+                className="text-base sm:text-lg lg:text-xl font-extrabold text-slate-700 hover:text-[#041B3B] transition-colors block whitespace-nowrap"
               >
                 {altDisplay}
               </a>
-              <span className="text-[11px] text-slate-500 font-medium">Alternative phone for calls</span>
+              <span className="text-[11px] text-slate-500 font-medium block truncate">Alternative phone for calls</span>
             </div>
 
             <a
               href={altTel}
               onClick={() => trackEvent('call_click', { sourcePage, target: 'alt_call_btn' })}
-              className="w-10 h-10 rounded-xl bg-white border border-slate-200 text-slate-700 hover:border-[#22AC33] hover:text-[#22AC33] flex items-center justify-center transition-colors shrink-0 shadow-2xs"
+              className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-white border border-slate-200 text-slate-700 hover:border-[#22AC33] hover:text-[#22AC33] flex items-center justify-center transition-colors shrink-0 shadow-2xs"
               title={`Call ${altDisplay}`}
               aria-label={`Call ${altDisplay}`}
             >

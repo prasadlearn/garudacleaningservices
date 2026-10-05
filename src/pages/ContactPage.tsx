@@ -262,7 +262,7 @@ export const ContactPage: React.FC = () => {
 
       <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-8 sm:space-y-12">
         {/* Top Direct Contact Action Cards: Side by side on big screens, stacked on mobile */}
-        <div className="flex justify-center">
+        <div className="flex justify-center w-full">
           <BusinessContactNumbers variant="cards" sourcePage="/contact" />
         </div>
 
